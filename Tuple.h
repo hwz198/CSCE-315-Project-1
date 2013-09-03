@@ -1,6 +1,13 @@
 #include <stdio.h>
+#include <string.h>
 using namespace std;
 
 class Tuple{
-	//Need to solve issues with Attribute
+		vector<string> dataStrings;
+	public:
+		addData(string newData);
+		changeDataMember(int targetColumn, string newData);
+		Tuple(vector<string> newDataVec);
+		Tuple();
+		~Tuple();
 };

@@ -8,13 +8,12 @@ class Relation{
 		vector<Tuple> rows;
 		vector<Attribute> columns;
 	public:
+		//Other relational functions
 		vector<Tuple> selection(string condition); //When this function is made, you may need to update the condition to be the proper type
 		Relation projection(vector<Attribute> columns);
 		void rename(Attribute target, string newvalue);
-		Relation set_union(Relation B); //Relation A for this function is the one operated on (i.e. A.set_union(B))
-		Relation set_difference(Relation B); //see above
-		Relation cartesian_product(Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
 		Relation(); //constructor
 		~Relation(); //destructor
-		//Do we need accessor functions?
-}
+		addTuple(Tuple T);
+		addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
+};

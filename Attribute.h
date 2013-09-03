@@ -2,12 +2,14 @@
 #include <string.h>
 using namespace std;
 
-template <class type>
-type Attribute{
-		type value;
-		//Do we need a domain member?
+class Attribute{
+		string value;
+		string dataType;
 	public:
-		type get_value();
-		Attribute(type value); //contructor
+		string getValue();
+		string getDataType();
+		void renameAttr(string newValue, string newType);
+		Attribute(string newValue, string newType); //contructor
+		Attribute();
 		~Attribute(); //destructor
 };
