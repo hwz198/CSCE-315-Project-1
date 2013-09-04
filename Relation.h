@@ -5,6 +5,7 @@
 using namespace std;
 
 class Relation{
+		string name;
 		vector<Tuple> rows;
 		vector<Attribute> columns;
 	public:

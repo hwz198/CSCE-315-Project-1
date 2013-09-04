@@ -16,3 +16,10 @@ class Database{
 		Relation set_difference(Relation A, Relation B); //see above
 		Relation cartesian_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
 };
+
+
+Relation Database::set_union(Relation A, Relation B){
+  if(A.columns != B.columns){
+    //return Empty relation
+  }
+  
