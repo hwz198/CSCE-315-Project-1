@@ -15,4 +15,6 @@ class Database{
 		Relation set_union(Relation A, Relation B); //Relation A for this function is the one operated on (i.e. A.set_union(B))
 		Relation set_difference(Relation A, Relation B); //see above
 		Relation cartesian_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
+		
+		Show(string r);	//Show the relation
 };
