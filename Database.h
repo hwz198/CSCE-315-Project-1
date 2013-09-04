@@ -16,5 +16,6 @@ class Database{
 		Relation set_difference(Relation A, Relation B); //see above
 		Relation cartesian_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
 		
-		Show(string r);	//Show the relation
+		void Show(string r);	//Show the relation
+		int RelationExists(string r); 	//Check if relation exists in dbase. created to avoid duplicate code in show, insert functions
 };
