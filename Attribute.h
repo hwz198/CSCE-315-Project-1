@@ -2,14 +2,16 @@
 #include <string.h>
 using namespace std;
 
+		enum dataTypes {str, i, d};
+
 class Attribute{
 		string value;
-		string dataType;
+		dataTypes dataType;
 	public:
 		string getValue();
-		string getDataType();
-		void renameAttr(string newValue, string newType);
-		Attribute(string newValue, string newType); //contructor
+		dataTypes getDataType();
+		void renameAttr(string newValue, dataTypes newType);
+		Attribute(string newValue, dataTypes newType); //contructor
 		Attribute();
 		~Attribute(); //destructor
 };
