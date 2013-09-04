@@ -14,8 +14,12 @@ class Relation{
 		Relation projection(vector<Attribute> columns);
 		void rename(Attribute target, string newvalue);
 		Relation(); //constructor
+		Relation(string c_name, Vector<Tuple> c_rows, Vector<Attribute> c_columns);
 		Relation(Relation A); //copy constructor
 		~Relation(); //destructor
 		addTuple(Tuple T);
 		addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
+		rows();
+		columns();
+		name();
 };
