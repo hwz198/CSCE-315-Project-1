@@ -15,12 +15,12 @@ void Database::Show(string r)
 		return;
 	}
 	//Show the relation in dBase
-	for(int i=0;i<dBase[index].rows.size();i++)
+	for(int i=0;i<dbase[index].rows.size();i++)
 	{
 		{
-			for(int j=0;j<dBase[index].rows.dataStrings.size();j++)
+			for(int j=0;j<dbase[index].rows.dataStrings.size();j++)
 			{
-				printf("%s ",dBase[index].rows[i].dataStrings[j]);
+				printf("%s ",dbase[index].rows[i].dataStrings[j]);
 			}
 			printf("\n");
 		}
@@ -29,10 +29,10 @@ void Database::Show(string r)
 
 int Database::RelationExists(string r)
 {
-	bool exist = false; //check if relation exists in Dbase -- Need to edit this for views after our discussion today. 
+	bool exist = false; //check if relation exists in dbase -- Need to edit this for views after our discussion today. 
 	int index;
-	for(int i = 0; i<dBase.size();i++){
-		if( r == dBase[i].name ){
+	for(int i = 0; i<dbase.size();i++){
+		if( r == dbase[i].name ){
 			exist = true;
 			index = i;
 			break;
@@ -44,4 +44,17 @@ int Database::RelationExists(string r)
 		index = -1;
 		return index;
 	}
+}
+
+void Database::Show(string r, Tuple t)
+{
+	int index = RelationExists(r);
+	if( index == -1 )
+	{
+		printf("Either the relation does not exist or is not open");
+		return;
+	}
+	
+	dbase[index].rows.push_back(t);
+	
 }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Relation.h"
+#include "Tuple.h"
 
 using namespace std;
 
@@ -18,4 +19,5 @@ class Database{
 		
 		void Show(string r);	//Show the relation
 		int RelationExists(string r); 	//Check if relation exists in dbase. created to avoid duplicate code in show, insert functions
+		void Insert(string r, Tuple t); //relation r and the tuple t that needs to be inserted into the relation
 };
