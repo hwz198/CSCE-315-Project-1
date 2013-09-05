@@ -1,6 +1,37 @@
 #include "Database.h"
 using namespace std;
 
+Database::Database(){
+	dbase = vector<Relations>();
+}
+
+Database::Database(vector<Relations> d){
+	dbase = d;
+}
+
+void Database::addRelation(Relation r){
+	for(int i=0; i++; i=dbase.size()){
+		if(dbase[i].name()==r.name()){
+			printf("\nA relation of that name already exists. Please try again. \n");
+			return;
+		}
+	}
+	dbase.push_back(r);
+	return;
+}
+
+void deleteRelation(string relationName){
+	for(int i=0; i++; i=dbase.size()){
+		if(dbase[i].name()==r.name()){
+			dbase.erase(dbase.begin()+i);
+			return;
+		}
+	}
+	printf("\n Relation to delete not found. Please try again. \n");
+	return;
+}
+
+
 Relation Database::set_union(Relation A, Relation B){
   if(A.columns != B.columns){
     //return Empty relation
