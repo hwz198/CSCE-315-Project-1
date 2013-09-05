@@ -1,17 +1,18 @@
 #include <algorithm>
+#include <iostream>
 #include "Database.h"
 using namespace std;
 
 Database::Database(){
-	dbase = vector<Relations>();
+	dbase = vector<Relation>();
 }
 
-Database::Database(vector<Relations> d){
+Database::Database(vector<Relation> d){
 	dbase = d;
 }
 
 void Database::addRelation(Relation r){
-  for(int i=0; i<dbase.size()(); ++i){
+  for(int i=0; i<dbase.size(); ++i){
 		if(dbase[i].getName()==r.getName()){
 			printf("\nA relation of that name already exists. Please try again. \n");
 			return;
@@ -46,9 +47,9 @@ void Database::Show(string r)
 		{
                   for(int j=0; j<dbase[index].getRows().getDataStrings.size(); ++j)
 			{
-				printf("%s ",dbase[index].getRows()[i].getdataStrings()[j]);	//CHECK SYNTAX LATER - VA
+                          cout << dbase[index].getRows()[i].getdataStrings()[j] << ' ';
 			}
-			printf("\n");
+                  cout << '\n';
 		}
 	}	
 }
@@ -77,7 +78,7 @@ void Database::Insert(string r, Tuple t)
 	int index = RelationExists(r);
 	if( index == -1 )
 	{
-		printf("Either the relation %s does not exist or is not open\n",r);
+          cout << "Either the relation " << r << " does not exist or is not open\n";
 		return;
 	}
 	
@@ -88,7 +89,7 @@ void Database::Open(string r)
 {
 	int check = RelationExists(r);	//Check if relation is already in memory
 	if(check != -1){
-		printf("Database %s is already open\n", r);
+          cout << "Database " << r << " is already open\n";
 		return;
 	}
 	
@@ -99,7 +100,7 @@ void Database::Close(string r)
 {
 	int index = RelationExists(r);	//Check if relation is already in memory
 	if(index == -1){
-		printf("Error. Database %s does not exist in memory!\n",r);
+          cout << "Error. Database " << r << " does not exist in memory!\n";
 		return;
 	}
 
