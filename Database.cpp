@@ -151,3 +151,25 @@ Relation Database::set_difference(Relation A, Relation B){
 
   return Relation("ABDifference", difference_rows, A.columns());
 }
+
+Relation cartesian_product(Relation A, Relation B){
+  vector<Attribute> cross_columns = A.getColumns();
+  vector<Attribute> Bcols = B.getColumns();
+  cross_columns.reserve(cross_columns.size()+Bcols.size());
+  cross_columns.insert(cross_columns.end(), Bcols.begin(), Bcols.end());
+
+  vector<Tuple> cross_rows;
+  vector<Tuple> Arows = A.getRows();
+  vector<Tuple> Brows = B.getRows();
+  for(size_t i = 0; i < Arows.size(); ++i){
+    vector<string> Atuple = A[i].getDataStrings();
+    for(size_t j = 0; j < Brows.size(); ++j){
+      vector<string> Btuple = B[j].getDataStrings();
+      Atuple.reserve(Atuple.size() + Btuple.size());
+      Atuple.insert(Atuple.end(), Btuple.begin(), Btuple.end());
+      cross_rows.push_back(Atuple);
+    }
+  }
+
+  return Relation("ABcartesian", cross_rows, cross_columns);
+}
