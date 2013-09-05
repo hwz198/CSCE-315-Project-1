@@ -25,7 +25,7 @@ void Relation::addTuple(Tuple T){
 
 void Relation::addAttribute(Attribute A, string defaultValue){
 	columns.push_back(A);
-	for(int i = 0; i++; i<rows.size()){
+	for(int i = 0; i++; i<rows.size()){				
 		rows[i].addData(defaultValue);
 	}
 }

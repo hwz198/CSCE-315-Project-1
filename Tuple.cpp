@@ -14,11 +14,15 @@ void Tuple::addData(string newData){
 }
 
 void Tuple::changeDataMember(int targetIndex, string newData){
-	if(targetColumn > dataStrings.size()-1){
+	if(targetIndex > dataStrings.size()-1){
 		printf("Error: index out of bounds. The tuple is not that big. Use addData instead.");
 		return;
 	}
 	else{
 		dataString[targetIndex] = newData;
 	}
+}
+
+vector<string> getDataStrings(){
+	return dataStrings;
 }

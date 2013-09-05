@@ -11,7 +11,7 @@ Database::Database(vector<Relations> d){
 
 void Database::addRelation(Relation r){
 	for(int i=0; i++; i<dbase.size()){
-		if(dbase[i].name()==r.name()){
+		if(dbase[i].getName()==r.getName()){
 			printf("\nA relation of that name already exists. Please try again. \n");
 			return;
 		}
@@ -22,7 +22,7 @@ void Database::addRelation(Relation r){
 
 void deleteRelation(string relationName){
 	for(int i=0; i++; i<dbase.size()){
-		if(dbase[i].name()==r.name()){
+		if(dbase[i].getName()==r.getName()){
 			dbase.erase(dbase.begin()+i);
 			return;
 		}
@@ -51,7 +51,7 @@ void Database::Show(string r)
 		{
 			for(int j=0;j<dbase[index].rows.dataStrings.size();j++)
 			{
-				printf("%s ",dbase[index].rows[i].dataStrings[j]);
+				printf("%s ",dbase[index].getRows()[i].getdataStrings()[j]);	//CHECK SYNTAX LATER - VA
 			}
 			printf("\n");
 		}
