@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Database.h"
 using namespace std;
 
@@ -30,12 +31,6 @@ void deleteRelation(string relationName){
 	printf("\n Relation to delete not found. Please try again. \n");
 	return;
 }
-
-
-Relation Database::set_union(Relation A, Relation B){
-  if(A.columns != B.columns){
-    //return Empty relation
-  }
 
 void Database::Show(string r)
 {
@@ -119,4 +114,40 @@ void Database::Exit()
 {
 	printf("Shutting down the database");	//Do we need to delete all the files? - VA
 	exit(-1);
+}
+
+Relation Database::set_union(Relation A, Relation B){
+  if(A.columns != B.columns){ //not union compatible
+    return Relation();
+  }
+
+  vector<Tuple> union_rows;
+  vector<Tuple> Arows = A.rows();
+  vector<Tuple> Brows = B.rows();
+
+  sort(Arows.begin(), Arows.end(), tupleComp);
+  sort(Brows.begin(), Brows.end(), tupleComp);
+  set_union(Arows.begin(), Arows.end(),
+            Brows.begin(), Brows,end(),
+            back_inserter(union_rows), tupleComp);
+
+  return Relation("ABUnion", union_rows, A.columns());
+}
+
+Relation Database::set_difference(Relation A, Relation B){
+  if(A.columns() != B.columns()){ //not union compatible
+    //return empty relation
+  }
+
+  vector<Tuple> difference_rows;
+  vector<Tuple> Arows = A.rows();
+  vector<Tuple> Brows = B.rows();
+
+  sort(Arows.begin(), Arows.end(), tupleComp);
+  sort(Brows.begin(), Brows.end(), tupleComp);
+  set_union(Arows.begin(), Arows.end(),
+            Brows.begin(), Brows,end(),
+            back_inserter(difference_rows), tupleComp);
+
+  return Relation("ABDifference", difference_rows, A.columns());
 }

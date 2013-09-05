@@ -14,9 +14,9 @@ Relation::Relation(string c_name, Vector<Tuple> c_rows, Vector<Attribute> c_colu
 }
 
 Relation::Relation(Relation A){
-	name = A.name;
-	rows = A.rows;
-	columns = A.columns;
+	name = A.getName();
+	rows = A.getRows();
+	columns = A.getColumns();
 }
 
 void Relation::addTuple(Tuple T){

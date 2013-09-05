@@ -23,6 +23,11 @@ void Tuple::changeDataMember(int targetIndex, string newData){
 	}
 }
 
-vector<string> getDataStrings(){
+vector<string> Tuple::getDataStrings(){
 	return dataStrings;
+}
+
+bool tupleComp::operator()(const Tuple &a, const Tuple &b){
+  size_t sort_key = keys[0];
+  return a.getDataString()[sort_key] < b.getDataString()[sort_key];
 }
