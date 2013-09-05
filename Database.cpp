@@ -63,7 +63,7 @@ int Database::RelationExists(string r)
 	bool exist = false; //check if relation exists in dbase -- Need to edit this for views after our discussion today. 
 	int index;
 	for(int i = 0; i<dbase.size();i++){
-		if( r == dbase[i].name ){
+		if( r == dbase[i].getName() ){
 			exist = true;
 			index = i;
 			break;
@@ -86,6 +86,6 @@ void Database::Insert(string r, Tuple t)
 		return;
 	}
 	
-	dbase[index].rows.push_back(t);
+	dbase[index].getRows().addTuple(t);
 	
 }
