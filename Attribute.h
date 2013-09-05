@@ -1,3 +1,6 @@
+#ifndef ATTRIBUTE_H
+#define ATTRIBUTE_H
+
 #include <cstdio>
 #include <string>
 using namespace std;
@@ -17,3 +20,5 @@ class Attribute{
 		friend bool operator==(const Attribute &a, const Attribute &b);
 		friend bool operator!=(const Attribute &a, const Attribute &b);
 };
+
+#endif /*ATTRIBUTE_H*/

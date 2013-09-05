@@ -1,3 +1,6 @@
+#ifndef TUPLE_H
+#define TUPLE_H
+
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -16,3 +19,5 @@ class Tuple{
 struct tupleComp{
   bool operator()(const Tuple &a, const Tuple &b) const;
 };
+
+#endif /*TUPLE_H*/

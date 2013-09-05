@@ -1,3 +1,6 @@
+#ifndef DATABASE_H
+#define DATABASE_H
+
 #include <cstdio>
 #include <vector>
 #include "Relation.h"
@@ -6,10 +9,10 @@
 using namespace std;
 
 class Database{
-		vector<Relations> dbase;
+		vector<Relation> dbase;
 	public:
 		Database();
-		Database(vector<Relations> d);
+		Database(vector<Relation> d);
 		void addRelation(Relation r);
 		void deleteRelation(string relationName); //This may change, but I'm implementing it [PMG]
 		
@@ -27,3 +30,5 @@ class Database{
 		
 		void Exit();
 };
+
+#endif /*DATABASE_H*/

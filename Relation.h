@@ -1,3 +1,6 @@
+#ifndef RELATION_H
+#define RELATION_H
+
 #include <cstdio>
 #include <vector>
 #include "Tuple.h"
@@ -26,3 +29,5 @@ class Relation{
 		bool isKey(size_t id);
 		string getName() const;
 };
+
+#endif /*RELATION_H*/
