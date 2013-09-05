@@ -11,7 +11,7 @@ Database::Database(vector<Relations> d){
 }
 
 void Database::addRelation(Relation r){
-	for(int i=0; i++; i<dbase.size()){
+  for(int i=0; i<dbase.size()(); ++i){
 		if(dbase[i].getName()==r.getName()){
 			printf("\nA relation of that name already exists. Please try again. \n");
 			return;
@@ -21,8 +21,8 @@ void Database::addRelation(Relation r){
 	return;
 }
 
-void deleteRelation(string relationName){
-	for(int i=0; i++; i<dbase.size()){
+void Database::deleteRelation(string relationName){
+  for(int i=0; i<dbase.size(); ++i){
 		if(dbase[i].getName()==r.getName()){
 			dbase.erase(dbase.begin()+i);
 			return;
@@ -41,10 +41,10 @@ void Database::Show(string r)
 		return;
 	}
 	//Show the relation in dBase
-	for(int i=0;i<dbase[index].rows.size();i++)
+	for(int i=0; i<dbase[index].getRows().size(); ++i)
 	{
 		{
-			for(int j=0;j<dbase[index].rows.dataStrings.size();j++)
+                  for(int j=0; j<dbase[index].getRows().getDataStrings.size(); ++j)
 			{
 				printf("%s ",dbase[index].getRows()[i].getdataStrings()[j]);	//CHECK SYNTAX LATER - VA
 			}
@@ -57,7 +57,7 @@ int Database::RelationExists(string r)
 {
 	bool exist = false; //check if relation exists in dbase -- Need to edit this for views after our discussion today. 
 	int index;
-	for(int i = 0; i<dbase.size();i++){
+	for(int i = 0; i<dbase.size(); ++i){
 		if( r == dbase[i].getName() ){
 			exist = true;
 			index = i;

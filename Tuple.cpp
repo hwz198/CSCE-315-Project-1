@@ -23,6 +23,6 @@ void Tuple::changeDataMember(int targetIndex, string newData){
 	}
 }
 
-vector<string> Tuple::getDataStrings(){
+vector<string> Tuple::getDataStrings() const{
 	return dataStrings;
 }

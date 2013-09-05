@@ -3,7 +3,7 @@ using namespace std;
 
 Attribute::Attribute(){		//Do we need default constructor for attribute? - VA
 	value = string(); 
-	dataType = dataType();
+	dataType = dataTypes();
 }
 
 Attribute::Attribute(string newValue, dataTypes newType){
@@ -11,7 +11,7 @@ Attribute::Attribute(string newValue, dataTypes newType){
 	dataType = newType;
 }
 
-Attribute::Attribute(Attribute A){
+Attribute::Attribute(Attribute const &A){
 	value = A.value;
 	dataType = A.dataType;
 }

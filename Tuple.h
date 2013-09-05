@@ -10,5 +10,5 @@ class Tuple{
 		void changeDataMember(int targetIndex, string newData);
 		Tuple(vector<string> newDataVec);
 		Tuple();
-		vector<string> getDataStrings(); 	//accessor function for dataStrings
+		vector<string> getDataStrings() const; 	//accessor function for dataStrings
 };

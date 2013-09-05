@@ -1,4 +1,5 @@
-#include <stdio.h>
+#include <cstdio>
+#include <vector>
 #include "Relation.h"
 #include "Tuple.h"
 

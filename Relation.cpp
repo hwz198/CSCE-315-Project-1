@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "Relation.h"
 using namespace std;
 
@@ -7,13 +8,13 @@ Relation::Relation(){
 	columns = vector<Attribute>();
 }
 
-Relation::Relation(string c_name, Vector<Tuple> c_rows, Vector<Attribute> c_columns){
+Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns){
 	name = c_name;
 	rows = c_rows;
 	columns = c_columns;
 }
 
-Relation::Relation(Relation A){
+Relation::Relation(Relation const &A){
 	name = A.getName();
 	rows = A.getRows();
 	columns = A.getColumns();
@@ -25,20 +26,20 @@ void Relation::addTuple(Tuple T){
 
 void Relation::addAttribute(Attribute A, string defaultValue){
 	columns.push_back(A);
-	for(int i = 0; i++; i<rows.size()){				
+	for(int i = 0; i<rows.size(); ++i){				
 		rows[i].addData(defaultValue);
 	}
 }
 
-vector<Tuple> Relation::getRows(){
+vector<Tuple> Relation::getRows() const{
 	return rows;
 }
 
-vector<Attribute> Relation::getColumns(){
+vector<Attribute> Relation::getColumns() const{
 	return columns;
 }
 
-vector<size_t> Relation::getKeys(){
+vector<size_t> Relation::getKeys() const{
 	return keys;
 }
 
@@ -47,7 +48,7 @@ bool Relation::isKey(size_t index){
 	return find(keys.begin(), keys.end(), index) != keys.end();
 }
 
-string Relation::getName(){
+string Relation::getName() const{
 	return name;
 }
 
