@@ -24,7 +24,7 @@ void Database::addRelation(Relation r){
 
 void Database::deleteRelation(string relationName){
   for(int i=0; i<dbase.size(); ++i){
-		if(dbase[i].getName()==r.getName()){
+		if(dbase[i].getName()==relationName){
 			dbase.erase(dbase.begin()+i);
 			return;
 		}
@@ -45,9 +45,9 @@ void Database::Show(string r)
 	for(int i=0; i<dbase[index].getRows().size(); ++i)
 	{
 		{
-                  for(int j=0; j<dbase[index].getRows().getDataStrings.size(); ++j)
+                  for(int j=0; j<dbase[index].getRows()[i].getDataStrings().size(); ++j)
 			{
-                          cout << dbase[index].getRows()[i].getdataStrings()[j] << ' ';
+                          cout << dbase[index].getRows()[i].getDataStrings()[j] << ' ';
 			}
                   cout << '\n';
 		}
@@ -82,7 +82,7 @@ void Database::Insert(string r, Tuple t)
 		return;
 	}
 	
-	dbase[index].getRows().addTuple(t);
+	dbase[index].addTuple(t);
 }
 
 void Database::Open(string r)
