@@ -10,7 +10,7 @@ Database::Database(vector<Relations> d){
 }
 
 void Database::addRelation(Relation r){
-	for(int i=0; i++; i=dbase.size()){
+	for(int i=0; i++; i<dbase.size()){
 		if(dbase[i].name()==r.name()){
 			printf("\nA relation of that name already exists. Please try again. \n");
 			return;
@@ -21,7 +21,7 @@ void Database::addRelation(Relation r){
 }
 
 void deleteRelation(string relationName){
-	for(int i=0; i++; i=dbase.size()){
+	for(int i=0; i++; i<dbase.size()){
 		if(dbase[i].name()==r.name()){
 			dbase.erase(dbase.begin()+i);
 			return;

@@ -16,10 +16,9 @@ class Relation{
 		Relation(); //constructor
 		Relation(string c_name, Vector<Tuple> c_rows, Vector<Attribute> c_columns);
 		Relation(Relation A); //copy constructor
-		~Relation(); //destructor
-		addTuple(Tuple T);
-		addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
-		rows();
-		columns();
-		name();
+		void addTuple(Tuple T);
+		void addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
+		Vector<Tuple> getRows();
+		Vector<Attribute> getColumns();
+		string getName();
 };
