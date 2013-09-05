@@ -30,14 +30,23 @@ void Relation::addAttribute(Attribute A, string defaultValue){
 	}
 }
 
-Vector<Tuple> rows(){
+vector<Tuple> getRows(){
 	return rows;
 }
 
-Vector<Attribute> columns(){
+vector<Attribute> getColumns(){
 	return columns;
 }
 
-string name(){
+vector<size_t> getKeys(){
+	return keys;
+}
+
+//returns false if index isn't found in keys vector
+bool isKey(size_t index){
+	return find(keys.begin(), keys.end(), index) != keys.end();
+}
+
+string getName(){
 	return name;
 }
