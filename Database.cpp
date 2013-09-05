@@ -82,7 +82,7 @@ void Database::Insert(string r, Tuple t)
 	int index = RelationExists(r);
 	if( index == -1 )
 	{
-		printf("Either the relation does not exist or is not open");
+		printf("Either the relation %s does not exist or is not open\n",r);
 		return;
 	}
 	
@@ -93,7 +93,7 @@ void Database::Open(string r)
 {
 	int check = RelationExists(r);	//Check if relation is already in memory
 	if(check != -1){
-		printf("Database %s is already open", r);
+		printf("Database %s is already open\n", r);
 		return;
 	}
 	
@@ -104,7 +104,7 @@ void Database::Close(string r)
 {
 	int index = RelationExists(r);	//Check if relation is already in memory
 	if(index == -1){
-		printf("Error. Database %s does not exist in memory!",r);
+		printf("Error. Database %s does not exist in memory!\n",r);
 		return;
 	}
 
@@ -113,4 +113,10 @@ void Database::Close(string r)
 		
 
 	dbase.erase(dbase.begin() + index);			//Delete from memory
+}
+
+void Database::Exit()
+{
+	printf("Shutting down the database");	//Do we need to delete all the files? - VA
+	exit(-1);
 }

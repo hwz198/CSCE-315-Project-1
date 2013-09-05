@@ -23,4 +23,6 @@ class Database{
 		
 		void Open(string r); //Open relation r - requires file IO
 		void Close(string r);
+		
+		void Exit();
 };
