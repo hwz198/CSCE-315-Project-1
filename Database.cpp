@@ -77,7 +77,7 @@ int Database::RelationExists(string r)
 	}
 }
 
-void Database::Show(string r, Tuple t)
+void Database::Insert(string r, Tuple t)
 {
 	int index = RelationExists(r);
 	if( index == -1 )
