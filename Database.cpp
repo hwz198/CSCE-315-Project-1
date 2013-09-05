@@ -117,7 +117,7 @@ void Database::Exit()
 	exit(-1);
 }
 
-Relation Database::set_union(Relation A, Relation B){
+Relation Database::relation_union(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
     return Relation();
   }
@@ -135,7 +135,7 @@ Relation Database::set_union(Relation A, Relation B){
   return Relation("ABUnion", union_rows, A.getColumns());
 }
 
-Relation Database::set_difference(Relation A, Relation B){
+Relation Database::relation_difference(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
     //return empty relation
   }
