@@ -1,5 +1,6 @@
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <string>
+#include <vector>
 using namespace std;
 
 class Tuple{
@@ -10,8 +11,4 @@ class Tuple{
 		Tuple(vector<string> newDataVec);
 		Tuple();
 		vector<string> getDataStrings(); 	//accessor function for dataStrings
-};
-
-struct tupleComp{
-  bool operator()(const Tuple &a, const Tuple &b);{
 };

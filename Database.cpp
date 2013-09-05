@@ -125,11 +125,11 @@ Relation Database::set_union(Relation A, Relation B){
   vector<Tuple> Arows = A.rows();
   vector<Tuple> Brows = B.rows();
 
-  sort(Arows.begin(), Arows.end(), tupleComp);
-  sort(Brows.begin(), Brows.end(), tupleComp);
+  sort(Arows.begin(), Arows.end(), A.tupleComp);
+  sort(Brows.begin(), Brows.end(), B.tupleComp);
   set_union(Arows.begin(), Arows.end(),
             Brows.begin(), Brows,end(),
-            back_inserter(union_rows), tupleComp);
+            back_inserter(union_rows), A.tupleComp);
 
   return Relation("ABUnion", union_rows, A.columns());
 }
@@ -143,11 +143,11 @@ Relation Database::set_difference(Relation A, Relation B){
   vector<Tuple> Arows = A.rows();
   vector<Tuple> Brows = B.rows();
 
-  sort(Arows.begin(), Arows.end(), tupleComp);
-  sort(Brows.begin(), Brows.end(), tupleComp);
+  sort(Arows.begin(), Arows.end(), A.tupleComp);
+  sort(Brows.begin(), Brows.end(), B.tupleComp);
   set_union(Arows.begin(), Arows.end(),
             Brows.begin(), Brows,end(),
-            back_inserter(difference_rows), tupleComp);
+            back_inserter(difference_rows), A.tupleComp);
 
   return Relation("ABDifference", difference_rows, A.columns());
 }

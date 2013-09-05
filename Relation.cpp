@@ -30,23 +30,28 @@ void Relation::addAttribute(Attribute A, string defaultValue){
 	}
 }
 
-vector<Tuple> getRows(){
+vector<Tuple> Relation::getRows(){
 	return rows;
 }
 
-vector<Attribute> getColumns(){
+vector<Attribute> Relation::getColumns(){
 	return columns;
 }
 
-vector<size_t> getKeys(){
+vector<size_t> Relation::getKeys(){
 	return keys;
 }
 
 //returns false if index isn't found in keys vector
-bool isKey(size_t index){
+bool Relation::isKey(size_t index){
 	return find(keys.begin(), keys.end(), index) != keys.end();
 }
 
-string getName(){
+string Relation::getName(){
 	return name;
+}
+
+bool Relation::tupleComp(const Tuple &a, const Tuple &b){
+  size_t sort_key = keys[0];
+  return a.getDataStrings()[sort_key] < b.getDataStrings()[sort_key];
 }

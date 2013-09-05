@@ -2,7 +2,7 @@
 using namespace std;
 
 Tuple::Tuple(){
-	dataStrings = vector<string>;
+	dataStrings = vector<string>();
 }
 
 Tuple::Tuple(vector<string> newDataVec){
@@ -10,7 +10,7 @@ Tuple::Tuple(vector<string> newDataVec){
 }
 
 void Tuple::addData(string newData){
-	dataString.push_back(newData);
+	dataStrings.push_back(newData);
 }
 
 void Tuple::changeDataMember(int targetIndex, string newData){
@@ -19,15 +19,10 @@ void Tuple::changeDataMember(int targetIndex, string newData){
 		return;
 	}
 	else{
-		dataString[targetIndex] = newData;
+		dataStrings[targetIndex] = newData;
 	}
 }
 
 vector<string> Tuple::getDataStrings(){
 	return dataStrings;
-}
-
-bool tupleComp::operator()(const Tuple &a, const Tuple &b){
-  size_t sort_key = keys[0];
-  return a.getDataString()[sort_key] < b.getDataString()[sort_key];
 }
