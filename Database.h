@@ -20,4 +20,7 @@ class Database{
 		void Show(string r);	//Show the relation
 		int RelationExists(string r); 	//Check if relation exists in dbase. created to avoid duplicate code in show, insert functions
 		void Insert(string r, Tuple t); //relation r and the tuple t that needs to be inserted into the relation
+		
+		void Open(string r); //Open relation r - requires file IO
+		void Close(string r);
 };

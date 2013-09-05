@@ -87,5 +87,30 @@ void Database::Insert(string r, Tuple t)
 	}
 	
 	dbase[index].getRows().addTuple(t);
+}
+
+void Database::Open(string r)
+{
+	int check = RelationExists(r);	//Check if relation is already in memory
+	if(check != -1){
+		printf("Database %s is already open", r);
+		return;
+	}
 	
+	//Rest of the function requires file IO - to be implemented later
+}
+
+void Database::Close(string r)
+{
+	int index = RelationExists(r);	//Check if relation is already in memory
+	if(index == -1){
+		printf("Error. Database %s does not exist in memory!",r);
+		return;
+	}
+
+	//Write to disk - file IO
+		
+		
+
+	dbase.erase(dbase.begin() + index);			//Delete from memory
 }

@@ -1,8 +1,8 @@
 #include "Attribute.h"
 using namespace std;
 
-Attribute::Attribute(){
-	value = string();
+Attribute::Attribute(){		//Do we need default constructor for attribute? - VA
+	value = string(); 
 	dataType = dataType();
 }
 
