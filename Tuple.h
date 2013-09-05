@@ -5,9 +5,8 @@ using namespace std;
 class Tuple{
 		vector<string> dataStrings;
 	public:
-		addData(string newData);
-		changeDataMember(int targetColumn, string newData);
+		void addData(string newData);
+		void changeDataMember(int targetIndex, string newData);
 		Tuple(vector<string> newDataVec);
 		Tuple();
-		~Tuple();
 };
