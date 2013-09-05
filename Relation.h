@@ -25,5 +25,4 @@ class Relation{
 		vector<size_t> getKeys() const;
 		bool isKey(size_t id);
 		string getName() const;
-		bool tupleComp(const Tuple &a, const Tuple &b);
 };

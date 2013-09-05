@@ -51,8 +51,3 @@ bool Relation::isKey(size_t index){
 string Relation::getName() const{
 	return name;
 }
-
-bool Relation::tupleComp(const Tuple &a, const Tuple &b){
-  size_t sort_key = keys[0];
-  return a.getDataStrings()[sort_key] < b.getDataStrings()[sort_key];
-}

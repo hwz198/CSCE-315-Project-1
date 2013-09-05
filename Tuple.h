@@ -12,3 +12,7 @@ class Tuple{
 		Tuple();
 		vector<string> getDataStrings() const; 	//accessor function for dataStrings
 };
+
+struct tupleComp{
+  bool operator()(const Tuple &a, const Tuple &b) const;
+};

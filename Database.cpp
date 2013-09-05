@@ -117,39 +117,39 @@ void Database::Exit()
 }
 
 Relation Database::set_union(Relation A, Relation B){
-  if(A.columns != B.columns){ //not union compatible
+  if(A.getColumns() != B.getColumns()){ //not union compatible
     return Relation();
   }
 
   vector<Tuple> union_rows;
-  vector<Tuple> Arows = A.rows();
-  vector<Tuple> Brows = B.rows();
+  vector<Tuple> Arows = A.getRows();
+  vector<Tuple> Brows = B.getRows();
 
-  sort(Arows.begin(), Arows.end(), A.tupleComp);
-  sort(Brows.begin(), Brows.end(), B.tupleComp);
-  set_union(Arows.begin(), Arows.end(),
-            Brows.begin(), Brows,end(),
-            back_inserter(union_rows), A.tupleComp);
+  sort(Arows.begin(), Arows.end(), tupleComp());
+  sort(Brows.begin(), Brows.end(), tupleComp());
+  std::set_union(Arows.begin(), Arows.end(),
+            Brows.begin(), Brows.end(),
+            back_inserter(union_rows), tupleComp());
 
-  return Relation("ABUnion", union_rows, A.columns());
+  return Relation("ABUnion", union_rows, A.getColumns());
 }
 
 Relation Database::set_difference(Relation A, Relation B){
-  if(A.columns() != B.columns()){ //not union compatible
+  if(A.getColumns() != B.getColumns()){ //not union compatible
     //return empty relation
   }
 
   vector<Tuple> difference_rows;
-  vector<Tuple> Arows = A.rows();
-  vector<Tuple> Brows = B.rows();
+  vector<Tuple> Arows = A.getRows();
+  vector<Tuple> Brows = B.getRows();
 
-  sort(Arows.begin(), Arows.end(), A.tupleComp);
-  sort(Brows.begin(), Brows.end(), B.tupleComp);
-  set_union(Arows.begin(), Arows.end(),
-            Brows.begin(), Brows,end(),
-            back_inserter(difference_rows), A.tupleComp);
+  sort(Arows.begin(), Arows.end(), tupleComp());
+  sort(Brows.begin(), Brows.end(), tupleComp());
+  std::set_difference(Arows.begin(), Arows.end(),
+            Brows.begin(), Brows.end(),
+            back_inserter(difference_rows), tupleComp());
 
-  return Relation("ABDifference", difference_rows, A.columns());
+  return Relation("ABDifference", difference_rows, A.getColumns());
 }
 
 Relation cartesian_product(Relation A, Relation B){
@@ -162,9 +162,9 @@ Relation cartesian_product(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
   for(size_t i = 0; i < Arows.size(); ++i){
-    vector<string> Atuple = A[i].getDataStrings();
+    vector<string> Atuple = Arows[i].getDataStrings();
     for(size_t j = 0; j < Brows.size(); ++j){
-      vector<string> Btuple = B[j].getDataStrings();
+      vector<string> Btuple = Brows[j].getDataStrings();
       Atuple.reserve(Atuple.size() + Btuple.size());
       Atuple.insert(Atuple.end(), Btuple.begin(), Btuple.end());
       cross_rows.push_back(Atuple);

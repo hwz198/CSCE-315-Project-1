@@ -16,15 +16,23 @@ Attribute::Attribute(Attribute const &A){
 	dataType = A.dataType;
 }
 
-string Attribute::getValue(){
+string Attribute::getValue() const{
 	return value;
 }
 
-dataTypes Attribute::getDataType(){
+dataTypes Attribute::getDataType() const{
 	return dataType;
 }
 
 void Attribute::renameAttr(string newValue, dataTypes newType){
 	value = newValue;
 	dataType = newType;
+}
+
+bool operator==(const Attribute &a, const Attribute &b){
+  return (a.getValue() == b.getValue() && a.getDataType() == b.getDataType());
+}
+
+bool operator!=(const Attribute &a, const Attribute &b){
+  return (a.getValue() != b.getValue() || a.getDataType() != b.getDataType());
 }
