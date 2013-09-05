@@ -1,4 +1,4 @@
-CC=clang++
+CC=g++
 CFLAGS=
 
 Database.o: Database.h Database.cpp Relation.o
