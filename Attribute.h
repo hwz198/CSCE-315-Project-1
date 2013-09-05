@@ -2,7 +2,7 @@
 #include <string.h>
 using namespace std;
 
-		enum dataTypes {str, i, d};
+enum dataTypes {str, i, d};
 
 class Attribute{
 		string value;
@@ -12,6 +12,6 @@ class Attribute{
 		dataTypes getDataType();
 		void renameAttr(string newValue, dataTypes newType);
 		Attribute(string newValue, dataTypes newType); //contructor
-		Attribute();
-		~Attribute(); //destructor
+		Attribute(); //constructor
+		Attribute(Attribute A); //copy constructor
 };
