@@ -14,10 +14,6 @@ class Relation{
 		vector<Attribute> columns;
 		vector<size_t> keys;
 	public:
-		//Other relational functions
-		vector<Tuple> selection(string condition); //When this function is made, you may need to update the condition to be the proper type
-		Relation projection(vector<Attribute> columns);
-		void rename(Attribute target, string newvalue);
 		Relation(); //constructor
 		Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns);
 		Relation(Relation const &A); //copy constructor

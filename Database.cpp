@@ -117,6 +117,86 @@ void Database::Exit()
 	exit(-1);
 }
 
+/* param A: Relation selecting from
+   param new_rel_name: Name of returned relation
+   param attrib_val: Name (or value) or attribute in A used for comparison
+   param op: Operator used in comparison
+   param condition: Attribute value to compare to */
+Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
+                             logic_operator op, Attribute condition){
+  vector<Attribute> Acols = A.getColumns();
+  int index = -1;
+  for(size_t i = 0; i < Acols.size(); ++i){
+    if(Acols[i].getValue() == attrib_val){	//attribute with matching name exists
+      index = i;
+      break;
+    }
+  }
+  if(index == -1)
+    return Relation();	//empty relation
+
+  Attribute Aattrib = Acols[index];
+
+  if(Aattrib.getDataType() != condition.getDataType()) //same name, different data type
+    return Relation(); //empty relation
+
+  vector<Tuple> Arows = A.getRows();
+  Relation sel(new_rel_name, vector<Tuple>(), Acols);
+
+  switch(op){
+  case g:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() > Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  case l:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() > Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  case ge:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() >= Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  case le:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() <= Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  case e:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() == Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  case ne:
+    for(size_t i = 0; i < Arows.size(); ++i){
+      //compare to Tuple value in index of Attribute to compare to
+      if(condition.getValue() != Arows[i].getDataStrings()[index]){
+        sel.addTuple(Arows[i]);
+      }
+    }
+    break;
+  }
+
+  return sel;
+}
+
 Relation Database::relation_union(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
     return Relation();
