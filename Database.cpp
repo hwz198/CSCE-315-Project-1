@@ -197,6 +197,45 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
   return sel;
 }
 
+
+/* param A: Relation to project from
+   param new_rel_name: Name of returned relation
+   attrib_vals: Names (or values) of attributes to project from A */
+Relation Database::projection(Relation A, string new_rel_name,
+                              vector<string> attrib_vals){
+  vector<size_t> indices;
+  vector<Attribute> Acols = A.getColumns();
+  vector<Tuple> Arows = A.getRows();
+  vector<Attribute> AprojCols;
+  vector<Tuple> AprojRows; 
+
+  for(size_t i = 0; i < Acols.size(); ++i){
+    //attrib_vals contains Acols[i]
+    if(find(attrib_vals.begin(), attrib_vals.end(), Acols[i].getValue()) != attrib_vals.end()){
+      indices.push_back(i);
+    }
+  }
+
+  if(indices.empty())
+    return Relation();
+
+  for(size_t i = 0; i < indices.size(); ++i){
+    AprojCols.push_back(Acols[indices[i]]);
+  }
+
+  for(size_t i = 0; i < Arows.size(); ++i){
+    Tuple tup;
+    vector<string> dataStrings = Arows[i].getDataStrings();
+    for(size_t j = 0; j < indices.size(); ++j){
+      tup.addData(dataStrings[indices[j]]);
+    }
+    AprojRows.push_back(tup);
+  }
+
+  return Relation(new_rel_name, AprojRows, AprojCols);
+}
+
+
 Relation Database::relation_union(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
     return Relation();
