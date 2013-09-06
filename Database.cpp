@@ -235,6 +235,25 @@ Relation Database::projection(Relation A, string new_rel_name,
   return Relation(new_rel_name, AprojRows, AprojCols);
 }
 
+/* param A: Relation to rename attributes from
+   param new_rel_name: Name for returned relations
+   param new_attrib_vals: Vector of new names for each attribute in A */
+Relation Database::rename(Relation A, string new_rel_name,
+                          vector<string> new_attrib_vals){
+  vector<Attribute> Acols = A.getColumns();
+  vector<Attribute> new_cols;
+  if(Acols.size() != new_attrib_vals.size())
+    return Relation();
+
+  for(size_t i = 0; i < new_attrib_vals.size(); ++i){
+    Attribute attr = Acols[i];
+    attr.renameAttr(new_attrib_vals[i], Acols[i].getDataType());
+    new_cols.push_back(attr);
+  }
+
+  return Relation(new_rel_name, A.getRows(), new_cols);
+}
+
 
 Relation Database::relation_union(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
