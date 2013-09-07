@@ -55,6 +55,12 @@ void Database::Show(string r)
 		return;
 	}
 	//Show the relation in dBase
+        string attribs;
+        for(int i = 0; i < dbase[index].getColumns().size(); ++i){
+          attribs += dbase[index].getColumns()[i].getValue() + "\t";
+        }
+        cout << attribs << endl << endl;
+
 	for(int i=0; i<dbase[index].getRows().size(); ++i)
 	{
 		{
