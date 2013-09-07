@@ -47,37 +47,41 @@ Relation Database::getRelation(string relationName){
   return Relation();
 }
 
-void Database::Show(string r)
-{
-	int index = RelationExists(r);	//Check if relation exists and get the index
-	if( index == -1 )
-	{
-		printf("Either the relation does not exist or is not open");
-		return;
-	}
-	//Show the relation in dBase
-        for(int i = 0; i < dbase[index].getColumns().size(); ++i){
-          cout << dbase[index].getColumns()[i].getValue() << '\t';
+void Database::Show(const Relation &r) const{
+  //Show the relation in dBase
+  for(int i = 0; i < r.getColumns().size(); ++i){
+    cout << r.getColumns()[i].getValue() << '\t';
+  }
+  cout << endl << endl;
+
+  for(int i=0; i<r.getRows().size(); ++i)
+    {
+      for(int j=0; j<r.getRows()[i].getDataStrings().size(); ++j)
+        {
+          cout << r.getRows()[i].getDataStrings()[j] << '\t';
         }
-        cout << endl << endl;
-
-	for(int i=0; i<dbase[index].getRows().size(); ++i)
-	{
-		{
-                  for(int j=0; j<dbase[index].getRows()[i].getDataStrings().size(); ++j)
-			{
-                          cout << dbase[index].getRows()[i].getDataStrings()[j] << '\t';
-			}
-                  cout << '\n';
-		}
-	}	
+      cout << '\n';
+    }
 }
 
-void Database::Show(size_t index){
-  return Database::Show(dbase[index].getName());
+
+void Database::Show(string r) const
+{
+  int index = RelationExists(r);	//Check if relation exists and get the index
+  if( index == -1 )
+    {
+      printf("Either the relation does not exist or is not open");
+      return;
+    }
+  Database::Show(dbase[index]);
 }
 
-int Database::RelationExists(string r)
+void Database::Show(size_t index) const{
+  if(index < dbase.size())
+    return Database::Show(dbase[index]);
+}
+
+int Database::RelationExists(string r) const
 {
 	bool exist = false; //check if relation exists in dbase -- Need to edit this for views after our discussion today. 
 	int index;
