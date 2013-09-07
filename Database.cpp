@@ -60,11 +60,15 @@ void Database::Show(string r)
 		{
                   for(int j=0; j<dbase[index].getRows()[i].getDataStrings().size(); ++j)
 			{
-                          cout << dbase[index].getRows()[i].getDataStrings()[j] << ' ';
+                          cout << dbase[index].getRows()[i].getDataStrings()[j] << '\t';
 			}
                   cout << '\n';
 		}
 	}	
+}
+
+void Database::Show(size_t index){
+  return Database::Show(dbase[index].getName());
 }
 
 int Database::RelationExists(string r)

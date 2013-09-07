@@ -34,6 +34,7 @@ class Database{
 		Relation cartesian_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
 		
 		void Show(string r);	//Show the relation
+		void Show(size_t index);
 		int RelationExists(string r); 	//Check if relation exists in dbase. created to avoid duplicate code in show, insert functions
 		void Insert(string r, Tuple t); //relation r and the tuple t that needs to be inserted into the relation
 		
