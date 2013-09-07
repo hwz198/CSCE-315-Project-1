@@ -32,3 +32,11 @@ bool tupleComp::operator()(const Tuple &a, const Tuple &b) const{
   size_t sort_key = 0;
   return a.getDataStrings()[sort_key] < b.getDataStrings()[sort_key];
 }
+
+bool operator==(const Tuple &a, const Tuple &b){
+  return a.dataStrings == b.dataStrings;
+}
+
+bool operator!=(const Tuple &a, const Tuple &b){
+  return a.dataStrings != b.dataStrings;
+}

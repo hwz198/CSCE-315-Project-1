@@ -31,6 +31,20 @@ void Relation::addAttribute(Attribute A, string defaultValue){
 	}
 }
 
+void Relation::deleteTuple(Tuple T){
+  for(vector<Tuple>::iterator it = rows.begin(); it != rows.end(); ++it){
+    if(*it == T){
+      rows.erase(it);
+      break;
+    }
+  }
+}
+
+void Relation::deleteTuple(size_t index){
+  if(index < rows.size())
+    rows.erase(rows.begin() + index);
+}
+
 vector<Tuple> Relation::getRows() const{
 	return rows;
 }
@@ -50,4 +64,22 @@ bool Relation::isKey(size_t index){
 
 string Relation::getName() const{
 	return name;
+}
+
+bool Relation::equalContents(const Relation &B) const{
+  return rows == B.getRows() && columns == B.getColumns();
+}
+
+bool operator==(const Relation &a, const Relation &b){
+  return a.name == b.name
+    && a.rows == b.rows
+    && a.columns == b.columns
+    && a.keys == b.keys;
+}
+
+bool operator!=(const Relation &a, const Relation &b){
+  return a.name != b.name
+    || a.rows != b.rows
+    || a.columns != b.columns
+    || a.keys != b.keys;
 }
