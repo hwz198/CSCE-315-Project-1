@@ -20,6 +20,7 @@ class Database{
 		void deleteRelation(string relationName); //This may change, but I'm implementing it [PMG]
 		Relation getRelation(size_t index);
 		Relation getRelation(string relationName);
+		int numberOfRelations();
 		
 		//Relational Functions, the rest are specific to a single Relation and are members of Relation class
 		Relation selection(Relation A, string new_rel_name,

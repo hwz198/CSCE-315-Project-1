@@ -47,6 +47,10 @@ Relation Database::getRelation(string relationName){
   return Relation();
 }
 
+int Database::numberOfRelations(){
+	return dbase.size();
+}
+
 void Database::Show(string r)
 {
 	int index = RelationExists(r);	//Check if relation exists and get the index
