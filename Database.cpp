@@ -172,149 +172,136 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
     case g:
       for(size_t i = 0; i < Arows.size(); ++i){
         //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) > atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) > atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case l:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) > atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) < atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case ge:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) >= atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) >= atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case le:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) <= atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) <= atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case e:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) == atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) == atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case ne:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atoi(condition.getValue().c_str()) != atoi(Arows[i].getDataStrings()[index].c_str())){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) != atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     }
+
   } else if(Aattrib.getDataType() == d){ //double
-   switch(op){
-    case g:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) > atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    case l:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) > atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    case ge:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) >= atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    case le:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) <= atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    case e:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) == atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    case ne:
-      for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(atof(condition.getValue().c_str()) != atof(Arows[i].getDataStrings()[index].c_str())){
-          sel.addTuple(Arows[i]);
-        }
-      }
-      break;
-    }
-  } else { //string
+
     switch(op){
     case g:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() > Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) > atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case l:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() > Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) < atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case ge:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() >= Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) >= atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case le:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() <= Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) <= atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case e:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() == Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) == atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
       }
       break;
     case ne:
       for(size_t i = 0; i < Arows.size(); ++i){
-        //compare to Tuple value in index of Attribute to compare to
-        if(condition.getValue() != Arows[i].getDataStrings()[index]){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) != atoi(condition.getValue().c_str())){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    }
+
+  } else { //string
+
+    switch(op){
+    case g:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] > condition.getValue()){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    case l:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] < condition.getValue()){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    case ge:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] >= condition.getValue()){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    case le:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] <= condition.getValue()){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    case e:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] == condition.getValue()){
+          sel.addTuple(Arows[i]);
+        }
+      }
+      break;
+    case ne:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] != condition.getValue()){
           sel.addTuple(Arows[i]);
         }
       }
