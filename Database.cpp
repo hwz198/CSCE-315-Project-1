@@ -33,6 +33,19 @@ void Database::deleteRelation(string relationName){
 	return;
 }
 
+Relation Database::getRelation(size_t index){
+  return dbase[index];
+}
+
+Relation Database::getRelation(string relationName){
+  for(size_t i = 0; i < dbase.size(); ++i){
+    if(dbase[i].getName() == relationName){
+      return dbase[i];
+    }
+  }
+  return Relation();
+}
+
 void Database::Show(string r)
 {
 	int index = RelationExists(r);	//Check if relation exists and get the index
