@@ -44,6 +44,7 @@ Relation Database::getRelation(string relationName){
       return dbase[i];
     }
   }
+  cerr << "Relation '" << relationName << "' not found.\n";
   return Relation();
 }
 
@@ -163,13 +164,17 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
       break;
     }
   }
-  if(index == -1)
+  if(index == -1){
+    cerr << "Attribute '" << attrib_val << "' not found.\n";
     return Relation();	//empty relation
+  }
 
   Attribute Aattrib = Acols[index];
 
-  if(Aattrib.getDataType() != condition.getDataType()) //same name, different data type
+  if(Aattrib.getDataType() != condition.getDataType()){ //same name, different data type
+    cerr << "Attributes to compare are not of the same data type\n";
     return Relation(); //empty relation
+  }
 
   vector<Tuple> Arows = A.getRows();
   Relation sel(new_rel_name, vector<Tuple>(), Acols, A.getKeys());
@@ -339,8 +344,10 @@ Relation Database::projection(Relation A, string new_rel_name,
     }
   }
 
-  if(indices.empty())
+  if(indices.empty()){
+    cerr << "Nothing to project\n";
     return Relation();
+  }
 
   for(size_t i = 0; i < indices.size(); ++i){
     AprojCols.push_back(Acols[indices[i]]);
@@ -365,8 +372,10 @@ Relation Database::rename(Relation A, string new_rel_name,
                           vector<string> new_attrib_vals){
   vector<Attribute> Acols = A.getColumns();
   vector<Attribute> new_cols;
-  if(Acols.size() != new_attrib_vals.size())
+  if(Acols.size() != new_attrib_vals.size()){
+    cerr << "Number of new attributes names not equal to number of current attributes.\n";
     return Relation();
+  }
 
   for(size_t i = 0; i < new_attrib_vals.size(); ++i){
     Attribute attr = Acols[i];
@@ -380,6 +389,7 @@ Relation Database::rename(Relation A, string new_rel_name,
 
 Relation Database::relation_union(Relation A, Relation B){
   if(A.getColumns() != B.getColumns()){ //not union compatible
+    cerr << "Relations not union compatible.\n";
     return Relation();
   }
 
@@ -397,8 +407,9 @@ Relation Database::relation_union(Relation A, Relation B){
 }
 
 Relation Database::relation_difference(Relation A, Relation B){
-  if(A.getColumns() != B.getColumns()){ //not union compatible
-    //return empty relation
+  if(A.getColumns() != B.getColumns()){ //not union compatiable
+    cerr << "Relations not difference compatiable.\n";
+    return Relation();
   }
 
   vector<Tuple> difference_rows;

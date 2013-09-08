@@ -10,9 +10,11 @@ Relation::Relation(){
 }
 
 Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys){
-	if(c_rows[0].getDataType().size() != c_columns.size()){
-		cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
-		return;
+	if(!c_rows.empty()){
+		if(c_rows[0].getDataStrings().size() != c_columns.size()){
+			cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
+			return;
+		}
 	}
 	name = c_name;
 	rows = c_rows;
@@ -78,6 +80,10 @@ string Relation::getName() const{
 
 bool Relation::equalContents(const Relation &B) const{
   return rows == B.getRows() && columns == B.getColumns();
+}
+
+bool Relation::empty() const{
+  return rows.empty();
 }
 
 bool operator==(const Relation &a, const Relation &b){

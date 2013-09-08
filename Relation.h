@@ -29,6 +29,7 @@ class Relation{
 		bool equalContents(const Relation &b) const;
 		friend bool operator==(const Relation &a, const Relation &b);
 		friend bool operator!=(const Relation &a, const Relation &b);
+		bool empty() const;
 };
 
 #endif /*RELATION_H*/

@@ -84,7 +84,19 @@ bool test_relational(){
 //////////////////////////////////////////////////
 ///            BEGIN SELECTION TEST            ///
 //////////////////////////////////////////////////
+  //test not found
+  if(!db.selection(db.getRelation(0), "broke", "Owner",
+                   e, Attribute("Sam", str)).empty()){
+    cerr << "Selection, attribute not found, FAILED\n";
+    success = false;
+  }
+  //incompatiable dataTypes
   //selection int
+  if(!db.selection(db.getRelation(0), "broke", "Age",
+                   e, Attribute("eight", str)).empty()){
+    cerr << "Selection, attribute not found, FAILED\n";
+    success = false;
+  }
   {
   vector<Tuple> old_animals_rows;
   old_animals_rows.push_back(mittens);
