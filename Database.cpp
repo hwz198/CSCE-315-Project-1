@@ -156,6 +156,11 @@ void Database::Exit()
    param condition: Attribute value to compare to */
 Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
                              logic_operator op, Attribute condition){
+  if(A.empty()){
+    cerr << "Passed empty relation\n";
+    return Relation();
+  }
+
   vector<Attribute> Acols = A.getColumns();
   int index = -1;
   for(size_t i = 0; i < Acols.size(); ++i){
@@ -331,6 +336,11 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
    attrib_vals: Names (or values) of attributes to project from A */
 Relation Database::projection(Relation A, string new_rel_name,
                               vector<string> attrib_vals){
+  if(A.empty()){
+    cerr << "Passed empty Relation\n";
+    return Relation();
+  }
+  
   vector<size_t> indices;
   vector<Attribute> Acols = A.getColumns();
   vector<Tuple> Arows = A.getRows();
@@ -345,7 +355,7 @@ Relation Database::projection(Relation A, string new_rel_name,
   }
 
   if(indices.empty()){
-    cerr << "Nothing to project\n";
+    cerr << "No matching attribute values found\n";
     return Relation();
   }
 
