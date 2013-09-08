@@ -47,23 +47,11 @@ Relation Database::getRelation(string relationName){
   return Relation();
 }
 
-<<<<<<< HEAD
+
 int Database::numberOfRelations(){
 	return dbase.size();
 }
 
-void Database::Show(string r)
-{
-	int index = RelationExists(r);	//Check if relation exists and get the index
-	if( index == -1 )
-	{
-		printf("Either the relation does not exist or is not open");
-		return;
-	}
-	//Show the relation in dBase
-        for(int i = 0; i < dbase[index].getColumns().size(); ++i){
-          cout << dbase[index].getColumns()[i].getValue() << '\t';
-=======
 void Database::Show(const Relation &r) const{
   //Show the relation in dBase
   for(int i = 0; i < r.getColumns().size(); ++i){
@@ -76,7 +64,6 @@ void Database::Show(const Relation &r) const{
       for(int j=0; j<r.getRows()[i].getDataStrings().size(); ++j)
         {
           cout << r.getRows()[i].getDataStrings()[j] << '\t';
->>>>>>> dcc522b16fb9f698308ff40cc98ace08c29901ef
         }
       cout << '\n';
     }
