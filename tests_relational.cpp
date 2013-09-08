@@ -3,15 +3,16 @@
 #include <vector>
 using namespace std;
 
-bool test_relational();
+void test_relational();
 
 int main(){
-  cout << test_relational() << endl;
+  test_relational();
   return 0;
 }
 
-bool test_relational(){
+void test_relational(){
   bool success = true;
+  string test_output;
 
   vector<Attribute> animals_columns;
   animals_columns.push_back(Attribute("Species", str));
@@ -21,7 +22,7 @@ bool test_relational(){
   animals_columns.push_back(Attribute("Weight", d));
 
   vector<size_t> keys;
-  keys.push_back(3);
+  keys.push_back(2);
 
   vector<Tuple> animals_rows;
 
@@ -81,9 +82,28 @@ bool test_relational(){
   db.Show(db.getRelation(0).getName());
   cout << endl << endl;
 
+  vector<string> jerry;
+  jerry.push_back("Bird");
+  jerry.push_back("1");
+  jerry.push_back("Jerry");
+  jerry.push_back("Male");
+  jerry.push_back("1.4");
+
+  vector<string> bowser;
+  bowser.push_back("Dog");
+  bowser.push_back("5");
+  bowser.push_back("Bowser");
+  bowser.push_back("Male");
+  bowser.push_back("43.1");
+
 //////////////////////////////////////////////////
 ///            BEGIN SELECTION TEST            ///
 //////////////////////////////////////////////////
+  if(!db.selection(Relation(), "empty", "Age", g,
+                   Attribute("8", i)).empty()){
+    cerr << "Selection, empty Relation FAILED\n";
+    success = false;
+  }
   //test not found
   if(!db.selection(db.getRelation(0), "broke", "Owner",
                    e, Attribute("Sam", str)).empty()){
@@ -220,9 +240,7 @@ bool test_relational(){
   }
 
   Relation not_cats = dogs;
-  not_cats.deleteTuple(bones); //equalContents is order sensitive
   not_cats.addTuple(pocky);
-  not_cats.addTuple(bones);
   if(!not_cats.equalContents(db.selection(db.getRelation(0), "dogs",
                                       "Species", ne, Attribute("Cat", str)))){
     cerr << "Selection, nequal, string, FAILED\n";
@@ -233,5 +251,268 @@ bool test_relational(){
 ///              END SELECTION TEST            ///
 //////////////////////////////////////////////////
 
-  return success;
+  if(success){
+    test_output += " -- Selection Tests PASSED -- \n";
+  } else {
+    test_output += " -- Selection Tests FAILED -- \n";
+    success = true;
+  }
+
+//////////////////////////////////////////////////
+///            BEGIN PROJECTION TEST           ///
+//////////////////////////////////////////////////
+  {
+  vector<string> attrib_vals;
+  if(!db.projection(db.getRelation(0), "empty", attrib_vals).empty()){
+    cerr << "Projection, empty attrib_vals test FAILED\n";
+    success = false;
+  }
+
+  attrib_vals.push_back("Species");
+  attrib_vals.push_back("Name");
+  if(!db.projection(Relation(), "empty", attrib_vals).empty()){
+    cerr << "Projection, empty relation FAILED\n";
+    success = false;
+  }
+
+  vector<Tuple> proj_animals_rows;
+  vector<string> pspot;
+  pspot.push_back("Dog");
+  pspot.push_back("Spot");
+  proj_animals_rows.push_back(Tuple(pspot));
+
+  vector<string> psockss;
+  psockss.push_back("Cat");
+  psockss.push_back("Socks");
+  proj_animals_rows.push_back(Tuple(psockss));
+
+  vector<string> pmittens;
+  pmittens.push_back("Cat");
+  pmittens.push_back("Mittens");
+  proj_animals_rows.push_back(Tuple(pmittens));
+
+  vector<string> pfido;
+  pfido.push_back("Dog");
+  pfido.push_back("Fido");
+  proj_animals_rows.push_back(Tuple(pfido));
+
+  vector<string> ppocky;
+  ppocky.push_back("Bird");
+  ppocky.push_back("Pocky");
+  proj_animals_rows.push_back(Tuple(ppocky));
+
+  vector<string> pbones;
+  pbones.push_back("Dog");
+  pbones.push_back("Bones");
+  proj_animals_rows.push_back(Tuple(pbones));
+
+  vector<Attribute> attribs;
+  attribs.push_back(Attribute("Species", str));
+  attribs.push_back(Attribute("Name", str));
+  vector<size_t> proj_keys;
+  proj_keys.push_back(1);
+  Relation proj_animals("Projected Animals", proj_animals_rows, attribs, proj_keys);
+  if(!proj_animals.equalContents(db.projection(db.getRelation(0), "SpecName",
+                                               attrib_vals))){
+    cerr << "Projection FAILED\n";
+    success = false;
+  }
+  }
+//////////////////////////////////////////////////
+///             END PROJECTION TEST            ///
+//////////////////////////////////////////////////
+
+  if(success){
+    test_output += " -- Projection Tests PASSED -- \n";
+  } else {
+    test_output += " -- Projection Tests FAILED -- \n";
+    success = true;
+  }
+
+//////////////////////////////////////////////////
+///            BEGIN RENAMING TEST             ///
+//////////////////////////////////////////////////
+  {
+  vector<string> attrib_vals;
+  if(!db.rename(db.getRelation(0), "empty", attrib_vals).empty()){
+    cerr << "Projection, empty attrib_vals test FAILED\n";
+    success = false;
+  }
+
+  attrib_vals.push_back("S");
+  attrib_vals.push_back("A");
+  if(!db.rename(db.getRelation(0), "empty", attrib_vals).empty()){
+    cerr << "Projection, wrong attrib_vals size FAILED\n";
+    success = false;
+  }
+
+  attrib_vals.push_back("N");
+  attrib_vals.push_back("G");
+  attrib_vals.push_back("W");
+  if(!db.rename(Relation(), "empty", attrib_vals).empty()){
+    cerr << "Projection, empty Relation FAILED\n";
+    success = false;
+  }
+
+  vector<Attribute> attrib_cols;
+  attrib_cols.push_back(Attribute("S", str));
+  attrib_cols.push_back(Attribute("A", i));
+  attrib_cols.push_back(Attribute("N", str));
+  attrib_cols.push_back(Attribute("G", str));
+  attrib_cols.push_back(Attribute("W", d));
+  Relation renamed("Renamed Animals", animals_rows, attrib_cols, keys);
+  if(!renamed.equalContents(db.rename(db.getRelation(0), "rename", attrib_vals))){
+    cerr << "Renaming FAILED\n";
+    success = false;
+  }
+  }
+//////////////////////////////////////////////////
+///              END RENAMING TEST             ///
+//////////////////////////////////////////////////
+
+  if(success){
+    test_output += " -- Renaming Tests PASSED -- \n";
+  } else {
+    test_output += " -- Renaming Tests FAILED -- \n";
+    success = true;
+  }
+
+//////////////////////////////////////////////////
+///              BEGIN UNION TEST              ///
+//////////////////////////////////////////////////
+  {
+  if(!db.relation_union(Relation(), db.getRelation(0)).empty()){
+    cerr << "Union, empty relation FAILED\n";
+    success = false;
+  }
+
+  if(!db.relation_union(db.getRelation(0), Relation()).empty()){
+    cerr << "Union, empty relation FAILED\n";
+    success = false;
+  }
+
+  vector<Attribute> union_cols;
+  union_cols.push_back(Attribute("Species", str));
+  union_cols.push_back(Attribute("Name", str));
+
+  vector<Tuple> union_rows;
+  vector<string> uspot;
+  uspot.push_back("Dog");
+  uspot.push_back("Spot");
+  union_rows.push_back(Tuple(uspot));
+  vector<string> usocks;
+  usocks.push_back("Cat");
+  usocks.push_back("Socks");
+  union_rows.push_back(Tuple(usocks));
+
+  vector<size_t> ukeys;
+  ukeys.push_back(0);
+
+  Relation inc_union("Union", union_rows, union_cols, ukeys);
+
+  if(!db.relation_union(db.getRelation(0), inc_union).empty()){
+    cerr << "Union, non compatible relations FAILED\n";
+    success = false;
+  }
+
+  Relation ani_union = db.getRelation(0);
+  ani_union.addTuple(Tuple(jerry));
+
+  db.getRelationRef(0)->addTuple(Tuple(bowser));
+  Relation union_result = ani_union;
+  ani_union.addTuple(Tuple(bowser));
+  if(!ani_union.equalContents(db.relation_union(ani_union, db.getRelation(0)))){
+    cerr << "Union FAILED\n";
+    success = false;
+  }
+  }
+//////////////////////////////////////////////////
+///              END UNION TEST                ///
+//////////////////////////////////////////////////
+
+  if(success){
+    test_output += " -- Union Tests PASSED -- \n";
+  } else {
+    test_output += " -- Union Tests FAILED -- \n";
+    success = true;
+  }
+
+//////////////////////////////////////////////////
+///            BEGIN DIFFERENCE TEST           ///
+//////////////////////////////////////////////////
+  {
+  if(!db.relation_difference(Relation(), db.getRelation(0)).empty()){
+    cerr << "Difference, empty relation FAILED\n";
+    success = false;
+  }
+
+  if(!db.relation_difference(db.getRelation(0), Relation()).empty()){
+    cerr << "Difference, empty relation FAILED\n";
+    success = false;
+  }
+
+  vector<Attribute> difference_cols;
+  difference_cols.push_back(Attribute("Species", str));
+  difference_cols.push_back(Attribute("Name", str));
+
+  vector<Tuple> difference_rows;
+  vector<string> uspot;
+  uspot.push_back("Dog");
+  uspot.push_back("Spot");
+  difference_rows.push_back(Tuple(uspot));
+  vector<string> usocks;
+  usocks.push_back("Cat");
+  usocks.push_back("Socks");
+  difference_rows.push_back(Tuple(usocks));
+
+  vector<size_t> ukeys;
+  ukeys.push_back(0);
+
+  Relation inc_difference("Difference", difference_rows, difference_cols, ukeys);
+
+  if(!db.relation_difference(db.getRelation(0), inc_difference).empty()){
+    cerr << "Difference, non compatible relations FAILED\n";
+    success = false;
+  }
+
+  vector<Tuple> ani_diff_rows;
+  ani_diff_rows.push_back(bones);
+  ani_diff_rows.push_back(fido);
+  ani_diff_rows.push_back(mittens);
+  Relation ani_diff("Difference", ani_diff_rows, animals_columns, keys);
+
+  vector<Tuple> diff_result_rows;
+  diff_result_rows.push_back(spot);
+  diff_result_rows.push_back(socks);
+  diff_result_rows.push_back(pocky);
+  diff_result_rows.push_back(bowser);
+  Relation diff_result("Difference Result", diff_result_rows, animals_columns, keys);
+
+  /*
+  db.Show(db.getRelation(0));
+  cout << endl;
+  db.Show(ani_diff);
+  cout << endl;
+  db.Show(diff_result);
+  cout << endl;
+  db.Show(db.relation_difference(db.getRelation(0), ani_diff));
+  cout << endl;
+  */
+  if(!diff_result.equalContents(db.relation_difference(db.getRelation(0), ani_diff))){
+    cerr << "Difference FAILED\n";
+    success = false;
+  }
+  }
+//////////////////////////////////////////////////
+///           END DIFFERENCE TEST              ///
+//////////////////////////////////////////////////
+
+  if(success){
+    test_output += " -- Difference Tests PASSED -- \n";
+  } else {
+    test_output += " -- Difference Tests FAILED -- \n";
+    success = true;
+  }
+
+  cout << test_output;
 }

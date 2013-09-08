@@ -21,6 +21,8 @@ class Relation{
 		void addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
 		void deleteTuple(Tuple T); //This may need different parameters
 		void deleteTuple(size_t index);
+		Tuple getTuple(Tuple T) const;
+		Tuple getTuple(size_t index) const;
 		vector<Tuple> getRows() const;
 		vector<Attribute> getColumns() const;
 		vector<size_t> getKeys() const;
@@ -30,6 +32,7 @@ class Relation{
 		friend bool operator==(const Relation &a, const Relation &b);
 		friend bool operator!=(const Relation &a, const Relation &b);
 		bool empty() const;
+                //		void sort(); //sorts by keys lexigraphically
 };
 
 #endif /*RELATION_H*/

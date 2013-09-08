@@ -441,11 +441,11 @@ Relation Database::relation_union(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
 
-  sort(Arows.begin(), Arows.end(), tupleComp());
-  sort(Brows.begin(), Brows.end(), tupleComp());
+  sort(Arows.begin(), Arows.end(), tupleComp(A.getKeys()));
+  sort(Brows.begin(), Brows.end(), tupleComp(A.getKeys()));
   std::set_union(Arows.begin(), Arows.end(),
             Brows.begin(), Brows.end(),
-            back_inserter(union_rows), tupleComp());
+            back_inserter(union_rows), tupleComp(A.getKeys()));
 
   return Relation("ABUnion", union_rows, A.getColumns(), A.getKeys());
 }
@@ -465,11 +465,11 @@ Relation Database::relation_difference(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
 
-  sort(Arows.begin(), Arows.end(), tupleComp());
-  sort(Brows.begin(), Brows.end(), tupleComp());
+  sort(Arows.begin(), Arows.end(), tupleComp(A.getKeys()));
+  sort(Brows.begin(), Brows.end(), tupleComp(A.getKeys()));
   std::set_difference(Arows.begin(), Arows.end(),
             Brows.begin(), Brows.end(),
-            back_inserter(difference_rows), tupleComp());
+            back_inserter(difference_rows), tupleComp(A.getKeys()));
 
   return Relation("ABDifference", difference_rows, A.getColumns(), A.getKeys());
 }

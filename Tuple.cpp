@@ -27,10 +27,23 @@ vector<string> Tuple::getDataStrings() const{
 	return dataStrings;
 }
 
+tupleComp::tupleComp(){
+  vector<size_t> keys;
+  keys.push_back(0);
+  sort_keys = keys;
+}
+
+tupleComp::tupleComp(vector<size_t> keys){
+  sort_keys = keys;
+}
+
 bool tupleComp::operator()(const Tuple &a, const Tuple &b) const{
-  //size_t sort_key = keys[0]; //no way to get keys at this level
-  size_t sort_key = 0;
-  return a.getDataStrings()[sort_key] < b.getDataStrings()[sort_key];
+  for(unsigned int i = 0; i < sort_keys.size(); ++i){
+    if(a.getDataStrings()[sort_keys[i]] < b.getDataStrings()[sort_keys[i]]){
+      return true;
+    }
+  }
+  return false;
 }
 
 bool operator==(const Tuple &a, const Tuple &b){

@@ -18,7 +18,11 @@ class Tuple{
 		friend bool operator!=(const Tuple &a, const Tuple &b);
 };
 
-struct tupleComp{
+class tupleComp{
+  vector<size_t> sort_keys;
+ public:
+  tupleComp();
+  tupleComp(vector<size_t> keys);
   bool operator()(const Tuple &a, const Tuple &b) const;
 };
 

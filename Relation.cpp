@@ -58,6 +58,24 @@ void Relation::deleteTuple(size_t index){
     rows.erase(rows.begin() + index);
 }
 
+Tuple Relation::getTuple(Tuple T) const{
+  for(size_t i = 0; i < rows.size(); ++i){
+    if(rows[i] == T){
+      return rows[i];
+    }
+  }
+  cerr << "Tuple not found.\n";
+  return Tuple();
+}
+
+Tuple Relation::getTuple(size_t index) const{
+  if(index < rows.size()){
+    return rows[i];
+  }
+  cerr << "Index out of bounds.\n";
+  return Tuple();
+}
+
 vector<Tuple> Relation::getRows() const{
 	return rows;
 }
@@ -80,12 +98,19 @@ string Relation::getName() const{
 }
 
 bool Relation::equalContents(const Relation &B) const{
-  return rows == B.getRows() && columns == B.getColumns();
+  vector<Tuple> Arows = rows;
+  vector<Tuple> Brows = B.getRows();
+  sort(Arows.begin(), Arows.end(), tupleComp(keys));
+  sort(Brows.begin(), Brows.end(), tupleComp(keys));
+  return Arows == Brows;
 }
 
 bool Relation::empty() const{
   return rows.empty();
 }
+
+//void Relation::sort(){
+  
 
 bool operator==(const Relation &a, const Relation &b){
   return a.name == b.name
