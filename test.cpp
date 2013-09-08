@@ -1,18 +1,25 @@
 #include "Database.h"
 #include "Tuple.h"
 #include "Attribute.h"
-#inslude "Relation.h"
+#include "Relation.h"
+#include <iostream>
 
 /***********************Database Class Tests**************************/
 
 void testDatabaseEmptyConstructor(){
 	Database d;
+        /* d cant be null, it's not a pointer.
 	if(d == NULL){
 		cout << "testDatabaseEmptyConstructor failed. The database was NULL" << endl;
 	}
 	else{
 		cout << "testDatabaseEmptyConstructor passed." << endl;
-	}
+                } */
+        if(d.numberOfRelations() == 0) {
+          cout << "testDatabaseEmptyConstructor passed." << endl;
+        } else {
+          cout << "testDatabaseEmptyConstructor failed. The database was NULL" << endl;
+        }
 }
 
 void testInitializedDatabase(){
@@ -22,10 +29,12 @@ void testInitializedDatabase(){
 	R.push_back(r2);
 	
 	Database d(R);
+	/* d can't be null, it's not a pointer
 	if(d == NULL){
 		cout << "testInitializedDatabase failed. The database was NULL" << endl;
 		return;
 	}
+        */
 	if(d.numberOfRelations() != 2){
 		cout << "testInitializedDatabase failed. The database contained " << d.numberOfRelations() << " relations instead of 2." << endl;
 		return;
@@ -35,8 +44,8 @@ void testInitializedDatabase(){
 
 void testGetRelation(){
 	vector<Relation> R;
-	Relation r1("test1", vector<Tuple>(), vector<Attribute>());
-	Relation r2("test2", vector<Tuple>(), vector<Attribute>());
+	Relation r1("test1", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
+	Relation r2("test2", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
 	R.push_back(r1);
 	R.push_back(r2);
 	
@@ -47,7 +56,7 @@ void testGetRelation(){
 		cout << "testGetRelation failed. The indexing of the Database relations was wrong." << endl;
 		return;
 	}
-	temp = d.getRelation("test2")
+	temp = d.getRelation("test2");
 	if(temp.getName() != "test2"){
 		cout << "testGetRelation failed. The named relation was not found." << endl;
 		return;
@@ -57,8 +66,8 @@ void testGetRelation(){
 
 void testNumberOfRelations(){
 	vector<Relation> R;
-	Relation r1("test1", vector<Tuple>(), vector<Attribute>());
-	Relation r2("test2", vector<Tuple>(), vector<Attribute>());
+	Relation r1("test1", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
+	Relation r2("test2", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
 	R.push_back(r1);
 	R.push_back(r2);
 	Database d(R);
@@ -73,12 +82,18 @@ void testNumberOfRelations(){
 
 void testRelationEmptyConstructor(){
 	Relation r;
+        /* r can't be null, it's not a pointer
 	if(r == NULL){
 		cout << "testRelationEmptyConstructor failed. The database was NULL" << endl;
 	}
 	else{
 		cout << "testRelationEmptyConstructor passed." << endl;
-	}
+                } */
+        if(r.getRows().empty() && r.getColumns().empty() && r.getKeys().empty()){
+          cout << "testRelationEmptyConstructor passed." << endl;
+        } else {
+          cout << "testRelationEmptyConstructor failed. The database was NULL" << endl;
+        }
 }
 
 void testInitializedRelation(){
@@ -91,15 +106,15 @@ void testInitializedRelation(){
 		cout << "testInitializedRelation failed. The name of the Relation was " << r.getName() << " not test1." << endl;
 		return;
 	}
-	if(r.getRows() == NULL){
+	if(r.getRows().empty()){
 		cout << "testInitializedRelation failed. The Tuple vector was NULL." << endl;
 		return;
 	}
-	if(r.getColumns() == NULL){
+	if(r.getColumns().empty()){
 		cout << "testInitializedRelation failed. The Attribute vector was NULL." << endl;
 		return;
 	}
-	if(r.getKeys() == NULL){
+	if(r.getKeys().empty()){
 		cout << "testInitializedRelation failed. The keys vector was NULL." << endl;
 		return;
 	}
@@ -111,21 +126,21 @@ void testCopyRelation(){
 	vector<Attribute> A;
 	vector<size_t> K;
 	Relation r("test1", T, A, K);
-	Relation rC(r);
+	Relation rc(r);
 	
 	if(rc.getName() != "test1"){
 		cout << "testCopyRelation failed. The name of the Relation was " << r.getName() << " not test1." << endl;
 		return;
 	}
-	if(rc.getRows() == NULL){
+	if(rc.getRows().empty()){
 		cout << "testCopyRelation failed. The Tuple vector was NULL." << endl;
 		return;
 	}
-	if(rc.getColumns() == NULL){
+	if(rc.getColumns().empty()){
 		cout << "testCopyRelation failed. The Attribute vector was NULL." << endl;
 		return;
 	}
-	if(rc.getKeys() == NULL){
+	if(rc.getKeys().empty()){
 		cout << "testCopyRelation failed. The keys vector was NULL." << endl;
 		return;
 	}
@@ -133,15 +148,15 @@ void testCopyRelation(){
 }
 
 void testAddTuple(){
-	Tuple T(vector<string>());
+	Tuple T((vector<string>()));
 	T.addData("test1");
 	Relation r;
-	r.addAttribute(Attribute("A", dataTypes::str),"test");
+	r.addAttribute(Attribute("A", str),"test");
 	r.addTuple(T);
 	
 	vector<Tuple> temp;
 	temp = r.getRows();
-	if(temp[0].getDataStrings[0] != "test1"){
+	if(temp[0].getDataStrings()[0] != "test1"){
 		cout << "testAddTuple failed. The Tuple put in was not returned." << endl;
 		return;
 	}
@@ -149,12 +164,12 @@ void testAddTuple(){
 }
 
 void testAddAttribute(){
-	Tuple T(vector<string>());
+  Tuple T((vector<string>()));
 	T.addData("test1");
 	Relation r;
-	r.addAttribute(Attribute("A", dataTypes::str),"test");
+	r.addAttribute(Attribute("A", str),"test");
 	r.addTuple(T);
-	r.addAttribute(Attribute("B", dataTypes::str),"test2");
+	r.addAttribute(Attribute("B", str),"test2");
 	
 	vector<Attribute> A;
 	A = r.getColumns();
@@ -202,7 +217,7 @@ void testGetRows(){
 	R.push_back(T);
 	R.push_back(T);
 	
-	Attribute A("test", dataTypes::str);
+	Attribute A("test", str);
 	vector<Attribute> C;
 	C.push_back(A);
 	
@@ -228,7 +243,7 @@ void testGetColumns(){
 	R.push_back(T);
 	R.push_back(T);
 	
-	Attribute A("test", dataTypes::str);
+	Attribute A("test", str);
 	vector<Attribute> C;
 	C.push_back(A);
 	
@@ -254,7 +269,7 @@ void testGetKeys(){
 	R.push_back(T);
 	R.push_back(T);
 	
-	Attribute A("test", dataTypes::str);
+	Attribute A("test", str);
 	vector<Attribute> C;
 	C.push_back(A);
 	
@@ -279,7 +294,7 @@ void testIsKey(){
 	R.push_back(T);
 	R.push_back(T);
 	
-	Attribute A("test", dataTypes::str);
+	Attribute A("test", str);
 	vector<Attribute> C;
 	C.push_back(A);
 	
@@ -306,12 +321,19 @@ void testGetName(){
 
 void testTupleEmptyContstructor(){
 	Tuple t;
+        /* t can't be NULL, it's not a pointer.
 	if(t == NULL){
 		cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
 	}
 	else{
 		cout << "testTupleEmptyConstructor passed." << endl;
 	}
+        */
+        if(t.getDataStrings().empty()){
+          cout << "testTupleEmptyConstructor passed." << endl;
+        } else {
+          cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
+        }
 }
 
 void testInitializedTuple(){
@@ -320,7 +342,7 @@ void testInitializedTuple(){
 	s.push_back("test2");
 	Tuple t(s);
 	if(t.getDataStrings()[1] != "test2"){
-		cout << "testInitializedTuple failed. The wrong data was in the Tuple. << endl;
+		cout << "testInitializedTuple failed. The wrong data was in the Tuple." << endl;
 		return;
 	}
 	cout << "testInitializedTuple passed." << endl;
@@ -360,8 +382,8 @@ void testChangeDataMember(){
 	Tuple t(s);
 	
 	t.changeDataMember(1,"testChanged");
-	if(t.getDataStrings[1] != "testChanged"){
-		cout << "testChangeDataMember failed. The data member was " << t.getDataStrings[1] << " instead of testChanged." << endl;
+	if(t.getDataStrings()[1] != "testChanged"){
+          cout << "testChangeDataMember failed. The data member was " << t.getDataStrings()[1] << " instead of testChanged." << endl;
 		return;
 	}
 	cout << "testChangeDataMember passed." << endl;
@@ -371,21 +393,28 @@ void testChangeDataMember(){
 
 void testAttributeEmptyConstructor(){
 	Attribute a;
+        /* a can't be NULL, it's not a pointer.
 	if(a == NULL){
 		cout << "testAttributeEmptyConstructor failed. The Attribute was NULL" << endl;
 	}
 	else{
 		cout << "testAttributeEmptyConstructor passed." << endl;
 	}
+	*/
+        if(a.getValue().empty()) {
+          cout << "testAttributeEmptyConstructor passed." << endl;
+        } else {
+          cout << "testAttributeEmptyConstructor failed. The Attribute was NULL" << endl;
+        }
 }
 
 void testInitializedAttribute(){
-	Attribute a("testString", dataTypes::str);
+	Attribute a("testString", str);
 	if(a.getValue() != "testString"){
 		cout << "testInitializedAttribute failed. The value was " << a.getValue() << " not testString." << endl;
 		return;
 	}
-	if(a.getDataType() != dataTypes::str){
+	if(a.getDataType() != str){
 		cout << "testInitializedAttribute failed. The type was not string." << endl;
 		return;
 	}
@@ -393,18 +422,18 @@ void testInitializedAttribute(){
 }
 
 void testCopyAttribute(){
-	Attribute a("testString", dataTypes::str);
+	Attribute a("testString", str);
 	Attribute b(a);
 	if(b !=a){
-		cout << "testCopyAttribute failed. The copy was not the same. << endl;
+		cout << "testCopyAttribute failed. The copy was not the same." << endl;
 		return;
 	}
 	cout << "testCopyAttribute passed." << endl;
 }
 
 void testAttributeGetValue(){
-	Attribute a("testString", dataTypes::str);
-	if(a.getValue != "testString"){
+	Attribute a("testString", str);
+	if(a.getValue() != "testString"){
 		cout << "testAttributeGetValue failed. The value was different from the initialized value." << endl;
 		return;
 	}
@@ -413,8 +442,8 @@ void testAttributeGetValue(){
 }
 
 void testAttributeGetDataType(){
-	Attribute a("testString", dataTypes::str);
-	if(a.getDataType != dataTypes::str){
+	Attribute a("testString", str);
+	if(a.getDataType() != str){
 		cout << "testAttributeGetDataType failed. The value was different from the initialized value." << endl;
 		return;
 	}
@@ -422,9 +451,9 @@ void testAttributeGetDataType(){
 }
 
 void testRenameAttr(){
-	Attribute a("testString", dataTypes::str);
+	Attribute a("testString", str);
 	Attribute b(a);
-	b.renameAttr("testString2", dataTypes::str);
+	b.renameAttr("testString2", str);
 	if(a == b){
 		cout << "testRenameAttr failed. The data type did not change." << endl;
 		return;
@@ -454,11 +483,11 @@ int main(){
 	testGetName();
 	
 	//Tuple Tests
-	testTupleEmptyConstructor();
+	testTupleEmptyContstructor();
 	testInitializedTuple();
 	testAddData();
 	testChangeDataMember();
-	tesGetDataStrings();
+	testGetDataStrings();
 	
 	//Attribute Tests
 	testAttributeEmptyConstructor();
