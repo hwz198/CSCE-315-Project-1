@@ -132,9 +132,9 @@ void testCopyRelation(){
 
 void testAddTuple(){
 	Tuple T(vector<string>());
-	T.push_back("test1");
+	T.addData("test1");
 	Relation r;
-	r.addAttribute(Attribute("A", "string"),"test");
+	r.addAttribute(Attribute("A", dataTypes::str),"test");
 	r.addTuple(T);
 	
 	vector<Tuple> temp;
@@ -148,11 +148,11 @@ void testAddTuple(){
 
 void testAddAttribute(){
 	Tuple T(vector<string>());
-	T.push_back("test1");
+	T.addData("test1");
 	Relation r;
-	r.addAttribute(Attribute("A", "string"),"test");
+	r.addAttribute(Attribute("A", dataTypes::str),"test");
 	r.addTuple(T);
-	r.addAttribute(Attribute("B", "string"),"test2");
+	r.addAttribute(Attribute("B", dataTypes::str),"test2");
 	
 	vector<Attribute> A;
 	A = r.getColumns();
@@ -170,6 +170,137 @@ void testAddAttribute(){
 	cout << "testAddAttribute passed." << endl;
 }
 
+void testDeleteTuple(){
+	vector<Tuple> T;
+	Tuple t;
+	vector<Attribute> A;
+	vector<size_t> K;
+	Relation r("test1", T, A, K);
+	
+	r.addTuple(t);
+	r.deleteTuple(t);
+	if(r.getRows().size() > 0){
+		cout << "testDeleteTuple failed. The tuple was not deleted by reference." << endl;
+		return;
+	}
+	r.addTuple(t);
+	r.deleteTuple(0);
+	if(r.getRows().size() > 0){
+		cout << "testDeleteTuple failed. The tuple was not deleted by index." << endl;
+		return;
+	}
+	cout << "testDeleteTuple passed." << endl;
+}
+
+void testGetRows(){
+	vector<string> s;
+	s.push_back("testString");
+	Tuple T(s);
+	vector<Tuple> R;
+	R.push_back(T);
+	R.push_back(T);
+	
+	Attribute A("test", dataTypes::str);
+	vector<Attribute> C;
+	C.push_back(A);
+	
+	vector<size_t> k;
+	k.push_back(0);
+	
+	Relation r("testRelation", R, C, k);
+	
+	vector<Tuple> temp;
+	temp = r.getRows();
+	if(temp[0].getDataStrings()[0] != "testString"){
+		cout << "testGetRows failed. The correct row was not returned." << endl;
+		return;
+	}
+	cout << "testGetRows passed." << endl;
+}
+
+void testGetColumns(){
+	vector<string> s;
+	s.push_back("testString");
+	Tuple T(s);
+	vector<Tuple> R;
+	R.push_back(T);
+	R.push_back(T);
+	
+	Attribute A("test", dataTypes::str);
+	vector<Attribute> C;
+	C.push_back(A);
+	
+	vector<size_t> k;
+	k.push_back(0);
+	
+	Relation r("testRelation", R, C, k);
+	
+	vector<Attribute> temp;
+	temp = r.getColumns();
+	if(temp[0].getValue() != "test"){
+		cout << "testGetColumns failed. The correct attribute was not returned." << endl;
+		return;
+	}
+	cout << "testGetColumns passed." << endl;
+}
+
+void testGetKeys(){
+	vector<string> s;
+	s.push_back("testString");
+	Tuple T(s);
+	vector<Tuple> R;
+	R.push_back(T);
+	R.push_back(T);
+	
+	Attribute A("test", dataTypes::str);
+	vector<Attribute> C;
+	C.push_back(A);
+	
+	vector<size_t> k;
+	k.push_back(0);
+	
+	Relation r("testRelation", R, C, k);
+	vector<size_t> temp;
+	temp = r.getKeys();
+	if(temp[0] != 0){
+		cout << "testGetKeys failed. The correct key was not returned." << endl;
+		return;
+	}
+	cout << "testGetKeys passed." << endl;
+}
+
+void testIsKey(){
+	vector<string> s;
+	s.push_back("testString");
+	Tuple T(s);
+	vector<Tuple> R;
+	R.push_back(T);
+	R.push_back(T);
+	
+	Attribute A("test", dataTypes::str);
+	vector<Attribute> C;
+	C.push_back(A);
+	
+	vector<size_t> k;
+	k.push_back(0);
+		
+	Relation r("testRelation", R, C, k);
+	
+	if(!r.isKey(0)){
+		cout << "testIsKey failed. The key was not detected." << endl;
+		return;
+	}
+	cout << "testIsKey passed." << endl;
+}
+
+void testGetName(){
+	Relation r("testRelation", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
+	if(r.getName() != "testRelation"){
+		cout << "testGetName failed. The returned name was " << r.getName() << " instead of testRelation." << endl;
+	}
+}
+
+
 int main(){
 	
 	//Database Tests
@@ -183,4 +314,10 @@ int main(){
 	testInitializedRelation();
 	testCopyRelation();
 	testAddTuple();
+	testAddAttribute();
+	testDeleteTuple();
+	testGetRows();
+	testGetColumns();
+	testGetKeys();
+	testIsKey();
 }

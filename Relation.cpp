@@ -9,6 +9,10 @@ Relation::Relation(){
 }
 
 Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys){
+	if(c_rows[0].getDataType().size() != c_columns.size()){
+		cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
+		return;
+	}
 	name = c_name;
 	rows = c_rows;
 	columns = c_columns;
