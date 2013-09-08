@@ -26,7 +26,7 @@ Relation::Relation(Relation const &A){
 	name = A.getName();
 	rows = A.getRows();
 	columns = A.getColumns();
-	keys = A.getKeys()
+	keys = A.getKeys();
 }
 
 void Relation::addTuple(Tuple T){
