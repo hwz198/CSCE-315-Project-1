@@ -172,7 +172,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
     return Relation(); //empty relation
 
   vector<Tuple> Arows = A.getRows();
-  Relation sel(new_rel_name, vector<Tuple>(), Acols);
+  Relation sel(new_rel_name, vector<Tuple>(), Acols, A.getKeys());
 
   // Lots of similar code ahead. 3 switch statements, 1 for each dataType
   if(Aattrib.getDataType() == i){ //int
@@ -355,7 +355,7 @@ Relation Database::projection(Relation A, string new_rel_name,
     AprojRows.push_back(tup);
   }
 
-  return Relation(new_rel_name, AprojRows, AprojCols);
+  return Relation(new_rel_name, AprojRows, AprojCols, A.getKeys());
 }
 
 /* param A: Relation to rename attributes from
@@ -374,7 +374,7 @@ Relation Database::rename(Relation A, string new_rel_name,
     new_cols.push_back(attr);
   }
 
-  return Relation(new_rel_name, A.getRows(), new_cols);
+  return Relation(new_rel_name, A.getRows(), new_cols, A.getKeys());
 }
 
 
@@ -393,7 +393,7 @@ Relation Database::relation_union(Relation A, Relation B){
             Brows.begin(), Brows.end(),
             back_inserter(union_rows), tupleComp());
 
-  return Relation("ABUnion", union_rows, A.getColumns());
+  return Relation("ABUnion", union_rows, A.getColumns(), A.getKeys());
 }
 
 Relation Database::relation_difference(Relation A, Relation B){
@@ -411,7 +411,7 @@ Relation Database::relation_difference(Relation A, Relation B){
             Brows.begin(), Brows.end(),
             back_inserter(difference_rows), tupleComp());
 
-  return Relation("ABDifference", difference_rows, A.getColumns());
+  return Relation("ABDifference", difference_rows, A.getColumns(), A.getKeys());
 }
 
 Relation cartesian_product(Relation A, Relation B){
@@ -433,5 +433,5 @@ Relation cartesian_product(Relation A, Relation B){
     }
   }
 
-  return Relation("ABcartesian", cross_rows, cross_columns);
+  return Relation("ABcartesian", cross_rows, cross_columns, A.getKeys());
 }

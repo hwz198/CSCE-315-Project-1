@@ -20,6 +20,9 @@ bool test_relational(){
   animals_columns.push_back(Attribute("Gender", str));
   animals_columns.push_back(Attribute("Weight", d));
 
+  vector<size_t> keys;
+  keys.push_back(3);
+
   vector<Tuple> animals_rows;
 
   vector<string> spot;
@@ -71,7 +74,7 @@ bool test_relational(){
   animals_rows.push_back(Tuple(bones));
 
   vector<Relation> r;
-  Relation animals("Animals", animals_rows, animals_columns);
+  Relation animals("Animals", animals_rows, animals_columns, keys);
   r.push_back(animals);
   Database db(r);
 
@@ -86,7 +89,7 @@ bool test_relational(){
   vector<Tuple> old_animals_rows;
   old_animals_rows.push_back(mittens);
   old_animals_rows.push_back(fido);
-  Relation old_animals("Old Animals", old_animals_rows, animals_columns);
+  Relation old_animals("Old Animals", old_animals_rows, animals_columns, keys);
   if(!old_animals.equalContents(db.selection(db.getRelation(0), "old",
                                             "Age", g, Attribute("8", i)))){
     cerr << "Selection, greater, int, FAILED\n";
@@ -97,7 +100,7 @@ bool test_relational(){
   young_animals_rows.push_back(spot);
   young_animals_rows.push_back(socks);
   young_animals_rows.push_back(pocky);
-  Relation young_animals("Young Animals", young_animals_rows, animals_columns);
+  Relation young_animals("Young Animals", young_animals_rows, animals_columns, keys);
   if(!young_animals.equalContents(db.selection(db.getRelation(0), "young",
                                               "Age", l, Attribute("8", i)))){
     cerr << "Selection, less, int, FAILED\n";
@@ -120,7 +123,7 @@ bool test_relational(){
 
   vector<Tuple> animals13_rows;
   animals13_rows.push_back(fido);
-  Relation animals13("Animals 13", animals13_rows, animals_columns);
+  Relation animals13("Animals 13", animals13_rows, animals_columns, keys);
   if(!animals13.equalContents(db.selection(db.getRelation(0), "13",
                                            "Age", e, Attribute("13", i)))){
     cerr << "Selection, equal, int, FAILED\n";
@@ -141,7 +144,7 @@ bool test_relational(){
   vector<Tuple> heavy_animals_rows;
   heavy_animals_rows.push_back(spot);
   heavy_animals_rows.push_back(fido);
-  Relation heavy_animals("Heavy Animals", heavy_animals_rows, animals_columns);
+  Relation heavy_animals("Heavy Animals", heavy_animals_rows, animals_columns, keys);
   if(!heavy_animals.equalContents(db.selection(db.getRelation(0), "heavy",
                                                "Weight", g, Attribute("37.2", d)))){
     cerr << "Selection, greater, double, FAILED\n";
@@ -152,7 +155,7 @@ bool test_relational(){
   light_animals_rows.push_back(socks);
   light_animals_rows.push_back(mittens);
   light_animals_rows.push_back(pocky);
-  Relation light_animals("Light Animals", light_animals_rows, animals_columns);
+  Relation light_animals("Light Animals", light_animals_rows, animals_columns, keys);
   if(!light_animals.equalContents(db.selection(db.getRelation(0), "light",
                                                "Weight", l, Attribute("37.2", d)))){
     cerr << "Selection, less, double, FAILED\n";
@@ -175,7 +178,7 @@ bool test_relational(){
 
   vector<Tuple> spotr_rows;
   spotr_rows.push_back(spot);
-  Relation spotr("Spot", spotr_rows, animals_columns);
+  Relation spotr("Spot", spotr_rows, animals_columns, keys);
   if(!spotr.equalContents(db.selection(db.getRelation(0), "light2",
                                        "Weight", e, Attribute("62.5", d)))){
     cerr << "Selection, equal, double, FAILED\n";
@@ -197,7 +200,7 @@ bool test_relational(){
   dogs_rows.push_back(spot);
   dogs_rows.push_back(fido);
   dogs_rows.push_back(bones);
-  Relation dogs("Dogs", dogs_rows, animals_columns);
+  Relation dogs("Dogs", dogs_rows, animals_columns, keys);
   if(!dogs.equalContents(db.selection(db.getRelation(0), "dogs",
                                       "Species", e, Attribute("Dog", str)))){
     cerr << "Selection, equal, string, FAILED\n";
