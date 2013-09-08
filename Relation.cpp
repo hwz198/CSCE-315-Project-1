@@ -8,10 +8,11 @@ Relation::Relation(){
 	columns = vector<Attribute>();
 }
 
-Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns){
+Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys){
 	name = c_name;
 	rows = c_rows;
 	columns = c_columns;
+	keys = c_keys;
 }
 
 Relation::Relation(Relation const &A){
@@ -21,6 +22,10 @@ Relation::Relation(Relation const &A){
 }
 
 void Relation::addTuple(Tuple T){
+	if(T.size() != columns.size()){
+		cout << "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
+		return;
+	}
 	rows.push_back(T);
 }
 
