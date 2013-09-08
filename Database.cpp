@@ -163,8 +163,10 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
       break;
     }
   }
-  if(index == -1)
+  if(index == -1){
     return Relation();	//empty relation
+    cerr << "Attribute '" << attrib_val << "' not found.";
+  }
 
   Attribute Aattrib = Acols[index];
 
