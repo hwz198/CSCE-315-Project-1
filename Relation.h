@@ -5,7 +5,7 @@
 #include <vector>
 #include "Tuple.h"
 #include "Attribute.h"
-//put more includey things here
+
 using namespace std;
 
 class Relation{
@@ -15,7 +15,7 @@ class Relation{
 		vector<size_t> keys;
 	public:
 		Relation(); //constructor
-		Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns);
+		Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys);
 		Relation(Relation const &A); //copy constructor
 		void addTuple(Tuple T);
 		void addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
