@@ -35,7 +35,12 @@ void Database::deleteRelation(string relationName){
 }
 
 Relation Database::getRelation(size_t index){
-  return dbase[index];
+  if(index < dbase.size()){
+    return dbase[index];
+  } else {
+    cerr << "Index " << index << " out of bounds.\n";
+    return Relation();
+  }
 }
 
 Relation Database::getRelation(string relationName){
@@ -46,6 +51,25 @@ Relation Database::getRelation(string relationName){
   }
   cerr << "Relation '" << relationName << "' not found.\n";
   return Relation();
+}
+
+Relation *Database::getRelationRef(size_t index){
+  if(index < dbase.size()){
+    return &(dbase[index]);
+  } else {
+    cerr << "Index " << index << " out of bounds.\n";
+    return new Relation(); //this is probably bad
+  }
+}
+
+Relation *Database::getRelationRef(string relationName){
+  for(size_t i = 0; i < dbase.size(); ++i){
+    if(dbase[i].getName() == relationName){
+      return &(dbase[i]);
+    }
+  }
+  cerr << "Relation '" << relationName << "' not found.\n";
+  return new Relation(); //also maybe bad. YAY POINTERS!
 }
 
 int Database::numberOfRelations(){
@@ -380,6 +404,11 @@ Relation Database::projection(Relation A, string new_rel_name,
    param new_attrib_vals: Vector of new names for each attribute in A */
 Relation Database::rename(Relation A, string new_rel_name,
                           vector<string> new_attrib_vals){
+  if(A.empty()){
+    cerr << "Passed empty Relation\n";
+    return Relation();
+  }
+
   vector<Attribute> Acols = A.getColumns();
   vector<Attribute> new_cols;
   if(Acols.size() != new_attrib_vals.size()){
@@ -398,6 +427,11 @@ Relation Database::rename(Relation A, string new_rel_name,
 
 
 Relation Database::relation_union(Relation A, Relation B){
+  if(A.empty() || B.empty()){
+    cerr << "Passed empty Relation\n";
+    return Relation();
+  }
+
   if(A.getColumns() != B.getColumns()){ //not union compatible
     cerr << "Relations not union compatible.\n";
     return Relation();
@@ -417,6 +451,11 @@ Relation Database::relation_union(Relation A, Relation B){
 }
 
 Relation Database::relation_difference(Relation A, Relation B){
+  if(A.empty() || B.empty()){
+    cerr << "Passed empty Relation\n";
+    return Relation();
+  }
+
   if(A.getColumns() != B.getColumns()){ //not union compatiable
     cerr << "Relations not difference compatiable.\n";
     return Relation();
@@ -436,6 +475,11 @@ Relation Database::relation_difference(Relation A, Relation B){
 }
 
 Relation cartesian_product(Relation A, Relation B){
+  if(A.empty() || B.empty()){
+    cerr << "Passed empty Relation\n";
+    return Relation();
+  }
+
   vector<Attribute> cross_columns = A.getColumns();
   vector<Attribute> Bcols = B.getColumns();
   cross_columns.reserve(cross_columns.size()+Bcols.size());
