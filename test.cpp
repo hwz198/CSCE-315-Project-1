@@ -1,5 +1,7 @@
 #include "Database.h"
-
+#include "Tuple.h"
+#include "Attribute.h"
+#inslude "Relation.h"
 
 /***********************Database Class Tests**************************/
 
@@ -300,6 +302,135 @@ void testGetName(){
 	}
 }
 
+/***************************Tuple Class Tests************************/
+
+void testTupleEmptyContstructor(){
+	Tuple t;
+	if(t == NULL){
+		cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
+	}
+	else{
+		cout << "testTupleEmptyConstructor passed." << endl;
+	}
+}
+
+void testInitializedTuple(){
+	vector<string> s;
+	s.push_back("test1");
+	s.push_back("test2");
+	Tuple t(s);
+	if(t.getDataStrings()[1] != "test2"){
+		cout << "testInitializedTuple failed. The wrong data was in the Tuple. << endl;
+		return;
+	}
+	cout << "testInitializedTuple passed." << endl;
+}
+
+void testAddData(){
+	Tuple t;
+	int temp = sizeof(t);
+	t.addData("test1");
+	if(sizeof(t)<temp){
+		cout << "testAddData failed. Adding data does not increase the size of a tuple." << endl;
+		return;
+	}
+	cout << "testAddData passed." << endl;
+}
+
+void testGetDataStrings(){
+	Tuple t;
+	string s1 = "test1";
+	string s2 = "test2";
+	vector<string> s;
+	t.addData(s1);
+	s.push_back(s1);
+	t.addData(s2);
+	s.push_back(s2);
+	if(t.getDataStrings() != s){
+		cout << "testGetDataStrings failed. The Tuple contents and the data put in are not equivalent." << endl;
+		return;
+	}
+	cout << "testGetDataStrings passed." << endl;
+}
+
+void testChangeDataMember(){
+	vector<string> s;
+	s.push_back("test1");
+	s.push_back("test2");
+	Tuple t(s);
+	
+	t.changeDataMember(1,"testChanged");
+	if(t.getDataStrings[1] != "testChanged"){
+		cout << "testChangeDataMember failed. The data member was " << t.getDataStrings[1] << " instead of testChanged." << endl;
+		return;
+	}
+	cout << "testChangeDataMember passed." << endl;
+}
+
+/**************************Attribute Class Tests************************/
+
+void testAttributeEmptyConstructor(){
+	Attribute a;
+	if(a == NULL){
+		cout << "testAttributeEmptyConstructor failed. The Attribute was NULL" << endl;
+	}
+	else{
+		cout << "testAttributeEmptyConstructor passed." << endl;
+	}
+}
+
+void testInitializedAttribute(){
+	Attribute a("testString", dataTypes::str);
+	if(a.getValue() != "testString"){
+		cout << "testInitializedAttribute failed. The value was " << a.getValue() << " not testString." << endl;
+		return;
+	}
+	if(a.getDataType() != dataTypes::str){
+		cout << "testInitializedAttribute failed. The type was not string." << endl;
+		return;
+	}
+	cout << "testInitializedAttribute passed." << endl;
+}
+
+void testCopyAttribute(){
+	Attribute a("testString", dataTypes::str);
+	Attribute b(a);
+	if(b !=a){
+		cout << "testCopyAttribute failed. The copy was not the same. << endl;
+		return;
+	}
+	cout << "testCopyAttribute passed." << endl;
+}
+
+void testAttributeGetValue(){
+	Attribute a("testString", dataTypes::str);
+	if(a.getValue != "testString"){
+		cout << "testAttributeGetValue failed. The value was different from the initialized value." << endl;
+		return;
+	}
+	cout << "testAttributeGetValue passed." << endl;
+
+}
+
+void testAttributeGetDataType(){
+	Attribute a("testString", dataTypes::str);
+	if(a.getDataType != dataTypes::str){
+		cout << "testAttributeGetDataType failed. The value was different from the initialized value." << endl;
+		return;
+	}
+	cout << "testAttributeGetDataType passed." << endl;
+}
+
+void testRenameAttr(){
+	Attribute a("testString", dataTypes::str);
+	Attribute b(a);
+	b.renameAttr("testString2", dataTypes::str);
+	if(a == b){
+		cout << "testRenameAttr failed. The data type did not change." << endl;
+		return;
+	}
+	cout << "testRenameAttr passed." << endl;
+}
 
 int main(){
 	
@@ -320,4 +451,21 @@ int main(){
 	testGetColumns();
 	testGetKeys();
 	testIsKey();
+	testGetName();
+	
+	//Tuple Tests
+	testTupleEmptyConstructor();
+	testInitializedTuple();
+	testAddData();
+	testChangeDataMember();
+	tesGetDataStrings();
+	
+	//Attribute Tests
+	testAttributeEmptyConstructor();
+	testInitializedAttribute();
+	testCopyAttribute();
+	testAttributeGetValue();
+	testAttributeGetDataType();
+	testRenameAttr();
+	
 }
