@@ -34,7 +34,7 @@ class Database{
                                 vector<string> new_attrib_vals);
 		Relation relation_union(Relation A, Relation B); //Relation A for this function is the one operated on (i.e. A.set_union(B))
 		Relation relation_difference(Relation A, Relation B); //see above
-		Relation cartesian_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
+		Relation cross_product(Relation A, Relation B); //see above. May need to be modified once we define how we are doing "Tuples of pairs"
 		
 		void Show(const Relation &r) const;
 		void Show(string r) const;	//Show the relation

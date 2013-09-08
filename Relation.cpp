@@ -109,9 +109,6 @@ bool Relation::empty() const{
   return rows.empty();
 }
 
-//void Relation::sort(){
-  
-
 bool operator==(const Relation &a, const Relation &b){
   return a.name == b.name
     && a.rows == b.rows

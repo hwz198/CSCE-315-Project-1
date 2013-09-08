@@ -474,7 +474,7 @@ Relation Database::relation_difference(Relation A, Relation B){
   return Relation("ABDifference", difference_rows, A.getColumns(), A.getKeys());
 }
 
-Relation cartesian_product(Relation A, Relation B){
+Relation Database::cross_product(Relation A, Relation B){
   if(A.empty() || B.empty()){
     cerr << "Passed empty Relation\n";
     return Relation();
@@ -489,8 +489,8 @@ Relation cartesian_product(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
   for(size_t i = 0; i < Arows.size(); ++i){
-    vector<string> Atuple = Arows[i].getDataStrings();
     for(size_t j = 0; j < Brows.size(); ++j){
+      vector<string> Atuple = Arows[i].getDataStrings();
       vector<string> Btuple = Brows[j].getDataStrings();
       Atuple.reserve(Atuple.size() + Btuple.size());
       Atuple.insert(Atuple.end(), Btuple.begin(), Btuple.end());
@@ -498,5 +498,5 @@ Relation cartesian_product(Relation A, Relation B){
     }
   }
 
-  return Relation("ABcartesian", cross_rows, cross_columns, A.getKeys());
+  return Relation("ABcross", cross_rows, cross_columns, A.getKeys());
 }

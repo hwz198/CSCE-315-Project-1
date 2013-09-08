@@ -28,11 +28,10 @@ class Relation{
 		vector<size_t> getKeys() const;
 		bool isKey(size_t id);
 		string getName() const;
-		bool equalContents(const Relation &b) const;
+		bool equalContents(const Relation &b) const; //checks if Relations contain the same Tuples, not order sensitive
 		friend bool operator==(const Relation &a, const Relation &b);
 		friend bool operator!=(const Relation &a, const Relation &b);
 		bool empty() const;
-                //		void sort(); //sorts by keys lexigraphically
 };
 
 #endif /*RELATION_H*/

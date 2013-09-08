@@ -79,9 +79,6 @@ void test_relational(){
   r.push_back(animals);
   Database db(r);
 
-  db.Show(db.getRelation(0).getName());
-  cout << endl << endl;
-
   vector<string> jerry;
   jerry.push_back("Bird");
   jerry.push_back("1");
@@ -488,16 +485,6 @@ void test_relational(){
   diff_result_rows.push_back(bowser);
   Relation diff_result("Difference Result", diff_result_rows, animals_columns, keys);
 
-  /*
-  db.Show(db.getRelation(0));
-  cout << endl;
-  db.Show(ani_diff);
-  cout << endl;
-  db.Show(diff_result);
-  cout << endl;
-  db.Show(db.relation_difference(db.getRelation(0), ani_diff));
-  cout << endl;
-  */
   if(!diff_result.equalContents(db.relation_difference(db.getRelation(0), ani_diff))){
     cerr << "Difference FAILED\n";
     success = false;
@@ -514,5 +501,123 @@ void test_relational(){
     success = true;
   }
 
-  cout << test_output;
+//////////////////////////////////////////////////
+///         BEGIN CROSS PRODUCT TEST           ///
+//////////////////////////////////////////////////
+  {
+  if(!db.cross_product(Relation(), db.getRelation(0)).empty()){
+    cerr << "Cross product, empty realtion FAILED\n";
+    success = false;
+  }
+
+  if(!db.cross_product(db.getRelation(0), Relation()).empty()){
+    cerr << "Cross product, empty realtion FAILED\n";
+    success = false;
+  }
+
+  vector<Attribute> food_cols;
+  food_cols.push_back(Attribute("Brand", str));
+  food_cols.push_back(Attribute("Price", d));
+
+  vector<Tuple> food_rows;
+  vector<string> purina;
+  purina.push_back("Purina");
+  purina.push_back("8.5");
+  food_rows.push_back(Tuple(purina));
+
+  vector<string> chow;
+  chow.push_back("Chow");
+  chow.push_back("7");
+  food_rows.push_back(Tuple(chow));
+
+  vector<size_t> food_keys;
+  food_keys.push_back(0);
+
+  Relation food("Food", food_rows, food_cols, food_keys);
+
+
+  vector<Attribute> cross_cols = animals_columns;
+  cross_cols.push_back(Attribute("Brand", str));
+  cross_cols.push_back(Attribute("Price", d));
+
+  vector<Tuple> cross_rows;
+  vector<string> spot1 = spot;
+  spot1.push_back("Purina");
+  spot1.push_back("8.5");
+  cross_rows.push_back(Tuple(spot1));
+
+  vector<string> spot2 = spot;
+  spot2.push_back("Chow");
+  spot2.push_back("7");
+  cross_rows.push_back(Tuple(spot2));
+
+  vector<string> socks1 = socks;
+  socks1.push_back("Purina");
+  socks1.push_back("8.5");
+  cross_rows.push_back(Tuple(socks1));
+
+  vector<string> socks2 = socks;
+  socks2.push_back("Chow");
+  socks2.push_back("7");
+  cross_rows.push_back(Tuple(socks2));
+
+  vector<string> mittens1 = mittens;
+  mittens1.push_back("Purina");
+  mittens1.push_back("8.5");
+  cross_rows.push_back(Tuple(mittens1));
+
+  vector<string> mittens2 = mittens;
+  mittens2.push_back("Chow");
+  mittens2.push_back("7");
+  cross_rows.push_back(Tuple(mittens2));
+
+  vector<string> fido1 = fido;
+  fido1.push_back("Purina");
+  fido1.push_back("8.5");
+  cross_rows.push_back(Tuple(fido1));
+
+  vector<string> fido2 = fido;
+  fido2.push_back("Chow");
+  fido2.push_back("7");
+  cross_rows.push_back(Tuple(fido2));
+
+  vector<string> pocky1 = pocky;
+  pocky1.push_back("Purina");
+  pocky1.push_back("8.5");
+  cross_rows.push_back(Tuple(pocky1));
+
+  vector<string> pocky2 = pocky;
+  pocky2.push_back("Chow");
+  pocky2.push_back("7");
+  cross_rows.push_back(Tuple(pocky2));
+
+  vector<string> bones1 = bones;
+  bones1.push_back("Purina");
+  bones1.push_back("8.5");
+  cross_rows.push_back(Tuple(bones1));
+
+  vector<string> bones2 = bones;
+  bones2.push_back("Chow");
+  bones2.push_back("7");
+  cross_rows.push_back(Tuple(bones2));
+
+  Relation cross("Cross", cross_rows, cross_cols, keys);
+
+  if(!cross.equalContents(db.cross_product(animals, food))){
+    cerr << "Cross product FAILED\n";
+    success = false;
+  }
+  }
+//////////////////////////////////////////////////
+///           END CROSS PRODUCT TEST           ///
+//////////////////////////////////////////////////
+
+  if(success){
+    test_output += " -- Cross Product Tests PASSED -- \n";
+  } else {
+    test_output += " -- Cross Product Tests FAILED -- \n";
+    success = true;
+  }
+
+  cout << endl << test_output << endl;
 }
