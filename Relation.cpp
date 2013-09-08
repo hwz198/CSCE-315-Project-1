@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include "Relation.h"
 using namespace std;
 
@@ -26,11 +27,11 @@ Relation::Relation(Relation const &A){
 }
 
 void Relation::addTuple(Tuple T){
-	if(T.size() != columns.size()){
-		cout << "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
-		return;
-	}
-	rows.push_back(T);
+  if(T.getDataStrings().size() != columns.size()){
+    cout << "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
+    return;
+  }
+  rows.push_back(T);
 }
 
 void Relation::addAttribute(Attribute A, string defaultValue){
