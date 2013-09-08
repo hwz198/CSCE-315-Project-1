@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-enum dataTypes {str, i, d};
+enum dataTypes {str, in, d};
 
 class Attribute{
 		string value;

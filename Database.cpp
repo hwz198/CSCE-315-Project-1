@@ -209,7 +209,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
   Relation sel(new_rel_name, vector<Tuple>(), Acols, A.getKeys());
 
   // Lots of similar code ahead. 3 switch statements, 1 for each dataType
-  if(Aattrib.getDataType() == i){ //int
+  if(Aattrib.getDataType() == in){ //int
     switch(op){
     case g:
       for(size_t i = 0; i < Arows.size(); ++i){

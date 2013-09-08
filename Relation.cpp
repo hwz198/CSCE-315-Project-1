@@ -70,7 +70,7 @@ Tuple Relation::getTuple(Tuple T) const{
 
 Tuple Relation::getTuple(size_t index) const{
   if(index < rows.size()){
-    return rows[i];
+    return rows[index];
   }
   cerr << "Index out of bounds.\n";
   return Tuple();

@@ -16,7 +16,7 @@ void test_relational(){
 
   vector<Attribute> animals_columns;
   animals_columns.push_back(Attribute("Species", str));
-  animals_columns.push_back(Attribute("Age", i));
+  animals_columns.push_back(Attribute("Age", in));
   animals_columns.push_back(Attribute("Name", str));
   animals_columns.push_back(Attribute("Gender", str));
   animals_columns.push_back(Attribute("Weight", d));
@@ -97,7 +97,7 @@ void test_relational(){
 ///            BEGIN SELECTION TEST            ///
 //////////////////////////////////////////////////
   if(!db.selection(Relation(), "empty", "Age", g,
-                   Attribute("8", i)).empty()){
+                   Attribute("8", in)).empty()){
     cerr << "Selection, empty Relation FAILED\n";
     success = false;
   }
@@ -120,7 +120,7 @@ void test_relational(){
   old_animals_rows.push_back(fido);
   Relation old_animals("Old Animals", old_animals_rows, animals_columns, keys);
   if(!old_animals.equalContents(db.selection(db.getRelation(0), "old",
-                                            "Age", g, Attribute("8", i)))){
+                                            "Age", g, Attribute("8", in)))){
     cerr << "Selection, greater, int, FAILED\n";
     success = false;
   }
@@ -131,21 +131,21 @@ void test_relational(){
   young_animals_rows.push_back(pocky);
   Relation young_animals("Young Animals", young_animals_rows, animals_columns, keys);
   if(!young_animals.equalContents(db.selection(db.getRelation(0), "young",
-                                              "Age", l, Attribute("8", i)))){
+                                              "Age", l, Attribute("8", in)))){
     cerr << "Selection, less, int, FAILED\n";
     success = false;
   }
 
   old_animals.addTuple(bones);
   if(!old_animals.equalContents(db.selection(db.getRelation(0), "old2",
-                                             "Age", ge, Attribute("8", i)))){
+                                             "Age", ge, Attribute("8", in)))){
     cerr << "Selection, greaterEqual, int, FAILED\n";
     success = false;
   }
 
   young_animals.addTuple(bones);
   if(!young_animals.equalContents(db.selection(db.getRelation(0), "young2",
-                                               "Age", le, Attribute("8", i)))){
+                                               "Age", le, Attribute("8", in)))){
     cerr << "Selection, lessEqual, int, FAILED\n";
     success = false;
   }
@@ -154,7 +154,7 @@ void test_relational(){
   animals13_rows.push_back(fido);
   Relation animals13("Animals 13", animals13_rows, animals_columns, keys);
   if(!animals13.equalContents(db.selection(db.getRelation(0), "13",
-                                           "Age", e, Attribute("13", i)))){
+                                           "Age", e, Attribute("13", in)))){
     cerr << "Selection, equal, int, FAILED\n";
     success = false;
   }
@@ -162,7 +162,7 @@ void test_relational(){
   Relation animals_not_13 = animals;
   animals_not_13.deleteTuple(fido);
   if(!animals_not_13.equalContents(db.selection(db.getRelation(0), "not13",
-                                                "Age", ne, Attribute("13", i)))){
+                                                "Age", ne, Attribute("13", in)))){
     cerr << "Selection, nequal, int, FAILED\n";
     success = false;
   }
@@ -353,7 +353,7 @@ void test_relational(){
 
   vector<Attribute> attrib_cols;
   attrib_cols.push_back(Attribute("S", str));
-  attrib_cols.push_back(Attribute("A", i));
+  attrib_cols.push_back(Attribute("A", in));
   attrib_cols.push_back(Attribute("N", str));
   attrib_cols.push_back(Attribute("G", str));
   attrib_cols.push_back(Attribute("W", d));
