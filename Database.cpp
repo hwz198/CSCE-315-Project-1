@@ -47,14 +47,10 @@ Relation Database::getRelation(string relationName){
   return Relation();
 }
 
-<<<<<<< HEAD
-
 int Database::numberOfRelations(){
 	return dbase.size();
 }
 
-=======
->>>>>>> dcc522b16fb9f698308ff40cc98ace08c29901ef
 void Database::Show(const Relation &r) const{
   //Show the relation in dBase
   for(int i = 0; i < r.getColumns().size(); ++i){
