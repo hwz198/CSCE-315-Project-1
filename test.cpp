@@ -50,6 +50,40 @@ void testInsert(){
 	
 }
 
+void testShow(){
+	Database d;
+	vector<Attribute> sports;
+	
+	sports.push_back(Attribute("Player", str));
+	sports.push_back(Attribute("Goals", in));
+	sports.push_back(Attribute("Age", in));
+	
+	Relation r("test", vector<Tuple>(), sports, vector<size_t>());
+		
+	d.addRelation(r);
+	
+	vector<string> Ronaldo_row;
+	Ronaldo_row.push_back("Ronaldo");
+	Ronaldo_row.push_back("147");
+	Ronaldo_row.push_back("28");
+	
+	vector<string> Messi_row;
+	Messi_row.push_back("Messi");
+	Messi_row.push_back("220");
+	Messi_row.push_back("26");
+	
+	Tuple Messi(Messi_row);
+	Tuple Ronaldo(Ronaldo_row);
+	
+	d.Insert("test",Ronaldo);
+	d.Insert("test",Messi);
+
+	printf("\nTesting show. There should be 2 rows (Ronaldo and Messi) and 3 columns\n\n");
+	d.Show(0);
+	printf("\nTable shown as expected. testShow() Passed.\n");
+
+}
+
 void testDatabaseEmptyConstructor(){
 	Database d;
         /* d cant be null, it's not a pointer.
@@ -543,5 +577,8 @@ int main(){
 	testAttributeGetValue();
 	testAttributeGetDataType();
 	testRenameAttr();
+
+	//Test for show - displays a table so putting it at the end
+	testShow();
 	
 }
