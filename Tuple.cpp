@@ -1,11 +1,11 @@
 #include "Tuple.h"
 using namespace std;
 
-Tuple::Tuple(){
+Tuple::Tuple(){ //Empty Constructor
 	dataStrings = vector<string>();
 }
 
-Tuple::Tuple(vector<string> newDataVec){
+Tuple::Tuple(vector<string> newDataVec){ //Initialized Constructor
 	dataStrings = newDataVec;
 }
 

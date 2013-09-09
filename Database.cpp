@@ -4,16 +4,16 @@
 #include "Database.h"
 using namespace std;
 
-Database::Database(){
+Database::Database(){ //Empty Constructor
 	dbase = vector<Relation>();
 }
 
-Database::Database(vector<Relation> d){
+Database::Database(vector<Relation> d){ //Initialized Constructor
 	dbase = d;
 }
 
 void Database::addRelation(Relation r){
-  for(int i=0; i<dbase.size(); ++i){
+  for(int i=0; i<dbase.size(); ++i){  //Need to check that there isn't already a same named relation
 		if(dbase[i].getName()==r.getName()){
 			printf("\nA relation of that name already exists. Please try again. \n");
 			return;
@@ -30,7 +30,7 @@ void Database::deleteRelation(string relationName){
 			return;
 		}
 	}
-	printf("\n Relation to delete not found. Please try again. \n");
+	printf("\n Relation to delete not found. Please try again. \n"); // if the delete was unsuccessful, we need to notify the user
 	return;
 }
 
@@ -169,7 +169,7 @@ void Database::Close(string r)
 
 void Database::Exit()
 {
-	printf("Shutting down the database");	//Do we need to delete all the files? - VA
+	printf("Shutting down the database");
 	exit(-1);
 }
 

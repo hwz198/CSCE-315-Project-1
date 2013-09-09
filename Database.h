@@ -12,12 +12,12 @@ using namespace std;
 enum logic_operator {g, l, ge, le, e, ne};
 
 class Database{
-		vector<Relation> dbase;
+		vector<Relation> dbase; //Stores all the relations in the given database
 	public:
-		Database();
-		Database(vector<Relation> d);
+		Database(); //Empty Constructor
+		Database(vector<Relation> d); //Initialized Constructor
 		void addRelation(Relation r);
-		void deleteRelation(string relationName); //This may change, but I'm implementing it [PMG]
+		void deleteRelation(string relationName);
 		Relation getRelation(size_t index);
 		Relation getRelation(string relationName);
 		Relation *getRelationRef(size_t index);

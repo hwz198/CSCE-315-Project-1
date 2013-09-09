@@ -3,13 +3,13 @@
 #include "Relation.h"
 using namespace std;
 
-Relation::Relation(){
+Relation::Relation(){ //Empty constructor
 	name = string();
 	rows = vector<Tuple>();
 	columns = vector<Attribute>();
 }
 
-Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys){
+Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys){ //Initialized constructor
 	if(!c_rows.empty()){
 		if(c_rows[0].getDataStrings().size() != c_columns.size()){
 			cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
@@ -23,7 +23,7 @@ Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_colu
 	keys = c_keys;
 }
 
-Relation::Relation(Relation const &A){
+Relation::Relation(Relation const &A){ //copy constructor
 	name = A.getName();
 	rows = A.getRows();
 	columns = A.getColumns();
@@ -31,7 +31,7 @@ Relation::Relation(Relation const &A){
 }
 
 void Relation::addTuple(Tuple T){
-  if(T.getDataStrings().size() != columns.size()){
+  if(T.getDataStrings().size() != columns.size()){ //This checks that a Tuple has a proper number of columns. If it doesn't that would break the table.
     cout<< "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
     return;
   }

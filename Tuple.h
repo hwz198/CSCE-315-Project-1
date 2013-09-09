@@ -11,8 +11,8 @@ class Tuple{
 	public:
 		void addData(string newData);
 		void changeDataMember(int targetIndex, string newData);
-		Tuple(vector<string> newDataVec);
-		Tuple();
+		Tuple(vector<string> newDataVec); //Initialized Constructor
+		Tuple(); //Empty constructor
 		vector<string> getDataStrings() const; 	//accessor function for dataStrings
 		friend bool operator==(const Tuple &a, const Tuple &b);
 		friend bool operator!=(const Tuple &a, const Tuple &b);

@@ -1,17 +1,17 @@
 #include "Attribute.h"
 using namespace std;
 
-Attribute::Attribute(){		//Do we need default constructor for attribute? - VA
+Attribute::Attribute(){		//Empty Constructor
 	value = string(); 
 	dataType = dataTypes();
 }
 
-Attribute::Attribute(string newValue, dataTypes newType){
+Attribute::Attribute(string newValue, dataTypes newType){ //Initialized Constructor
 	value = newValue;
 	dataType = newType;
 }
 
-Attribute::Attribute(Attribute const &A){
+Attribute::Attribute(Attribute const &A){ //Copy Constructor
 	value = A.value;
 	dataType = A.dataType;
 }

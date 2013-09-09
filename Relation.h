@@ -10,12 +10,12 @@ using namespace std;
 
 class Relation{
 		string name;
-		vector<Tuple> rows;
-		vector<Attribute> columns;
+		vector<Tuple> rows;			//Each Tuple is one row of the table
+		vector<Attribute> columns;  //Each Attribute refers to a column in the table, however you must look through each tuple to find the actual columm values
 		vector<size_t> keys;
 	public:
-		Relation(); //constructor
-		Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys);
+		Relation(); //empty constructor
+		Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_columns, vector<size_t> c_keys); //constructor
 		Relation(Relation const &A); //copy constructor
 		void addTuple(Tuple T);
 		void addAttribute(Attribute A, string defaultValue); //A is the attribute to be added, default value is the value used to initially populate the tuples
