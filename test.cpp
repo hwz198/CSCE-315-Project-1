@@ -159,12 +159,11 @@ void testUpdate(){
 	Database db = createTestDatabase();
 
 	db.updateTuples(db.getRelation(0),"Age",g,Attribute("8",in),"6");
-	db.Show(0);
 	
 	if(db.getRelation(0).getRows()[2].getDataStrings()[1]=="6" && db.getRelation(0).getRows()[3].getDataStrings()[1]=="6" )
-		printf("testUpdate Passed");
+		printf("testUpdate Passed\n");
 	else
-		printf("testUpdate Failed.")
+		printf("testUpdate Failed.\n");
 	
 }
 
@@ -172,9 +171,11 @@ void testDelete(){
 	Database db = createTestDatabase();
 
 	db.deleteTuples(db.getRelation(0),"Age",g,Attribute("8",in));
-	db.Show(0);
+	
 	if(db.getRelation(0).getRows().size()==4)
-		printf("testDelete Passed");
+		printf("testDelete Passed\n");
+	else
+		printf("testDelete Failed\n")
 }
 
 void testWhere(){
