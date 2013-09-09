@@ -134,7 +134,7 @@ void Database::Insert(string r, Tuple t)
 	int index = RelationExists(r);
 	if( index == -1 )
 	{
-          cout << "Either the relation " << r << " does not exist or is not open\n";
+          cerr << "Either the relation " << r << " does not exist or is not open\n";
 		return;
 	}
 	

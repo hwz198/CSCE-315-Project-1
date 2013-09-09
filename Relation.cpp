@@ -31,7 +31,7 @@ Relation::Relation(Relation const &A){
 
 void Relation::addTuple(Tuple T){
   if(T.getDataStrings().size() != columns.size()){
-    cout << "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
+    cout<< "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
     return;
   }
   rows.push_back(T);

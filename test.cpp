@@ -6,6 +6,50 @@
 
 /***********************Database Class Tests**************************/
 
+void testRelationExists(){
+	Database d;
+	Relation r("test", vector<Tuple>(), vector<Attribute>(), vector<size_t>());
+	d.addRelation(r);
+	int ind = d.RelationExists("test");
+	if(ind==0)
+		printf("RelationExists test passed\n");
+	else
+		printf("Error. RelationExists test failed\n");
+}
+
+void testInsert(){
+	Database d;
+	vector<Attribute> sports;
+	
+	sports.push_back(Attribute("Player", str));
+	sports.push_back(Attribute("Goals", in));
+	sports.push_back(Attribute("Age", in));
+	
+	Relation r("test", vector<Tuple>(), sports, vector<size_t>());
+		
+	d.addRelation(r);
+	
+	vector<string> Ronaldo_row;
+	Ronaldo_row.push_back("Ronaldo");
+	Ronaldo_row.push_back("147");
+	Ronaldo_row.push_back("28");
+	
+	Tuple Ronaldo(Ronaldo_row);
+	
+	
+	d.Insert("test",Ronaldo);
+
+	vector<Tuple> check = d.getRelation(0).getRows();
+
+	vector<string> check_strings = check[0].getDataStrings();
+	
+	if(check_strings[0]=="Ronaldo" && check_strings[1]=="147" && check_strings[2]=="28")
+		printf("testInsert passed\n");
+	else
+		printf("testInsert failed\n");
+	
+}
+
 void testDatabaseEmptyConstructor(){
 	Database d;
         /* d cant be null, it's not a pointer.
@@ -468,6 +512,9 @@ int main(){
 	testInitializedDatabase();
 	testGetRelation();
 	testNumberOfRelations();
+	
+	testRelationExists();
+	testInsert();
 	
 	//Relation Tests
 	testRelationEmptyConstructor();
