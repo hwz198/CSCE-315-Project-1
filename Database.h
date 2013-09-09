@@ -25,7 +25,7 @@ class Database{
 		int numberOfRelations();
 		
 		//update and delete functions
-		vector<int> Database::where(Relation A, string attrib_val,logic_operator op, Attribute condition);
+		vector<int> where(Relation A, string attrib_val,logic_operator op, Attribute condition);
 
 		void deleteTuples(Relation A, string attrib_val, logic_operator op, Attribute condition);
 		void updateTuples(Relation A, string attrib_val, logic_operator op, Attribute condition, string updateTo);
