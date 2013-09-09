@@ -3,6 +3,7 @@
 #include "Attribute.h"
 #include "Relation.h"
 #include <iostream>
+#include <cstdlib>
 
 /***********************Database Class Tests**************************/
 
@@ -86,18 +87,19 @@ void testShow(){
 
 void testDatabaseEmptyConstructor(){
 	Database d;
-        /* d cant be null, it's not a pointer.
-	if(d == NULL){
+	Database * addr = &d;
+	if(addr == NULL){
 		cout << "testDatabaseEmptyConstructor failed. The database was NULL" << endl;
 	}
 	else{
 		cout << "testDatabaseEmptyConstructor passed." << endl;
-                } */
-        if(d.numberOfRelations() == 0) {
+    }
+	//Deprecated test, numberOf Relations tested elsewhere
+	/*if(d.numberOfRelations() == 0) {
           cout << "testDatabaseEmptyConstructor passed." << endl;
-        } else {
+    } else {
           cout << "testDatabaseEmptyConstructor failed. The database was NULL" << endl;
-        }
+    }*/
 }
 
 void testInitializedDatabase(){
@@ -107,12 +109,11 @@ void testInitializedDatabase(){
 	R.push_back(r2);
 	
 	Database d(R);
-	/* d can't be null, it's not a pointer
-	if(d == NULL){
+	Database * addr = &d;
+	if(addr == NULL){
 		cout << "testInitializedDatabase failed. The database was NULL" << endl;
 		return;
 	}
-        */
 	if(d.numberOfRelations() != 2){
 		cout << "testInitializedDatabase failed. The database contained " << d.numberOfRelations() << " relations instead of 2." << endl;
 		return;
@@ -160,24 +161,29 @@ void testNumberOfRelations(){
 
 void testRelationEmptyConstructor(){
 	Relation r;
-        /* r can't be null, it's not a pointer
-	if(r == NULL){
-		cout << "testRelationEmptyConstructor failed. The database was NULL" << endl;
+	Relation * addr = &r;
+	if(addr == NULL){
+		cout << "testRelationEmptyConstructor failed. The relation was NULL" << endl;
 	}
 	else{
 		cout << "testRelationEmptyConstructor passed." << endl;
-                } */
+    } /* Deprecated test, Null better in this context
         if(r.getRows().empty() && r.getColumns().empty() && r.getKeys().empty()){
           cout << "testRelationEmptyConstructor passed." << endl;
         } else {
           cout << "testRelationEmptyConstructor failed. The database was NULL" << endl;
-        }
+        }*/
 }
 
 void testInitializedRelation(){
-	vector<Tuple> T;
 	vector<Attribute> A;
+	A.push_back(Attribute());
+	vector<Tuple> T;
+	vector<string> tupleData;
+	tupleData.push_back("");
+	T.push_back(Tuple(tupleData));
 	vector<size_t> K;
+	K.push_back(0);
 	Relation r("test1", T, A, K);
 	
 	if(r.getName() != "test1"){
@@ -200,9 +206,14 @@ void testInitializedRelation(){
 }
 
 void testCopyRelation(){
-	vector<Tuple> T;
+	vector<Tuple> T;	
+	vector<string> tupleData;
+	tupleData.push_back("");
+	T.push_back(Tuple(tupleData));
 	vector<Attribute> A;
+	A.push_back(Attribute());
 	vector<size_t> K;
+	K.push_back(0);
 	Relation r("test1", T, A, K);
 	Relation rc(r);
 	
@@ -251,7 +262,7 @@ void testAddAttribute(){
 	
 	vector<Attribute> A;
 	A = r.getColumns();
-	if(A[1].getValue() == "B"){
+	if(A[1].getValue() != "B"){
 		cout << "testAddAttribute failed. The Attribute was not added." << endl;
 		return;
 	}
@@ -399,19 +410,19 @@ void testGetName(){
 
 void testTupleEmptyContstructor(){
 	Tuple t;
-        /* t can't be NULL, it's not a pointer.
-	if(t == NULL){
+	Tuple * addr = &t;
+	if(addr == NULL){
 		cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
 	}
 	else{
 		cout << "testTupleEmptyConstructor passed." << endl;
 	}
-        */
+	/* Deprecated test, Null is better in this context.
         if(t.getDataStrings().empty()){
           cout << "testTupleEmptyConstructor passed." << endl;
         } else {
           cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
-        }
+        }*/
 }
 
 void testInitializedTuple(){
@@ -471,19 +482,19 @@ void testChangeDataMember(){
 
 void testAttributeEmptyConstructor(){
 	Attribute a;
-        /* a can't be NULL, it's not a pointer.
-	if(a == NULL){
+	Attribute * addr = &a;
+	if(addr == NULL){
 		cout << "testAttributeEmptyConstructor failed. The Attribute was NULL" << endl;
 	}
 	else{
 		cout << "testAttributeEmptyConstructor passed." << endl;
 	}
-	*/
+	/*
         if(a.getValue().empty()) {
           cout << "testAttributeEmptyConstructor passed." << endl;
         } else {
           cout << "testAttributeEmptyConstructor failed. The Attribute was NULL" << endl;
-        }
+        }*/
 }
 
 void testInitializedAttribute(){

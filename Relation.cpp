@@ -13,6 +13,7 @@ Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_colu
 	if(!c_rows.empty()){
 		if(c_rows[0].getDataStrings().size() != c_columns.size()){
 			cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
+			cout << "There are " << c_rows[0].getDataStrings().size() << " rows and " << c_columns.size() << " columns" << endl;
 			return;
 		}
 	}
