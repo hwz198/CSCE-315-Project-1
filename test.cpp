@@ -161,7 +161,10 @@ void testUpdate(){
 	db.updateTuples(db.getRelation(0),"Age",g,Attribute("8",in),"6");
 	db.Show(0);
 	
-	printf("TESTupdate still needs to be worked on");
+	if(db.getRelation(0).getRows()[2].getDataStrings()[1]=="6" && db.getRelation(0).getRows()[3].getDataStrings()[1]=="6" )
+		printf("testUpdate Passed");
+	else
+		printf("testUpdate Failed.")
 	
 }
 
@@ -171,7 +174,7 @@ void testDelete(){
 	db.deleteTuples(db.getRelation(0),"Age",g,Attribute("8",in));
 	db.Show(0);
 	if(db.getRelation(0).getRows().size()==4)
-		printf("testDelete passed");
+		printf("testDelete Passed");
 }
 
 void testWhere(){
@@ -659,9 +662,7 @@ int main(){
 	testInitializedDatabase();
 	testGetRelation();
 	testNumberOfRelations();
-	
-	testRelationExists();
-	testInsert();
+
 	
 	//Relation Tests
 	testRelationEmptyConstructor();
@@ -691,10 +692,12 @@ int main(){
 	testAttributeGetDataType();
 	testRenameAttr();
 
-	//DELETE AND UPDATE TESTS
+	//Database management functions test
 	testWhere();
 	testDelete();
 	testUpdate();
+	testRelationExists();
+	testInsert();
 	//Test for show - displays a table so putting it at the end
 	testShow();
 	
