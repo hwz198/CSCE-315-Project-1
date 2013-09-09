@@ -1,13 +1,10 @@
 CC=g++
 CFLAGS=-O0 -g
 
-all: test.out tests_relational.out
+all: test.out
 
 test.out: test.cpp Database.o
 	$(CC) $(CFLAGS) test.cpp Database.o Relation.o Attribute.o Tuple.o -o test.out
-
-tests_relational.out: tests_relational.cpp Database.o
-	$(CC) $(CFLAGS) tests_relational.cpp Database.o Relation.o Attribute.o Tuple.o -o tests_relational.out
 
 Database.o: Database.h Database.cpp Relation.o
 	$(CC) -c $(CFLAGS) Database.cpp
