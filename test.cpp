@@ -159,7 +159,7 @@ void testUpdate(){
 	Database db = createTestDatabase();
 
 	db.updateTuples(db.getRelation(0),"Age",g,Attribute("8",in),"6");
-	printf("\n\n\n");
+	db.Show(0);
 	
 	printf("TESTupdate still needs to be worked on");
 	
@@ -169,7 +169,7 @@ void testDelete(){
 	Database db = createTestDatabase();
 
 	db.deleteTuples(db.getRelation(0),"Age",g,Attribute("8",in));
-	
+	db.Show(0);
 	if(db.getRelation(0).getRows().size()==4)
 		printf("testDelete passed");
 }

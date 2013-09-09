@@ -33,7 +33,8 @@ class Relation{
 		friend bool operator!=(const Relation &a, const Relation &b);
 		bool empty() const;
 
-		void deleteTupleAtIndex(size_t index);
+		//void deleteTupleAtIndex(size_t index);
+		void updateTuple(Tuple T, int target_index, string newData);
 };
 
 #endif /*RELATION_H*/

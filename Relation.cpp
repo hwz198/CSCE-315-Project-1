@@ -59,8 +59,14 @@ void Relation::deleteTuple(size_t index){
     rows.erase(rows.begin() + index);
 }
 
-void Relation::deleteTupleAtIndex(size_t index){
-  rows.erase(rows.begin()+index);
+
+void Relation::updateTuple(Tuple T, int target_index, string newData){
+	for(vector<Tuple>::iterator it = rows.begin(); it != rows.end(); ++it){
+    if(*it == T){
+      it->changeDataMember(target_index,newData);
+      break;
+    }
+	}
 }
 
 Tuple Relation::getTuple(Tuple T) const{

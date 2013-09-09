@@ -188,12 +188,18 @@ void Database::deleteTuples(Relation A, string attrib_val, logic_operator op, At
 		return;
 	}
 	else{
+		vector<Tuple> to_delete;
 		int j=0;
 		for(int i=0;i<rows_to_delete.size();i++)
 		{
-			dbase[rel].deleteTupleAtIndex(rows_to_delete[i]-j);
-			j=1;
+			Tuple t = dbase[rel].getTuple(rows_to_delete[i]);
+			to_delete.push_back(t);
 		}
+		for(int i=0;i<rows_to_delete.size();i++)
+		{
+			dbase[rel].deleteTuple(to_delete[i]);			
+		}
+
 	}
 
 }
@@ -201,9 +207,7 @@ void Database::deleteTuples(Relation A, string attrib_val, logic_operator op, At
 void Database::updateTuples(Relation A, string attrib_val, logic_operator op, Attribute condition, string updateTo)
 {
 
-	vector<int> rows_to_update = where(A, attrib_val, op, condition);
-
-	
+	vector<int> rows_to_delete = where(A, attrib_val, op, condition);
 
 	int rel = RelationExists(A.getName());
 
@@ -212,12 +216,18 @@ void Database::updateTuples(Relation A, string attrib_val, logic_operator op, At
 		return;
 	}
 	else{
+		vector<Tuple> to_delete;
 		int j=0;
-		for(int i=0;i<rows_to_update.size();i++)
+		for(int i=0;i<rows_to_delete.size();i++)
 		{
-			dbase[rel].getRows()[rows_to_update[i]-j].changeDataMember(1,updateTo); //rows needs to be public. or return reference of rows in getRowsReference()
-			j=1;
+			Tuple t = dbase[rel].getTuple(rows_to_delete[i]);
+			to_delete.push_back(t);
 		}
+		for(int i=0;i<rows_to_delete.size();i++)
+		{
+			dbase[rel].updateTuple(to_delete[i],1,updateTo);			
+		}
+
 	}
 }
 
