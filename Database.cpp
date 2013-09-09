@@ -216,7 +216,7 @@ void Database::updateTuples(Relation A, string attrib_val, logic_operator op, At
 	 }
 	 if(index==-1){
 	 	printf("Attribute does not exist\n");
-	 	break;
+	 	return;
 	}
 
 	vector<int> rows_to_delete = where(A, attrib_val, op, condition);
