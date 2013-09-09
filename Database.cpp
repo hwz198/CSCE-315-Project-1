@@ -206,18 +206,29 @@ void Database::deleteTuples(Relation A, string attrib_val, logic_operator op, At
 
 void Database::updateTuples(Relation A, string attrib_val, logic_operator op, Attribute condition, string updateTo)
 {
+	 vector<Attribute> Acols = A.getColumns();
+  	 int index = -1;
+	 for(size_t i = 0; i < Acols.size(); ++i){
+		  if(Acols[i].getValue() == attrib_val){	//attribute with matching name exists
+		 	index = i;
+		 	break;
+    		  }
+	 }
+	 if(index==-1){
+	 	printf("Attribute does not exist\n");
+	 	break;
+	}
 
 	vector<int> rows_to_delete = where(A, attrib_val, op, condition);
 
 	int rel = RelationExists(A.getName());
 
 	if(rel==-1){
-		printf("RELATION DOES NOT EXIST");
+		printf("RELATION DOES NOT EXIST\n");
 		return;
 	}
 	else{
 		vector<Tuple> to_delete;
-		int j=0;
 		for(int i=0;i<rows_to_delete.size();i++)
 		{
 			Tuple t = dbase[rel].getTuple(rows_to_delete[i]);
@@ -225,7 +236,7 @@ void Database::updateTuples(Relation A, string attrib_val, logic_operator op, At
 		}
 		for(int i=0;i<rows_to_delete.size();i++)
 		{
-			dbase[rel].updateTuple(to_delete[i],1,updateTo);			
+			dbase[rel].updateTuple(to_delete[i],index,updateTo);			
 		}
 
 	}
