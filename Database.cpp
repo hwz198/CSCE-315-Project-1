@@ -173,6 +173,236 @@ void Database::Exit()
 	exit(-1);
 }
 
+//////UPDATE AND DELETE ---------//////////////////////////////////////////////
+
+
+void Database::deleteTuples(Relation A, string attrib_val, logic_operator op, Attribute condition)
+{
+
+	vector<int> rows_to_delete = where(A, attrib_val, op, condition);
+
+	int rel = RelationExists(A.getName());
+
+	if(rel==-1){
+		printf("RELATION DOES NOT EXIST");
+		return;
+	}
+	else{
+		int j=0;
+		for(int i=0;i<rows_to_delete.size();i++)
+		{
+			dbase[rel].deleteTupleAtIndex(rows_to_delete[i]-j);
+			j=1;
+		}
+	}
+
+}
+
+void Database::updateTuples(Relation A, string attrib_val, logic_operator op, Attribute condition, string updateTo)
+{
+
+	vector<int> rows_to_update = where(A, attrib_val, op, condition);
+
+	
+
+	int rel = RelationExists(A.getName());
+
+	if(rel==-1){
+		printf("RELATION DOES NOT EXIST");
+		return;
+	}
+	else{
+		int j=0;
+		for(int i=0;i<rows_to_update.size();i++)
+		{
+			dbase[rel].getRows()[rows_to_update[i]-j].changeDataMember(1,updateTo); //rows needs to be public. or return reference of rows in getRowsReference()
+			j=1;
+		}
+	}
+}
+
+
+vector<int> Database::where(Relation A, string attrib_val,
+                             logic_operator op, Attribute condition)
+{
+	vector<int> ret;
+  if(A.empty()){
+    cerr << "Passed empty relation\n";
+    return ret;	//EMPTY
+  }
+
+  vector<Attribute> Acols = A.getColumns();
+  int index = -1;
+  for(size_t i = 0; i < Acols.size(); ++i){
+    if(Acols[i].getValue() == attrib_val){	//attribute with matching name exists
+      index = i;
+      break;
+    }
+  }
+  if(index == -1){
+    cerr << "Attribute '" << attrib_val << "' not found.\n";
+    return ret;
+  }
+
+  Attribute Aattrib = Acols[index];
+
+  if(Aattrib.getDataType() != condition.getDataType()){ //same name, different data type
+    cerr << "Attributes to compare are not of the same data type\n";
+    return ret; //empty relation
+  }
+
+  vector<Tuple> Arows = A.getRows();
+ 
+  // Lots of similar code ahead. 3 switch statements, 1 for each dataType
+  if(Aattrib.getDataType() == in){ //int
+    switch(op){
+    case g:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        //compare to Tuple value in index of Attribute to compare to
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) > atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case l:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) < atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case ge:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) >= atoi(condition.getValue().c_str())){
+         ret.push_back(i);
+        }
+      }
+      break;
+    case le:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) <= atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case e:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) == atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case ne:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) != atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    }
+
+  } else if(Aattrib.getDataType() == d){ //double
+
+    switch(op){
+    case g:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) > atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case l:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) < atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case ge:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) >= atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case le:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) <= atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case e:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) == atoi(condition.getValue().c_str())){
+			ret.push_back(i);
+        }
+      }
+      break;
+    case ne:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(atoi(Arows[i].getDataStrings()[index].c_str()) != atoi(condition.getValue().c_str())){
+          ret.push_back(i);
+        }
+      }
+      break;
+    }
+
+  } else { //string
+
+    switch(op){
+    case g:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] > condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case l:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] < condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case ge:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] >= condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case le:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] <= condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case e:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] == condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    case ne:
+      for(size_t i = 0; i < Arows.size(); ++i){
+        if(Arows[i].getDataStrings()[index] != condition.getValue()){
+          ret.push_back(i);
+        }
+      }
+      break;
+    }
+  }
+
+  return ret;
+}
+
+//-------------------------------------------------------------------------//////
+
+
+
 /* param A: Relation selecting from
    param new_rel_name: Name of returned relation
    param attrib_val: Name (or value) or attribute in A used for comparison

@@ -24,6 +24,12 @@ class Database{
 		Relation *getRelationRef(string relationName);
 		int numberOfRelations();
 		
+		//update and delete functions
+		vector<int> Database::where(Relation A, string attrib_val,logic_operator op, Attribute condition);
+
+		void deleteTuples(Relation A, string attrib_val, logic_operator op, Attribute condition);
+		void updateTuples(Relation A, string attrib_val, logic_operator op, Attribute condition, string updateTo);
+
 		//Relational Functions, the rest are specific to a single Relation and are members of Relation class
 		Relation selection(Relation A, string new_rel_name,
                                    string attrib_val, logic_operator op,

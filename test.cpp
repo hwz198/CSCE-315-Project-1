@@ -85,6 +85,108 @@ void testShow(){
 
 }
 
+
+Database createTestDatabase(){
+	 vector<Attribute> animals_columns;
+  animals_columns.push_back(Attribute("Species", str));
+  animals_columns.push_back(Attribute("Age", in));
+  animals_columns.push_back(Attribute("Name", str));
+  animals_columns.push_back(Attribute("Gender", str));
+  animals_columns.push_back(Attribute("Weight", d));
+
+  vector<size_t> keys;
+  keys.push_back(2);
+
+  vector<Tuple> animals_rows;
+
+  vector<string> spot;
+  spot.push_back("Dog");
+  spot.push_back("5");
+  spot.push_back("Spot");
+  spot.push_back("Male");
+  spot.push_back("62.5");
+  animals_rows.push_back(Tuple(spot));
+
+  vector<string> socks;
+  socks.push_back("Cat");
+  socks.push_back("3");
+  socks.push_back("Socks");
+  socks.push_back("Female");
+  socks.push_back("6.1");
+  animals_rows.push_back(Tuple(socks));
+
+  vector<string> mittens;
+  mittens.push_back("Cat");
+  mittens.push_back("11");
+  mittens.push_back("Mittens");
+  mittens.push_back("Male");
+  mittens.push_back("8.3");
+  animals_rows.push_back(Tuple(mittens));
+
+  vector<string> fido;
+  fido.push_back("Dog");
+  fido.push_back("13");
+  fido.push_back("Fido");
+  fido.push_back("Female");
+  fido.push_back("73.6");
+  animals_rows.push_back(Tuple(fido));
+
+  vector<string> pocky;
+  pocky.push_back("Bird");
+  pocky.push_back("2");
+  pocky.push_back("Pocky");
+  pocky.push_back("Male");
+  pocky.push_back("2.9");
+  animals_rows.push_back(Tuple(pocky));
+
+  vector<string> bones;
+  bones.push_back("Dog");
+  bones.push_back("8");
+  bones.push_back("Bones");
+  bones.push_back("Male");
+  bones.push_back("37.2");
+  animals_rows.push_back(Tuple(bones));
+
+  vector<Relation> r;
+  Relation animals("Animals", animals_rows, animals_columns, keys);
+  r.push_back(animals);
+  Database db(r);
+
+  return db;
+}
+
+void testUpdate(){
+	Database db = createTestDatabase();
+
+	db.updateTuples(db.getRelation(0),"Age",g,Attribute("8",in),"6");
+	printf("\n\n\n");
+	
+	printf("TESTupdate still needs to be worked on");
+	
+}
+
+void testDelete(){
+	Database db = createTestDatabase();
+
+	db.deleteTuples(db.getRelation(0),"Age",g,Attribute("8",in));
+	
+	if(db.getRelation(0).getRows().size()==4)
+		printf("testDelete passed");
+}
+
+void testWhere(){
+ 
+  Database db = createTestDatabase();
+ 
+  vector<int> cols = db.where(db.getRelation(0),"Age",g,Attribute("8",in));
+  
+  if(cols.size()==2 && cols[0]==2 && cols[1]==3)
+	  printf("testWhere Passed\n");
+  else
+	  printf("testWhere Failed\n");
+ 
+}
+
 void testDatabaseEmptyConstructor(){
 	Database d;
 	Database * addr = &d;
@@ -589,6 +691,10 @@ int main(){
 	testAttributeGetDataType();
 	testRenameAttr();
 
+	//DELETE AND UPDATE TESTS
+	testWhere();
+	testDelete();
+	testUpdate();
 	//Test for show - displays a table so putting it at the end
 	testShow();
 	

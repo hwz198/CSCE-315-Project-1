@@ -32,6 +32,8 @@ class Relation{
 		friend bool operator==(const Relation &a, const Relation &b);
 		friend bool operator!=(const Relation &a, const Relation &b);
 		bool empty() const;
+
+		void deleteTupleAtIndex(size_t index);
 };
 
 #endif /*RELATION_H*/
