@@ -58,7 +58,7 @@ Relation *Database::getRelationRef(size_t index){
     return &(dbase[index]);
   } else {
     cerr << "Index " << index << " out of bounds.\n";
-    return NULL; //this is probably bad
+    return new Relation(); //this is probably bad
   }
 }
 

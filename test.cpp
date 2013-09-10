@@ -1105,7 +1105,7 @@ void test_relational(){
   Relation ani_union = db.getRelation(0);
   ani_union.addTuple(Tuple(jerry));
 
-  db.getRelationRef(4)->addTuple(Tuple(bowser));
+  db.getRelationRef(0)->addTuple(Tuple(bowser));
   Relation union_result = ani_union;
   ani_union.addTuple(Tuple(bowser));
   if(!ani_union.equalContents(db.relation_union(ani_union, db.getRelation(0)))){
