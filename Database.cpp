@@ -58,7 +58,7 @@ Relation *Database::getRelationRef(size_t index){
     return &(dbase[index]);
   } else {
     cerr << "Index " << index << " out of bounds.\n";
-    return new Relation(); //this is probably bad
+    return NULL; //this is probably bad
   }
 }
 
@@ -438,8 +438,8 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
 
   vector<Attribute> Acols = A.getColumns();
   int index = -1;
-  for(size_t i = 0; i < Acols.size(); ++i){
-    if(Acols[i].getValue() == attrib_val){	//attribute with matching name exists
+  for(size_t i = 0; i < Acols.size(); ++i){	//find attrib_val in A
+    if(Acols[i].getValue() == attrib_val){
       index = i;
       break;
     }
@@ -449,7 +449,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
     return Relation();	//empty relation
   }
 
-  Attribute Aattrib = Acols[index];
+  Attribute Aattrib = Acols[index]; //attribute in A that matches attrib_val
 
   if(Aattrib.getDataType() != condition.getDataType()){ //same name, different data type
     cerr << "Attributes to compare are not of the same data type\n";
@@ -457,7 +457,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
   }
 
   vector<Tuple> Arows = A.getRows();
-  Relation sel(new_rel_name, vector<Tuple>(), Acols, A.getKeys());
+  Relation sel(new_rel_name, vector<Tuple>(), Acols, A.getKeys()); //Relation to be returned
 
   // Lots of similar code ahead. 3 switch statements, 1 for each dataType
   if(Aattrib.getDataType() == in){ //int
@@ -512,6 +512,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
     switch(op){
     case g:
       for(size_t i = 0; i < Arows.size(); ++i){
+        //compare to Tuple value in index of Attribute to compare to
         if(atoi(Arows[i].getDataStrings()[index].c_str()) > atoi(condition.getValue().c_str())){
           sel.addTuple(Arows[i]);
         }
@@ -559,6 +560,7 @@ Relation Database::selection(Relation A, string new_rel_name, string attrib_val,
     switch(op){
     case g:
       for(size_t i = 0; i < Arows.size(); ++i){
+        //compare to Tuple value in index of Attribute to compare to
         if(Arows[i].getDataStrings()[index] > condition.getValue()){
           sel.addTuple(Arows[i]);
         }
@@ -615,12 +617,12 @@ Relation Database::projection(Relation A, string new_rel_name,
     cerr << "Passed empty Relation\n";
     return Relation();
   }
-  
-  vector<size_t> indices;
+
+  vector<size_t> indices; //indices of Attributes in A that exist in attrib_vals
   vector<Attribute> Acols = A.getColumns();
   vector<Tuple> Arows = A.getRows();
-  vector<Attribute> AprojCols;
-  vector<Tuple> AprojRows; 
+  vector<Attribute> AprojCols; //columns projected to
+  vector<Tuple> AprojRows; //rows projected to
 
   for(size_t i = 0; i < Acols.size(); ++i){
     //attrib_vals contains Acols[i]
@@ -635,9 +637,10 @@ Relation Database::projection(Relation A, string new_rel_name,
   }
 
   for(size_t i = 0; i < indices.size(); ++i){
-    AprojCols.push_back(Acols[indices[i]]);
+    AprojCols.push_back(Acols[indices[i]]); //add matching Attributes in A to projected columns
   }
 
+  //construct Tuples from A that contain only the columns to project
   for(size_t i = 0; i < Arows.size(); ++i){
     Tuple tup;
     vector<string> dataStrings = Arows[i].getDataStrings();
@@ -661,12 +664,13 @@ Relation Database::rename(Relation A, string new_rel_name,
   }
 
   vector<Attribute> Acols = A.getColumns();
-  vector<Attribute> new_cols;
+  vector<Attribute> new_cols; //renamed Attributes
   if(Acols.size() != new_attrib_vals.size()){
     cerr << "Number of new attributes names not equal to number of current attributes.\n";
     return Relation();
   }
 
+  //rename each Attribute and add to new_cols
   for(size_t i = 0; i < new_attrib_vals.size(); ++i){
     Attribute attr = Acols[i];
     attr.renameAttr(new_attrib_vals[i], Acols[i].getDataType());
@@ -692,6 +696,7 @@ Relation Database::relation_union(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
 
+  //sort for use with std::set_union
   sort(Arows.begin(), Arows.end(), tupleComp(A.getKeys()));
   sort(Brows.begin(), Brows.end(), tupleComp(A.getKeys()));
   std::set_union(Arows.begin(), Arows.end(),
@@ -716,6 +721,7 @@ Relation Database::relation_difference(Relation A, Relation B){
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
 
+  //sort for use with std::set_difference
   sort(Arows.begin(), Arows.end(), tupleComp(A.getKeys()));
   sort(Brows.begin(), Brows.end(), tupleComp(A.getKeys()));
   std::set_difference(Arows.begin(), Arows.end(),
@@ -733,9 +739,11 @@ Relation Database::cross_product(Relation A, Relation B){
 
   vector<Attribute> cross_columns = A.getColumns();
   vector<Attribute> Bcols = B.getColumns();
+  //add columns from B to cross_columns (columns from A)
   cross_columns.reserve(cross_columns.size()+Bcols.size());
   cross_columns.insert(cross_columns.end(), Bcols.begin(), Bcols.end());
 
+  //for every row in A, append each row in B
   vector<Tuple> cross_rows;
   vector<Tuple> Arows = A.getRows();
   vector<Tuple> Brows = B.getRows();
@@ -743,6 +751,7 @@ Relation Database::cross_product(Relation A, Relation B){
     for(size_t j = 0; j < Brows.size(); ++j){
       vector<string> Atuple = Arows[i].getDataStrings();
       vector<string> Btuple = Brows[j].getDataStrings();
+      //append Brows[j] to Arows[i] and add to cross_rows
       Atuple.reserve(Atuple.size() + Btuple.size());
       Atuple.insert(Atuple.end(), Btuple.begin(), Btuple.end());
       cross_rows.push_back(Atuple);

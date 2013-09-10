@@ -204,12 +204,6 @@ void testDatabaseEmptyConstructor(){
 	else{
 		cout << "testDatabaseEmptyConstructor passed." << endl;
     }
-	//Deprecated test, numberOf Relations tested elsewhere
-	/*if(d.numberOfRelations() == 0) {
-          cout << "testDatabaseEmptyConstructor passed." << endl;
-    } else {
-          cout << "testDatabaseEmptyConstructor failed. The database was NULL" << endl;
-    }*/
 }
 
 void testInitializedDatabase(){
@@ -277,12 +271,7 @@ void testRelationEmptyConstructor(){
 	}
 	else{
 		cout << "testRelationEmptyConstructor passed." << endl;
-    } /* Deprecated test, Null better in this context
-        if(r.getRows().empty() && r.getColumns().empty() && r.getKeys().empty()){
-          cout << "testRelationEmptyConstructor passed." << endl;
-        } else {
-          cout << "testRelationEmptyConstructor failed. The database was NULL" << endl;
-        }*/
+    }
 }
 
 void testInitializedRelation(){
@@ -527,12 +516,6 @@ void testTupleEmptyContstructor(){
 	else{
 		cout << "testTupleEmptyConstructor passed." << endl;
 	}
-	/* Deprecated test, Null is better in this context.
-        if(t.getDataStrings().empty()){
-          cout << "testTupleEmptyConstructor passed." << endl;
-        } else {
-          cout << "testTupleEmptyConstructor failed. The Tuple was NULL" << endl;
-        }*/
 }
 
 void testInitializedTuple(){
@@ -718,6 +701,7 @@ void test_relational(){
   bool success = true;
   string test_output;
 
+  //construct initial Relation animal for testing
   vector<Attribute> animals_columns;
   animals_columns.push_back(Attribute("Species", str));
   animals_columns.push_back(Attribute("Age", in));
@@ -778,11 +762,13 @@ void test_relational(){
   bones.push_back("37.2");
   animals_rows.push_back(Tuple(bones));
 
+  //make new Datbase and add animals relation
   vector<Relation> r;
   Relation animals("Animals", animals_rows, animals_columns, keys);
   r.push_back(animals);
   Database db(r);
 
+  //construct two Tuples for later use in testing
   vector<string> jerry;
   jerry.push_back("Bird");
   jerry.push_back("1");
@@ -1119,7 +1105,7 @@ void test_relational(){
   Relation ani_union = db.getRelation(0);
   ani_union.addTuple(Tuple(jerry));
 
-  db.getRelationRef(0)->addTuple(Tuple(bowser));
+  db.getRelationRef(4)->addTuple(Tuple(bowser));
   Relation union_result = ani_union;
   ani_union.addTuple(Tuple(bowser));
   if(!ani_union.equalContents(db.relation_union(ani_union, db.getRelation(0)))){
