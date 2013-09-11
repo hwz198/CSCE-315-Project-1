@@ -42,8 +42,7 @@ class parser{
   bool plus();
   bool minus();
   bool asterisk();
-  bool conditional_or();
-  bool conditional_and();
+  bool semicolon();
   bool literal(string lit);
   /*
   bool command();

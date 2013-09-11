@@ -3,11 +3,12 @@
 
 bool parser::parse(string input){
   str = input;
+  marker = 0;
   return statement();
 }
 
 bool parser::statement(){
-  return query(); //|| command();
+  return query() && semicolon(); //|| command();
 }
 
 bool parser::query(){
@@ -65,7 +66,7 @@ bool parser::atomic_expr(){
 }
 
 bool parser::selection(){
-  return literal("SELECT") && lparen() && condition() && rparen() && atomic_expr();
+  return literal("select") && lparen() && condition() && rparen() && atomic_expr();
 }
 
 bool parser::condition(){
@@ -106,7 +107,7 @@ bool parser::attr_name(){
 }
 
 bool parser::projection(){
-  return literal("PROJECT") && lparen() && attr_list() && rparen() && atomic_expr();
+  return literal("project") && lparen() && attr_list() && rparen() && atomic_expr();
 }
 
 bool parser::attr_list(){
@@ -119,7 +120,7 @@ bool parser::attr_list(){
 }
 
 bool parser::renaming(){
-  return literal("RENAME") && lparen() && attr_list() && rparen() && atomic_expr();
+  return literal("rename") && lparen() && attr_list() && rparen() && atomic_expr();
 }
 
 bool parser::union_rel(){
@@ -211,6 +212,14 @@ bool parser::asterisk(){
 
 bool parser::comma(){
   if(get(marker) == ','){
+    marker++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::semicolon(){
+  if(get(marker) == ';'){
     marker++;
     return true;
   }
