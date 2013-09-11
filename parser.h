@@ -1,5 +1,15 @@
+#ifndef PARSER_H
+#define PARSER_H
+
+#include<string>
+using namespace std;
+
 class parser{
- public:
+  string str;
+  size_t marker;
+
+  char get(size_t index);
+
   bool statement();
 
   bool query();
@@ -16,7 +26,6 @@ class parser{
   bool op();
   bool operand();
   bool attr_name();
-  bool literal();
   bool projection();
   bool attr_list();
   bool renaming();
@@ -24,6 +33,19 @@ class parser{
   bool difference();
   bool product();
 
+  bool lparen();
+  bool rparen();
+  bool quote();
+  bool comma();
+  bool assign();
+  bool space();
+  bool plus();
+  bool minus();
+  bool asterisk();
+  bool conditional_or();
+  bool conditional_and();
+  bool literal(string lit);
+  /*
   bool command();
   bool open();
   bool close();
@@ -33,8 +55,13 @@ class parser{
   bool create();
   bool update();
   bool insert();
-  bool delete();
+  bool del();
   bool typed_attr_list();
   bool type();
   bool integer();
-}
+  */
+ public:
+  bool parse(string input);
+};
+
+#endif /* PARSER_H */
