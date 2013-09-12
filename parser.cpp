@@ -5,6 +5,7 @@
 using namespace std;
 
 void parser::lex(string input){
+  tokens.clear();
   str = input;
   t_index = 0;
   while(t_index < str.size()){
@@ -43,7 +44,7 @@ void parser::lex(string input){
       t_index++;
       continue;
     }
-    if(get(t_index) == '-'){
+    if(get(t_index) == '-' && !isdigit(get(t_index+1))){
       tokens.push_back(Token(t_index, str.substr(t_index, 1), _minus));
       t_index++;
       continue;
@@ -221,7 +222,7 @@ void parser::lex(string input){
                              _literal));
       continue;
     }
-    if(get(t_index) >= '0' && get(t_index) <= '9'){
+    if((get(t_index) >= '0' && get(t_index) <= '9')){
       size_t first_index = t_index;
       t_index++;
       while(get(t_index) >= '0' && get(t_index) <= '9'){
@@ -230,6 +231,17 @@ void parser::lex(string input){
       tokens.push_back(Token(first_index,
                              str.substr(first_index, t_index - first_index),
                              _integer));
+      continue;
+    }
+    if((get(t_index) >= '0' && get(t_index) <= '9') || (get(t_index) == '-')){
+      size_t first_index = t_index;
+      t_index++;
+      while(get(t_index) >= '0' && get(t_index) <= '9'){
+        t_index++;
+      }
+      tokens.push_back(Token(first_index,
+                             str.substr(first_index, t_index - first_index),
+                             _literal));
       continue;
     }
     char t = 'a';
