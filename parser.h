@@ -8,9 +8,11 @@ using namespace std;
 enum TokenType {_null = 0, _identifier, _lparen, _rparen, _comma, _assign,
                 _space, _plus, _minus, _asterisk, _semicolon, _g, _l, _e, _ge,
                 _le, _ne, _project, _rename,_open, _close, _write, _exit,
-                _show, _create, _update, _insert, _delete, _varchar, _table,
-                _primary, _key, _set, _where, _into, _values, _from, _integer,
-                _literal};
+                _show, _create, _update, _insert, _delete, _varchar, _integer,
+                _table, _primary, _key, _set, _where, _into, _values, _from,
+                _lit_integer, _literal};
+
+const extern string TokenStrings[];
 
 struct Token{
   size_t index;

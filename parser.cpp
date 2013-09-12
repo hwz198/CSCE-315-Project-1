@@ -4,6 +4,16 @@
 #include <cctype>
 using namespace std;
 
+const string TokenStrings[] = {"null", "identifier", "lparen", "rparen",
+                               "comma", "assign", "space", "plus", "minus",
+                               "asterisk", "semicolon", "g", "l", "e", "ge",
+                               "le", "ne", "project", "rename","open", "close",
+                               "write", "exit", "show", "create", "update",
+                               "insert", "delete", "varchar", "integer",
+                               "table", "primary", "key", "set", "where",
+                               "into", "values", "from", "lit_integer",
+                               "literal"};
+
 void parser::lex(string input){
   tokens.clear();
   str = input;
@@ -91,102 +101,191 @@ void parser::lex(string input){
       t_index += 2;
       continue;
     }
-    if(str.substr(t_index, 7) == "project" && isspace(get(t_index+7))){
+    if(str.substr(t_index, 7) == "project"
+       && !((get(t_index+7) >= 'a' && get(t_index+7) <= 'z')
+            || (get(t_index+7) >= 'A' && get(t_index+7) <= 'Z')
+            || (get(t_index+7) >= '0' && get(t_index+7) <= '9')
+            || (get(t_index+7) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _project));
       t_index += 7;
       continue;
     }
-    if(str.substr(t_index, 6) == "rename" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "rename"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _rename));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 4) == "OPEN" && isspace(get(t_index+4))){
+    if(str.substr(t_index, 4) == "OPEN"
+       && !((get(t_index+4) >= 'a' && get(t_index+4) <= 'z')
+            || (get(t_index+4) >= 'A' && get(t_index+4) <= 'Z')
+            || (get(t_index+4) >= '0' && get(t_index+4) <= '9')
+            || (get(t_index+4) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _open));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 5) == "CLOSE" && isspace(get(t_index+5))){
+    if(str.substr(t_index, 5) == "CLOSE"
+       && !((get(t_index+5) >= 'a' && get(t_index+5) <= 'z')
+            || (get(t_index+5) >= 'A' && get(t_index+5) <= 'Z')
+            || (get(t_index+5) >= '0' && get(t_index+5) <= '9')
+            || (get(t_index+5) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _close));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 5) == "WRTIE" && isspace(get(t_index+5))){
+    if(str.substr(t_index, 5) == "WRTIE"
+       && !((get(t_index+5) >= 'a' && get(t_index+5) <= 'z')
+            || (get(t_index+5) >= 'A' && get(t_index+5) <= 'Z')
+            || (get(t_index+5) >= '0' && get(t_index+5) <= '9')
+            || (get(t_index+5) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _write));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 4) == "EXIT" && isspace(get(t_index+4))){
+    if(str.substr(t_index, 4) == "EXIT"
+       && !((get(t_index+4) >= 'a' && get(t_index+4) <= 'z')
+            || (get(t_index+4) >= 'A' && get(t_index+4) <= 'Z')
+            || (get(t_index+4) >= '0' && get(t_index+4) <= '9')
+            || (get(t_index+4) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _exit));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 4) == "SHOW" && isspace(get(t_index+4))){
+    if(str.substr(t_index, 4) == "SHOW"
+       && !((get(t_index+4) >= 'a' && get(t_index+4) <= 'z')
+            || (get(t_index+4) >= 'A' && get(t_index+4) <= 'Z')
+            || (get(t_index+4) >= '0' && get(t_index+4) <= '9')
+            || (get(t_index+4) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _show));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 6) == "CREATE" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "CREATE"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _create));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "UPDATE" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "UPDATE"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _update));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "INSERT" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "INSERT"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _update));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "DELETE" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "DELETE"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _delete));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 7) == "VARCHAR" && isspace(get(t_index+7))){
+    if(str.substr(t_index, 7) == "VARCHAR"
+       && !((get(t_index+7) >= 'a' && get(t_index+7) <= 'z')
+            || (get(t_index+7) >= 'A' && get(t_index+7) <= 'Z')
+            || (get(t_index+7) >= '0' && get(t_index+7) <= '9')
+            || (get(t_index+7) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _varchar));
       t_index += 7;
       continue;
     }
-    if(str.substr(t_index, 5) == "TABLE" && isspace(get(t_index+5))){
+    if(str.substr(t_index, 7) == "INTEGER"
+       && !((get(t_index+7) >= 'a' && get(t_index+7) <= 'z')
+            || (get(t_index+7) >= 'A' && get(t_index+7) <= 'Z')
+            || (get(t_index+7) >= '0' && get(t_index+7) <= '9')
+            || (get(t_index+7) == '_'))) {
+      tokens.push_back(Token(t_index, str.substr(t_index, 7), _integer));
+      t_index += 7;
+      continue;
+    }
+    if(str.substr(t_index, 5) == "TABLE"
+       && !((get(t_index+5) >= 'a' && get(t_index+5) <= 'z')
+            || (get(t_index+5) >= 'A' && get(t_index+5) <= 'Z')
+            || (get(t_index+5) >= '0' && get(t_index+5) <= '9')
+            || (get(t_index+5) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _table));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 7) == "PRIMARY" && isspace(get(t_index+7))){
+    if(str.substr(t_index, 7) == "PRIMARY"
+       && !((get(t_index+7) >= 'a' && get(t_index+7) <= 'z')
+            || (get(t_index+7) >= 'A' && get(t_index+7) <= 'Z')
+            || (get(t_index+7) >= '0' && get(t_index+7) <= '9')
+            || (get(t_index+7) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _primary));
       t_index += 7;
       continue;
     }
-      if(str.substr(t_index, 3) == "KEY" && isspace(get(t_index+3))){
+    if(str.substr(t_index, 3) == "KEY"
+       && !((get(t_index+3) >= 'a' && get(t_index+3) <= 'z')
+            || (get(t_index+3) >= 'A' && get(t_index+3) <= 'Z')
+            || (get(t_index+3) >= '0' && get(t_index+3) <= '9')
+            || (get(t_index+3) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 3), _key));
       t_index += 3;
       continue;
     }
-      if(str.substr(t_index, 3) == "SET" && isspace(get(t_index+3))){
+    if(str.substr(t_index, 3) == "SET"
+       && !((get(t_index+3) >= 'a' && get(t_index+3) <= 'z')
+            || (get(t_index+3) >= 'A' && get(t_index+3) <= 'Z')
+            || (get(t_index+3) >= '0' && get(t_index+3) <= '9')
+            || (get(t_index+3) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 3), _set));
       t_index += 3;
       continue;
     }
-      if(str.substr(t_index, 5) == "WHERE" && isspace(get(t_index+5))){
+    if(str.substr(t_index, 5) == "WHERE"
+       && !((get(t_index+5) >= 'a' && get(t_index+5) <= 'z')
+            || (get(t_index+5) >= 'A' && get(t_index+5) <= 'Z')
+            || (get(t_index+5) >= '0' && get(t_index+5) <= '9')
+            || (get(t_index+5) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _where));
       t_index += 5;
       continue;
     }
-      if(str.substr(t_index, 4) == "INTO" && isspace(get(t_index+4))){
+    if(str.substr(t_index, 4) == "INTO"
+       && !((get(t_index+4) >= 'a' && get(t_index+4) <= 'z')
+            || (get(t_index+4) >= 'A' && get(t_index+4) <= 'Z')
+            || (get(t_index+4) >= '0' && get(t_index+4) <= '9')
+            || (get(t_index+4) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _into));
       t_index += 4;
       continue;
     }
-      if(str.substr(t_index, 6) == "VALUES" && isspace(get(t_index+6))){
+    if(str.substr(t_index, 6) == "VALUES"
+       && !((get(t_index+6) >= 'a' && get(t_index+6) <= 'z')
+            || (get(t_index+6) >= 'A' && get(t_index+6) <= 'Z')
+            || (get(t_index+6) >= '0' && get(t_index+6) <= '9')
+            || (get(t_index+6) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _values));
       t_index += 6;
       continue;
     }
-      if(str.substr(t_index, 4) == "FROM" && isspace(get(t_index+4))){
+    if(str.substr(t_index, 4) == "FROM"
+       && !((get(t_index+4) >= 'a' && get(t_index+4) <= 'z')
+            || (get(t_index+4) >= 'A' && get(t_index+4) <= 'Z')
+            || (get(t_index+4) >= '0' && get(t_index+4) <= '9')
+            || (get(t_index+4) == '_'))) {
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _from));
       t_index += 4;
       continue;
@@ -200,8 +299,8 @@ void parser::lex(string input){
             || (get(t_index) >= '0' && get(t_index) <= '9')
             || (get(t_index) == '_')){
         /*
-        cout << t_index << endl;
-        cout << get(t_index) << endl;
+          cout << t_index << endl;
+          cout << get(t_index) << endl;
         */
         t_index++;
       }
@@ -230,7 +329,7 @@ void parser::lex(string input){
       }
       tokens.push_back(Token(first_index,
                              str.substr(first_index, t_index - first_index),
-                             _integer));
+                             _lit_integer));
       continue;
     }
     if((get(t_index) >= '0' && get(t_index) <= '9') || (get(t_index) == '-')){
@@ -246,10 +345,10 @@ void parser::lex(string input){
     }
     char t = 'a';
     /*
-    cout << t_index << endl;
-    cout << get(t_index) << endl;
-    char t;
-    cin >> t;
+      cout << t_index << endl;
+      cout << get(t_index) << endl;
+      char t;
+      cin >> t;
     */
   }
 }
