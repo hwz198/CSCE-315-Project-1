@@ -12,7 +12,7 @@ enum TokenType {_null = 0, _identifier, _lparen, _rparen, _comma, _assign,
                 _table, _primary, _key, _set, _where, _into, _values, _from,
                 _lit_integer, _literal};
 
-const extern string TokenStrings[];
+const extern string TokenStrings[]; //used to "decode" enums
 
 struct Token{
   size_t index;

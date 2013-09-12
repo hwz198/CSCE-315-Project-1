@@ -102,6 +102,8 @@ void parser::lex(string input){
       continue;
     }
     if(str.substr(t_index, 7) == "project"
+       /* also check that keyword isnt part of identifier
+         and thus isnt followed by alpha or digit */
        && !((get(t_index+7) >= 'a' && get(t_index+7) <= 'z')
             || (get(t_index+7) >= 'A' && get(t_index+7) <= 'Z')
             || (get(t_index+7) >= '0' && get(t_index+7) <= '9')
@@ -343,7 +345,7 @@ void parser::lex(string input){
                              _literal));
       continue;
     }
-    char t = 'a';
+    char t = 'a'; //gdb breakpoint
     /*
       cout << t_index << endl;
       cout << get(t_index) << endl;
