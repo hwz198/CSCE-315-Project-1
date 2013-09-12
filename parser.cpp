@@ -1,5 +1,8 @@
 #include "parser.h"
 #include <string>
+#include <iostream>
+#include <cctype>
+using namespace std;
 
 bool parser::parse(string input){
   str = input;
@@ -8,7 +11,10 @@ bool parser::parse(string input){
 }
 
 bool parser::statement(){
-  return query() && semicolon(); //|| command();
+  bool val = query() && semicolon(); //|| command();
+  cout << marker << endl;
+  cout << get(marker-1) << get(marker) << get(marker+1) << endl;
+  return val;
 }
 
 bool parser::query(){
@@ -31,10 +37,9 @@ bool parser::identifier(){
   } else if (alpha()) {
       while (alpha() || digit()){
       }
-      if (space()) {
-        return true;
-      }
-    }
+      consumeWhitespace();
+      return true;
+  }
   return false;
 }
 
@@ -57,8 +62,8 @@ bool parser::digit(){
 }
 
 bool parser::expr(){
-  return atomic_expr() || selection() || projection() || renaming()
-    || union_rel() || difference() || product();
+  return selection() || projection() || renaming()
+    || union_rel() || difference() || product() || atomic_expr();
 }
 
 bool parser::atomic_expr(){
@@ -74,6 +79,7 @@ bool parser::condition(){
     if (literal("||") && conjunction()) {
       return true;
     }
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -84,6 +90,7 @@ bool parser::conjunction(){
     if (literal("&&") && conjunction()){
       return true;
     }
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -138,6 +145,7 @@ bool parser::product(){
 bool parser::assign(){
   if(get(marker) == '<' && get(marker+1) == '-'){
     marker += 2;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -162,6 +170,7 @@ bool parser::space(){
 bool parser::lparen(){
   if(get(marker) == '('){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -170,6 +179,7 @@ bool parser::lparen(){
 bool parser::rparen(){
   if(get(marker) == ')'){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -179,6 +189,7 @@ bool parser::literal(string lit){
   if(marker + lit.size() < str.size()){
     if(str.substr(marker, marker+lit.size()) == lit){
       marker += lit.size();
+      consumeWhitespace();
       return true;
     }
   }
@@ -188,6 +199,7 @@ bool parser::literal(string lit){
 bool parser::plus(){
   if(get(marker) == '+'){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -196,6 +208,7 @@ bool parser::plus(){
 bool parser::minus(){
   if(get(marker) == '-'){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -205,6 +218,7 @@ bool parser::minus(){
 bool parser::asterisk(){
   if(get(marker) == '*'){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -213,6 +227,7 @@ bool parser::asterisk(){
 bool parser::comma(){
   if(get(marker) == ','){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -221,6 +236,7 @@ bool parser::comma(){
 bool parser::semicolon(){
   if(get(marker) == ';'){
     marker++;
+    consumeWhitespace();
     return true;
   }
   return false;
@@ -231,4 +247,9 @@ char parser::get(size_t index){
     return str[index];
   }
   return (char)0;
+}
+
+void parser::consumeWhitespace(){
+  while(isspace(get(marker)))
+    marker++;
 }

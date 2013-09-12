@@ -4,7 +4,19 @@
 #include<string>
 using namespace std;
 
+enum TokenType {_null = 0, _indentifier, _lparen, _rparen, _quote, _comma,
+                _assign, _space, _plus, _minus, _asterisk, _semicolon, _g, _l,
+                _e, _ge, _le, _ne}
+
 class parser{
+  struct Token{
+    size_t index;
+    string field;
+    size_t size(){return field.size()};
+    size_t length(){return field.length()};
+  }
+
+  }
   string str;
   size_t marker;
 
@@ -59,6 +71,8 @@ class parser{
   bool type();
   bool integer();
   */
+
+  void consumeWhitespace();
  public:
   bool parse(string input);
 };
