@@ -9,27 +9,27 @@ void parser::lex(string input){
   t_index = 0;
   while(t_index < str.size()){
     if(isspace(get(t_index))){
-      //tokens.push_back(Token(t_index, get(t_index), _space));
+      //tokens.push_back(Token(t_index, str.substr(t_index, 1), _space));
       t_index++;
       continue;
     }
     if(get(t_index) == '('){
-      tokens.push_back(Token(t_index, get(t_index), _lparen));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _lparen));
       t_index++;
       continue;
     }
     if(get(t_index) == ')'){
-      tokens.push_back(Token(t_index, get(t_index), _rparen));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _rparen));
       t_index++;
       continue;
     }
     if(get(t_index) == ','){
-      tokens.push_back(Token(t_index, get(t_index), _comma));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _comma));
       t_index++;
       continue;
     }
     if(get(t_index) == '('){
-      tokens.push_back(Token(t_index, get(t_index), _lparen));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _lparen));
       t_index++;
       continue;
     }
@@ -39,22 +39,22 @@ void parser::lex(string input){
       continue;
     }
     if(get(t_index) == '+'){
-      tokens.push_back(Token(t_index, get(t_index), _plus));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _plus));
       t_index++;
       continue;
     }
     if(get(t_index) == '-'){
-      tokens.push_back(Token(t_index, get(t_index), _minus));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _minus));
       t_index++;
       continue;
     }
     if(get(t_index) == '*'){
-      tokens.push_back(Token(t_index, get(t_index), _asterisk));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _asterisk));
       t_index++;
       continue;
     }
     if(get(t_index) == ';'){
-      tokens.push_back(Token(t_index, get(t_index), _semicolon));
+      tokens.push_back(Token(t_index, str.substr(t_index, 1), _semicolon));
       t_index++;
       continue;
     }
@@ -64,7 +64,7 @@ void parser::lex(string input){
         t_index += 2;
         continue;
       } else {
-        tokesn.push_back(Token(t_index, get(t_index), _g));
+        tokens.push_back(Token(t_index, str.substr(t_index, 1), _g));
         t_index++;
         continue;
       }
@@ -75,7 +75,7 @@ void parser::lex(string input){
         t_index += 2;
         continue;
       } else {
-        tokesn.push_back(Token(t_index, get(t_index), _l));
+        tokens.push_back(Token(t_index, str.substr(t_index, 1), _l));
         t_index++;
         continue;
       }
@@ -90,345 +90,156 @@ void parser::lex(string input){
       t_index += 2;
       continue;
     }
-    if(str.substr(t_index, 7) == "project"){
+    if(str.substr(t_index, 7) == "project" && isspace(get(t_index+7))){
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _project));
       t_index += 7;
       continue;
     }
-    if(str.substr(t_index, 6) == "rename"){
+    if(str.substr(t_index, 6) == "rename" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _rename));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 4) == "OPEN"){
+    if(str.substr(t_index, 4) == "OPEN" && isspace(get(t_index+4))){
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _open));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 5) == "CLOSE"){
+    if(str.substr(t_index, 5) == "CLOSE" && isspace(get(t_index+5))){
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _close));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 5) == "WRTIE"){
+    if(str.substr(t_index, 5) == "WRTIE" && isspace(get(t_index+5))){
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _write));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 4) == "EXIT"){
+    if(str.substr(t_index, 4) == "EXIT" && isspace(get(t_index+4))){
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _exit));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 4) == "SHOW"){
+    if(str.substr(t_index, 4) == "SHOW" && isspace(get(t_index+4))){
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _show));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 6) == "CREATE"){
+    if(str.substr(t_index, 6) == "CREATE" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _create));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "UPDATE"){
+    if(str.substr(t_index, 6) == "UPDATE" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _update));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "INSERT"){
+    if(str.substr(t_index, 6) == "INSERT" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _update));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 6) == "DELETE"){
+    if(str.substr(t_index, 6) == "DELETE" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _delete));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 7) == "VARCHAR"){
+    if(str.substr(t_index, 7) == "VARCHAR" && isspace(get(t_index+7))){
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _varchar));
       t_index += 7;
       continue;
     }
-    if(str.substr(t_index, 5) == "TABLE"){
+    if(str.substr(t_index, 5) == "TABLE" && isspace(get(t_index+5))){
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _table));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 7) == "PRIMARY"){
+    if(str.substr(t_index, 7) == "PRIMARY" && isspace(get(t_index+7))){
       tokens.push_back(Token(t_index, str.substr(t_index, 7), _primary));
       t_index += 7;
       continue;
     }
-    if(str.substr(t_index, 3) == "KEY"){
+      if(str.substr(t_index, 3) == "KEY" && isspace(get(t_index+3))){
       tokens.push_back(Token(t_index, str.substr(t_index, 3), _key));
       t_index += 3;
       continue;
     }
-    if(str.substr(t_index, 3) == "SET"){
+      if(str.substr(t_index, 3) == "SET" && isspace(get(t_index+3))){
       tokens.push_back(Token(t_index, str.substr(t_index, 3), _set));
       t_index += 3;
       continue;
     }
-    if(str.substr(t_index, 5) == "WHERE"){
+      if(str.substr(t_index, 5) == "WHERE" && isspace(get(t_index+5))){
       tokens.push_back(Token(t_index, str.substr(t_index, 5), _where));
       t_index += 5;
       continue;
     }
-    if(str.substr(t_index, 4) == "INTO"){
+      if(str.substr(t_index, 4) == "INTO" && isspace(get(t_index+4))){
       tokens.push_back(Token(t_index, str.substr(t_index, 4), _into));
       t_index += 4;
       continue;
     }
-    if(str.substr(t_index, 6) == "VALUES"){
+      if(str.substr(t_index, 6) == "VALUES" && isspace(get(t_index+6))){
       tokens.push_back(Token(t_index, str.substr(t_index, 6), _values));
       t_index += 6;
       continue;
     }
-    if(str.substr(t_index, 4) == "FROM"){
-      tokens.push_back(Token(t_index, str.substr(t_index, 4), _FROM));
+      if(str.substr(t_index, 4) == "FROM" && isspace(get(t_index+4))){
+      tokens.push_back(Token(t_index, str.substr(t_index, 4), _from));
       t_index += 4;
       continue;
     }
-  }
-}
-
-bool parser::parse(string input){
-  str = input;
-  marker = 0;
-  return statement();
-}
-
-bool parser::statement(){
-  bool val = query() && semicolon(); //|| command();
-  cout << marker << endl;
-  cout << get(marker-1) << get(marker) << get(marker+1) << endl;
-  return val;
-}
-
-bool parser::query(){
-  return rel_name() && assign() && expr();
-}
-
-bool parser::rel_name(){
-  return identifier();
-}
-
-bool parser::identifier(){
-  if (quote()) {
-    if (alpha()) {
-          while (alpha() || digit()){
-          }
-          if (quote()) {
-            return true;
-          }
-        }
-  } else if (alpha()) {
-      while (alpha() || digit()){
+    if((get(t_index) >= 'a' && get(t_index) <= 'z')
+       || (get(t_index) >= 'A' && get(t_index) <= 'Z')){
+      size_t first_index = t_index;
+      t_index++;
+      while((get(t_index) >= 'a' && get(t_index) <= 'z')
+            || (get(t_index) >= 'A' && get(t_index) <= 'Z')
+            || (get(t_index) >= '0' && get(t_index) <= '9')
+            || (get(t_index) == '_')){
+        /*
+        cout << t_index << endl;
+        cout << get(t_index) << endl;
+        */
+        t_index++;
       }
-      consumeWhitespace();
-      return true;
-  }
-  return false;
-}
-
-bool parser::alpha(){
-  if((get(marker) >= 'A' && get(marker) <= 'Z')
-     || (get(marker) >= 'a' && get(marker) <= 'z')
-     || get(marker) == '_'){
-    marker++;
-    return true;
-  }
-  return false;
-}
-
-bool parser::digit(){
-  if(get(marker) >= '0' && get(marker) <= '9'){
-    marker++;
-    return true;
-  }
-  return false;
-}
-
-bool parser::expr(){
-  return selection() || projection() || renaming()
-    || union_rel() || difference() || product() || atomic_expr();
-}
-
-bool parser::atomic_expr(){
-  return rel_name() || (lparen() && expr() && rparen());
-}
-
-bool parser::selection(){
-  return literal("select") && lparen() && condition() && rparen() && atomic_expr();
-}
-
-bool parser::condition(){
-  if (conjunction()) {
-    if (literal("||") && conjunction()) {
-      return true;
+      tokens.push_back(Token(first_index,
+                             str.substr(first_index, t_index - first_index),
+                             _identifier));
+      continue;
     }
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::conjunction(){
-  if (comparison()) {
-    if (literal("&&") && conjunction()){
-      return true;
+    if(get(t_index) == '\"'){
+      size_t first_index = t_index;
+      t_index++;
+      while(get(t_index) != '\"'){
+        t_index++;
+      }
+      t_index++; //catch quote that escaped while loop
+      tokens.push_back(Token(first_index,
+                             str.substr(first_index, t_index - first_index),
+                             _literal));
+      continue;
     }
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::comparison(){
-  return (operand() && op() && operand()) || (lparen() && condition() && rparen());
-}
-
-bool parser::op(){
-  return literal("==") || literal("!=") || literal("<") || literal(">")
-    || literal("<=") || literal(">=");
-}
-
-bool parser::operand(){
-  return attr_name(); // || literal()?
-}
-
-bool parser::attr_name(){
-  return identifier();
-}
-
-bool parser::projection(){
-  return literal("project") && lparen() && attr_list() && rparen() && atomic_expr();
-}
-
-bool parser::attr_list(){
-  if (attr_name()){
-    while (comma() && attr_name()){
+    if(get(t_index) >= '0' && get(t_index) <= '9'){
+      size_t first_index = t_index;
+      t_index++;
+      while(get(t_index) >= '0' && get(t_index) <= '9'){
+        t_index++;
+      }
+      tokens.push_back(Token(first_index,
+                             str.substr(first_index, t_index - first_index),
+                             _integer));
+      continue;
     }
-    return true;
+    char t = 'a';
+    /*
+    cout << t_index << endl;
+    cout << get(t_index) << endl;
+    char t;
+    cin >> t;
+    */
   }
-  return false;
-}
-
-bool parser::renaming(){
-  return literal("rename") && lparen() && attr_list() && rparen() && atomic_expr();
-}
-
-bool parser::union_rel(){
-  return atomic_expr() && plus() && atomic_expr();
-}
-
-bool parser::difference(){
-  return atomic_expr() && minus() && atomic_expr();
-}
-
-bool parser::product(){
-  return atomic_expr() && asterisk() && atomic_expr();
-}
-
-bool parser::assign(){
-  if(get(marker) == '<' && get(marker+1) == '-'){
-    marker += 2;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::quote(){
-  if(get(marker) == '\"'){
-    marker++;
-    return true;
-  }
-  return false;
-}
-
-bool parser::space(){
-  if(get(marker) == ' '){
-    marker++;
-    return true;
-  }
-  return false;
-}
-
-bool parser::lparen(){
-  if(get(marker) == '('){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::rparen(){
-  if(get(marker) == ')'){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::literal(string lit){
-  if(marker + lit.size() < str.size()){
-    if(str.substr(marker, marker+lit.size()) == lit){
-      marker += lit.size();
-      consumeWhitespace();
-      return true;
-    }
-  }
-  return false;
-}
-
-bool parser::plus(){
-  if(get(marker) == '+'){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::minus(){
-  if(get(marker) == '-'){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-
-bool parser::asterisk(){
-  if(get(marker) == '*'){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::comma(){
-  if(get(marker) == ','){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
-}
-
-bool parser::semicolon(){
-  if(get(marker) == ';'){
-    marker++;
-    consumeWhitespace();
-    return true;
-  }
-  return false;
 }
 
 char parser::get(size_t index){
@@ -436,9 +247,4 @@ char parser::get(size_t index){
     return str[index];
   }
   return (char)0;
-}
-
-void parser::consumeWhitespace(){
-  while(isspace(get(marker)))
-    marker++;
 }
