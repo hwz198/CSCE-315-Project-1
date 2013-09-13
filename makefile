@@ -1,7 +1,13 @@
-CC=g++
-CFLAGS=-O0 -g
+CC=clang++
+CFLAGS=-O0 -gdwarf-2
 
 all: test.out
+
+parse_test.out: parse_test.cpp parser.o
+	$(CC) $(CFLAGS) parse_test.cpp parser.o -o parse_test.out
+
+parser.o: parser.cpp parser.h
+	$(CC) -c $(CFLAGS) parser.cpp -o parser.o
 
 test.out: test.cpp Database.o
 	$(CC) $(CFLAGS) test.cpp Database.o Relation.o Attribute.o Tuple.o -o test.out
