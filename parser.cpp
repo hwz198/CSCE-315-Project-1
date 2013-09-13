@@ -492,7 +492,7 @@ bool parser::lparen(){
 }
 
 bool parser::rparen(){
-  if(t_get(t_index).type() == _lparen){
+  if(t_get(t_index).type() == _rparen){
     t_index++;
     return true;
   }
