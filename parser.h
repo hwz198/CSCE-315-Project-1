@@ -7,10 +7,10 @@ using namespace std;
 
 enum TokenType {_null = 0, _identifier, _lparen, _rparen, _comma, _assign,
                 _space, _plus, _minus, _asterisk, _semicolon, _g, _l, _e, _ge,
-                _le, _ne, _select, _project, _rename,_open, _close, _write, _exit,
-                _show, _create, _update, _insert, _delete, _varchar, _integer,
-                _table, _primary, _key, _set, _where, _into, _values, _from,
-                _lit_integer, _literal, _or, _and, _equals};
+                _le, _ne, _select, _project, _rename,_open, _close, _write,
+                _exit, _show, _create, _update, _insert, _delete, _varchar,
+                _integer, _table, _primary, _key, _set, _where, _into, _values,
+                _from, _relation, _lit_integer, _literal, _or, _and, _equals};
 
 const extern string TokenStrings[]; //used to "decode" enums
 
@@ -59,6 +59,40 @@ class parser{
   bool difference();
   bool product();
 
+  bool command();
+  bool open_cmd();
+  bool open();
+  bool close_cmd();
+  bool close();
+  bool write_cmd();
+  bool write();
+  bool exit_cmd();
+  bool exit();
+  bool show_cmd();
+  bool show();
+  bool create_cmd();
+  bool create();
+  bool table();
+  bool primary();
+  bool key();
+  bool update_cmd();
+  bool update();
+  bool set();
+  bool where();
+  bool insert_cmd();
+  bool insert();
+  bool into();
+  bool values();
+  bool from();
+  bool relation();
+  bool delete_cmd();
+  bool delete_keyword();
+  bool typed_attr_list();
+  bool type();
+  bool varchar();
+  bool lit_integer();
+  bool integer();
+
   bool lparen();
   bool rparen();
   bool quote();
@@ -75,6 +109,7 @@ class parser{
   bool rename();
   bool binary_or();
   bool binary_and();
+  bool equals();
 
   // public:
   void lex(string input);

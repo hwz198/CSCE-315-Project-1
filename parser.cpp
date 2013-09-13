@@ -4,11 +4,14 @@
 #include <cctype>
 using namespace std;
 
-const string TokenStrings[] = {"null", "identifier", "lparen", "rparen", "comma", "assign",
-                               "space", "plus", "minus", "asterisk", "semicolon", "g", "l", "e", "ge",
-                               "le", "ne", "select", "project", "rename","open", "close", "write", "exit",
-                               "show", "create", "update", "insert", "delete", "varchar", "integer",
-                               "table", "primary", "key", "set", "where", "into", "values", "from",
+const string TokenStrings[] = {"null = 0", "identifier", "lparen", "rparen",
+                               "comma", "assign", "space", "plus", "minus",
+                               "asterisk", "semicolon", "g", "l", "e", "ge",
+                               "le", "ne", "select", "project", "rename","open",
+                               "close", "write", "exit", "show", "create",
+                               "update", "insert", "delete", "varchar",
+                               "integer", "table", "primary", "key", "set",
+                               "where", "into", "values", "from", "relation",
                                "lit_integer", "literal", "or", "and", "equals"};
 
 bool parser::parse(string input){
@@ -19,12 +22,10 @@ bool parser::parse(string input){
     return true;
   }
   t_index = first_index;
-  /*
   if(command() && semicolon()){
     return true;
   }
   t_index = first_index;
-  */
   return false;
 }
 
@@ -132,7 +133,7 @@ void parser::lex(string input){
     }
     if(str.substr(s_index, 7) == "project"
        /* also check that keyword isnt part of identifier
-         and thus isnt followed by alpha or digit */
+          and thus isnt followed by alpha or digit */
        && !((get(s_index+7) >= 'a' && get(s_index+7) <= 'z')
             || (get(s_index+7) >= 'A' && get(s_index+7) <= 'Z')
             || (get(s_index+7) >= '0' && get(s_index+7) <= '9')
@@ -143,7 +144,7 @@ void parser::lex(string input){
     }
     if(str.substr(s_index, 6) == "select"
        /* also check that keyword isnt part of identifier
-         and thus isnt followed by alpha or digit */
+          and thus isnt followed by alpha or digit */
        && !((get(s_index+6) >= 'a' && get(s_index+6) <= 'z')
             || (get(s_index+6) >= 'A' && get(s_index+6) <= 'Z')
             || (get(s_index+6) >= '0' && get(s_index+6) <= '9')
@@ -330,6 +331,15 @@ void parser::lex(string input){
             || (get(s_index+4) == '_'))) {
       tokens.push_back(Token(s_index, str.substr(s_index, 4), _from));
       s_index += 4;
+      continue;
+    }
+    if(str.substr(s_index, 8) == "RELATION"
+       && !((get(s_index+8) >= 'a' && get(s_index+8) <= 'z')
+            || (get(s_index+8) >= 'A' && get(s_index+8) <= 'Z')
+            || (get(s_index+8) >= '0' && get(s_index+8) <= '9')
+            || (get(s_index+8) == '_'))) {
+      tokens.push_back(Token(s_index, str.substr(s_index, 8), _relation));
+      s_index += 8;
       continue;
     }
     if((get(s_index) >= 'a' && get(s_index) <= 'z')
@@ -520,7 +530,6 @@ bool parser::conjunction(){
       /* every time the loop evals, t_index will change, this is the point
          to set it back to, technically calculated before the last eval */
       first_index = t_index;
-      
     }
     t_index = first_index;
     return true;
@@ -585,7 +594,8 @@ bool parser::attr_name(){
 }
 
 bool parser::literal(){
-  if(t_get(t_index).type() == _literal){
+  if(t_get(t_index).type() == _literal
+     || t_get(t_index).type() == _lit_integer){
     t_index++;
     return true;
   }
@@ -682,6 +692,315 @@ bool parser::comma(){
 
 bool parser::assign(){
   if(t_get(t_index).type() == _assign){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::command(){
+  size_t first_index = t_index;
+  if(open_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(close_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(write_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(exit_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(show_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(create_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(update_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(insert_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  if(delete_cmd()){
+    return true;
+  }
+  t_index = first_index;
+  return false;
+}
+
+bool parser::open_cmd(){
+  return open() && rel_name();
+}
+
+bool parser::open(){
+  if(t_get(t_index).type() == _open){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::close_cmd(){
+  return close() && rel_name();
+}
+
+bool parser::close(){
+  if(t_get(t_index).type() == _close){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::write_cmd(){
+  return write() && rel_name();
+}
+
+bool parser::write(){
+  if(t_get(t_index).type() == _write){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::exit_cmd(){
+  return exit();
+}
+
+bool parser::exit(){
+  if(t_get(t_index).type() == _exit){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::show_cmd(){
+  return show() && atomic_expr();
+}
+
+bool parser::show(){
+  if(t_get(t_index).type() == _show){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::create_cmd(){
+  return create() && table() && rel_name() && lparen() && typed_attr_list()
+    && rparen() && primary() && key() && lparen() && attr_list() && rparen();
+}
+
+bool parser::create(){
+  if(t_get(t_index).type() == _create){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::table(){
+  if(t_get(t_index).type() == _table){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::primary(){
+  if(t_get(t_index).type() == _primary){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::key(){
+  if(t_get(t_index).type() == _key){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::update_cmd(){
+  size_t first_index = t_index;
+  if(update() && rel_name() && set() && attr_name() && equals() && literal()){
+    size_t second_index = t_index;
+    while(comma() && attr_name() && equals() && literal()){
+      second_index = t_index;
+    }
+    t_index = second_index;
+    if(where() && condition()){
+      return true;
+    }
+  }
+  t_index = first_index;
+  return false;
+}
+
+bool parser::update(){
+  if(t_get(t_index).type() == _update){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::set(){
+  if(t_get(t_index).type() == _set){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::where(){
+  if(t_get(t_index).type() == _where){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::insert_cmd(){
+  size_t first_index = t_index;
+  if(insert() && into() && rel_name() && values()
+     && from() && lparen() && literal()){
+    size_t second_index = t_index;
+    while(comma() && literal()){
+      second_index = t_index;
+    }
+    t_index = second_index;
+    if(rparen()){
+      return true;
+    }
+  }
+  t_index = first_index;
+  if(insert() && into() && rel_name() && values()
+     && from() && relation() && expr()){
+    return true;
+  }
+  t_index = first_index;
+  return false;
+}
+
+bool parser::insert(){
+  if(t_get(t_index).type() == _insert){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::into(){
+  if(t_get(t_index).type() == _into){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::values(){
+  if(t_get(t_index).type() == _values){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::from(){
+  if(t_get(t_index).type() == _from){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::relation(){
+  if(t_get(t_index).type() == _relation){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::delete_cmd(){
+  return delete_keyword() && from() && rel_name() && where() && condition();
+}
+
+bool parser::delete_keyword(){
+  if(t_get(t_index).type() == _delete){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::typed_attr_list(){
+  if(attr_name() && type()){
+    size_t first_index = t_index;
+    while(comma() && attr_name() && type()){
+      first_index = t_index;
+    }
+    t_index = first_index;
+    return true;
+  }
+  return false;
+}
+
+bool parser::type(){
+  size_t first_index = t_index;
+  if(varchar() && lparen() && lit_integer() && rparen()){
+    return true;
+  }
+  t_index = first_index;
+  if(integer()){
+    return true;
+  }
+  t_index = first_index;
+  return false;
+}
+
+bool parser::varchar(){
+  if(t_get(t_index).type() == _varchar){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::lit_integer(){
+  if(t_get(t_index).type() == _lit_integer){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::integer(){
+  if(t_get(t_index).type() == _integer){
+    t_index++;
+    return true;
+  }
+  return false;
+}
+
+bool parser::equals(){
+  if(t_get(t_index).type() == _equals){
     t_index++;
     return true;
   }
