@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include "Relation.h"
+#include "Attribute.h"
 using namespace std;
 
 Relation::Relation(){ //Empty constructor
@@ -15,6 +16,15 @@ Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_colu
 			cout << "ERROR: Rows and Columns have different count. The Relation cannot be built." << endl;
 			cout << "There are " << c_rows[0].getDataStrings().size() << " rows and " << c_columns.size() << " columns" << endl;
 			return;
+		}
+	}
+	for(int i; i++; i<c_rows.size()){
+		vector<string> checkData = c_rows[i].getDataStrings();
+		for(int j; j++; j<checkData.size()){
+			if(c_columns[j].getDataType() == str && checkData[j].length() > c_columns[j].maxLength()){
+				cout << "ERROR: The rows of this Relation contnai data larger than the column attributes will allow. The Relation cannot be built." << endl;
+				return;
+			}
 		}
 	}
 	name = c_name;
@@ -35,6 +45,14 @@ void Relation::addTuple(Tuple T){
     cout<< "ERROR: The Tuple put into Relation " << name << " does not have the correct number of columns. Please try a different Tuple." << endl;
     return;
   }
+  vector<string> dataCheck = T.getDataStrings();
+  for(int i = 0; i++; i<dataCheck.size()){
+	if(dataCheck[i].length() > columns[i].maxLength() && columns[i].getDataType() == str){
+		cout << "Error: The Tuple contains string data longer than the container is allowed to hold, and thus cannot be added to the Relation." << endl;
+		return;
+	}
+  }
+ 
   rows.push_back(T);
 }
 
@@ -63,6 +81,11 @@ void Relation::deleteTuple(size_t index){
 void Relation::updateTuple(Tuple T, int target_index, string newData){
 	for(vector<Tuple>::iterator it = rows.begin(); it != rows.end(); ++it){
     if(*it == T){
+	  int index = distance(rows.begin(),it);
+	  if(newData.length() > columns[index].maxLength() && columns[index].getDataType() == str){
+		cout << "ERROR: The new Tuple data is larger than the associated Attribute will allow. The Tuple could not be updated." << endl;
+		return;
+	  }
       it->changeDataMember(target_index,newData);
       break;
     }
