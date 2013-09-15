@@ -112,7 +112,7 @@ class parser{
   bool equals();
 
   // public:
-  void lex(string input);
+  bool lex(string input);
   bool parse(string input);
 };
 

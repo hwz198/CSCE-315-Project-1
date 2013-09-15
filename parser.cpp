@@ -16,20 +16,21 @@ const string TokenStrings[] = {"null = 0", "identifier", "lparen", "rparen",
 
 bool parser::parse(string input){
   t_index = 0;
-  lex(input);
-  size_t first_index = t_index;
-  if(query() && semicolon()){
-    return true;
+  if(lex(input)){
+    size_t first_index = t_index;
+    if(query() && semicolon()){
+      return true;
+    }
+    t_index = first_index;
+    if(command() && semicolon()){
+      return true;
+    }
+    t_index = first_index;
   }
-  t_index = first_index;
-  if(command() && semicolon()){
-    return true;
-  }
-  t_index = first_index;
   return false;
 }
 
-void parser::lex(string input){
+bool parser::lex(string input){
   tokens.clear();
   str = input;
   s_index = 0;
@@ -396,6 +397,7 @@ void parser::lex(string input){
       continue;
     }
     char t = 'a'; //gdb breakpoint
+    return 0; //reached if all ifs failed
     /*
       cout << s_index << endl;
       cout << get(s_index) << endl;
@@ -403,6 +405,7 @@ void parser::lex(string input){
       cin >> t;
     */
   }
+  return true;
 }
 
 char parser::get(size_t index){
