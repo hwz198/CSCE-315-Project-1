@@ -1,7 +1,7 @@
-CC=clang++
+CC=g++
 CFLAGS=-O0 -gdwarf-2
 
-all: test.out
+all: test.out parse_test.out
 
 parse_test.out: parse_test.cpp parser.o
 	$(CC) $(CFLAGS) parse_test.cpp parser.o -o parse_test.out
