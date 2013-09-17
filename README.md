@@ -13,11 +13,12 @@ Running/Testing
 ===============
 
 Currently the project only consists of a DBMS engine, with no way of input.
-To test to existing DBMS engine code, run the following commands
+To test to existing DBMS engine code and parser, run the following commands
 
 ```
 make all
 ./test.out
+./parse_test.out
 ```
 Note that some tests output error messages as they test incorrect calling of functions.
 These can be ignored as long as no line says something failed.
