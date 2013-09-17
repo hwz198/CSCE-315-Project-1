@@ -19,11 +19,15 @@ bool parser::parse(string input){
   if(lex(input)){
     size_t first_index = t_index;
     if(query() && semicolon()){
-      return true;
+      if(t_index == tokens.size()){
+        return true;
+      }
     }
     t_index = first_index;
     if(command() && semicolon()){
-      return true;
+      if(t_index == tokens.size()){
+        return true;
+      }
     }
     t_index = first_index;
   }

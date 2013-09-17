@@ -41,9 +41,10 @@ void testCreateTable(){
   	}
   	
   str = "CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (test, kind);"; //Can it be checked that the variables in primary key are one of the ones mentioned before? i.e. in this case either name,kind or years...not test.
+  //that will probably be checked upon relation creation
   
   result = P.parse(str);	
-  if(result!=0){
+  if(result!=1){
   	cout<<"Create Table test 6 failed"<<endl;
   	return;
   	}
