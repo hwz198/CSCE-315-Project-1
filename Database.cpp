@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Database.h"
+#include "parser.h"
 using namespace std;
 
 Database::Database(){ //Empty Constructor
@@ -149,7 +150,29 @@ void Database::Open(string r)
 		return;
 	}
 	
+	ofstream file;
+	Parser p;
+	string l;
+	file.open(r + ".db");
+	if(file.is_open()){
+		while(getline(file,l)){
+			p.parse(l);
+		}
+		file.close();
+	}
 	//Rest of the function requires file IO - to be implemented later
+}
+
+void Database::Write(string r)
+{
+	int index = RelationExists(r);	//Check if relation is already in memory
+	if(index == -1){
+          cout << "Error. Database " << r << " does not exist in memory!\n";
+		return;
+	}
+	
+	fileIOOp F(getRelation(r));
+	F.writeToFile();
 }
 
 void Database::Close(string r)
@@ -161,9 +184,8 @@ void Database::Close(string r)
 	}
 
 	//Write to disk - file IO
-		
-		
-
+	Write(r);
+	printf("Closing database. \n");
 	dbase.erase(dbase.begin() + index);			//Delete from memory
 }
 
