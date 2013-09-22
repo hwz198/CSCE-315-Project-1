@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <cctype>
+#include <cstdlib>
 using namespace std;
 
 const string TokenStrings[] = {"null = 0", "identifier", "lparen", "rparen",
@@ -18,21 +19,19 @@ AST* parser::parse(string input){
   t_index = 0;
   if(lex(input)){
     size_t first_index = t_index;
-    AST* q;
-    if((q = query()) && semicolon()){
+    AST* statement;
+    if((statement = query()) && semicolon()){
       if(t_index == tokens.size()){
-        return q;
+        return statement;
       }
     }
     t_index = first_index;
-    /*
-    if(command() && semicolon()){
+    if((statement = command()) && semicolon()){
       if(t_index == tokens.size()){
-        return true;
+        return statement;
       }
     }
     t_index = first_index;
-    */
   }
   return NULL;
 }
@@ -389,53 +388,65 @@ Token parser::assign(){
   return Token(0, "", _null);
 }
 
-/*
 AST* parser::command(){
   size_t first_index = t_index;
-  if(open_cmd()){
-    return true;
+  AST* comAST = open_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(close_cmd()){
-    return true;
+  comAST = close_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(write_cmd()){
-    return true;
+  comAST = write_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(exit_cmd()){
-    return true;
+  comAST = exit_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(show_cmd()){
-    return true;
+  comAST = show_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(create_cmd()){
-    return true;
+  comAST = create_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(update_cmd()){
-    return true;
+  comAST = update_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(insert_cmd()){
-    return true;
+  comAST = insert_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  if(delete_cmd()){
-    return true;
+  comAST = delete_cmd();
+  if(comAST){
+    return comAST;
   }
   t_index = first_index;
-  return false;
+  return NULL;
 }
 
 AST* parser::open_cmd(){
-  return open() && rel_name();
+  AST *relAST;
+  if(open() && (relAST = rel_name())){
+    return new OpenAST(relAST);
+  }
+  return NULL;
 }
 
-AST* parser::open(){
+bool parser::open(){
   if(t_get(t_index).type() == _open){
     t_index++;
     return true;
@@ -444,10 +455,14 @@ AST* parser::open(){
 }
 
 AST* parser::close_cmd(){
-  return close() && rel_name();
+  AST *relAST;
+  if(close() && (relAST = rel_name())){
+    return new CloseAST(relAST);
+  }
+  return NULL;
 }
 
-AST* parser::close(){
+bool parser::close(){
   if(t_get(t_index).type() == _close){
     t_index++;
     return true;
@@ -456,10 +471,14 @@ AST* parser::close(){
 }
 
 AST* parser::write_cmd(){
-  return write() && rel_name();
+  AST *relAST;
+  if(write() && (relAST = rel_name())){
+    return new WriteAST(relAST);
+  }
+  return NULL;
 }
 
-AST* parser::write(){
+bool parser::write(){
   if(t_get(t_index).type() == _write){
     t_index++;
     return true;
@@ -468,10 +487,13 @@ AST* parser::write(){
 }
 
 AST* parser::exit_cmd(){
-  return exit();
+  if(exit()){
+    return new ExitAST;
+  }
+  return NULL;
 }
 
-AST* parser::exit(){
+bool parser::exit(){
   if(t_get(t_index).type() == _exit_key){
     t_index++;
     return true;
@@ -480,10 +502,14 @@ AST* parser::exit(){
 }
 
 AST* parser::show_cmd(){
-  return show() && atomic_expr();
+  AST *relAST;
+  if(show() && (relAST = atomic_expr())){
+    return new ShowAST(relAST);
+  }
+  return NULL;
 }
 
-AST* parser::show(){
+bool parser::show(){
   if(t_get(t_index).type() == _show){
     t_index++;
     return true;
@@ -492,11 +518,16 @@ AST* parser::show(){
 }
 
 AST* parser::create_cmd(){
-  return create() && table() && rel_name() && lparen() && typed_attr_list()
-    && rparen() && primary() && key() && lparen() && attr_list() && rparen();
+  AST *relAST, *typedAST, *keyAST;
+  if(create() && table() && (relAST = rel_name()) && lparen()
+     && (typedAST = typed_attr_list()) && rparen() && primary() && key()
+     && lparen() && (keyAST = attr_list()) && rparen()){
+    return new CreateAST(relAST, typedAST, keyAST);
+  }
+  return NULL;
 }
 
-AST* parser::create(){
+bool parser::create(){
   if(t_get(t_index).type() == _create){
     t_index++;
     return true;
@@ -504,7 +535,7 @@ AST* parser::create(){
   return false;
 }
 
-AST* parser::table(){
+bool parser::table(){
   if(t_get(t_index).type() == _table){
     t_index++;
     return true;
@@ -512,7 +543,7 @@ AST* parser::table(){
   return false;
 }
 
-AST* parser::primary(){
+bool parser::primary(){
   if(t_get(t_index).type() == _primary){
     t_index++;
     return true;
@@ -520,7 +551,7 @@ AST* parser::primary(){
   return false;
 }
 
-AST* parser::key(){
+bool parser::key(){
   if(t_get(t_index).type() == _key){
     t_index++;
     return true;
@@ -529,22 +560,27 @@ AST* parser::key(){
 }
 
 AST* parser::update_cmd(){
+  AST *rel, *attr, *lit;
   size_t first_index = t_index;
-  if(update() && rel_name() && set() && attr_name() && equals() && literal()){
+  if(update() && (rel = rel_name()) && set()
+     && (attr = attr_name()) && equals() && (lit = literal())){
+    UpdateListAST* listAST = new UpdateListAST(attr, lit, NULL);
     size_t second_index = t_index;
-    while(comma() && attr_name() && equals() && literal()){
+    while(comma() && (attr = attr_name()) && equals() && (lit = literal())){
+      listAST = new UpdateListAST(attr, lit, listAST);
       second_index = t_index;
     }
     t_index = second_index;
-    if(where() && condition()){
-      return true;
+    AST *cond;
+    if(where() && (cond = condition())){
+      return new UpdateAST(rel, listAST, cond);
     }
   }
   t_index = first_index;
-  return false;
+  return NULL;
 }
 
-AST* parser::update(){
+bool parser::update(){
   if(t_get(t_index).type() == _update){
     t_index++;
     return true;
@@ -552,7 +588,7 @@ AST* parser::update(){
   return false;
 }
 
-AST* parser::set(){
+bool parser::set(){
   if(t_get(t_index).type() == _set){
     t_index++;
     return true;
@@ -560,7 +596,7 @@ AST* parser::set(){
   return false;
 }
 
-AST* parser::where(){
+bool parser::where(){
   if(t_get(t_index).type() == _where){
     t_index++;
     return true;
@@ -569,28 +605,31 @@ AST* parser::where(){
 }
 
 AST* parser::insert_cmd(){
+  AST *rel, *cond;
   size_t first_index = t_index;
-  if(insert() && into() && rel_name() && values()
-     && from() && lparen() && literal()){
+  if(insert() && into() && (rel = rel_name()) && values()
+     && from() && lparen() && (cond = literal())){
+    AST* list = new LiteralListAST(cond, NULL);
     size_t second_index = t_index;
-    while(comma() && literal()){
+    while(comma() && (cond = literal())){
+      list = new LiteralListAST(cond, list);
       second_index = t_index;
     }
     t_index = second_index;
     if(rparen()){
-      return true;
+      return new InsertAST(rel, list);
     }
   }
   t_index = first_index;
-  if(insert() && into() && rel_name() && values()
-     && from() && relation() && expr()){
-    return true;
+  if(insert() && into() && (rel = rel_name()) && values()
+     && from() && relation() && (cond = expr())){
+    return new InsertAST(rel, cond);
   }
   t_index = first_index;
-  return false;
+  return NULL;
 }
 
-AST* parser::insert(){
+bool parser::insert(){
   if(t_get(t_index).type() == _insert){
     t_index++;
     return true;
@@ -598,7 +637,7 @@ AST* parser::insert(){
   return false;
 }
 
-AST* parser::into(){
+bool parser::into(){
   if(t_get(t_index).type() == _into){
     t_index++;
     return true;
@@ -606,7 +645,7 @@ AST* parser::into(){
   return false;
 }
 
-AST* parser::values(){
+bool parser::values(){
   if(t_get(t_index).type() == _values){
     t_index++;
     return true;
@@ -614,7 +653,7 @@ AST* parser::values(){
   return false;
 }
 
-AST* parser::from(){
+bool parser::from(){
   if(t_get(t_index).type() == _from){
     t_index++;
     return true;
@@ -622,7 +661,7 @@ AST* parser::from(){
   return false;
 }
 
-AST* parser::relation(){
+bool parser::relation(){
   if(t_get(t_index).type() == _relation){
     t_index++;
     return true;
@@ -631,10 +670,15 @@ AST* parser::relation(){
 }
 
 AST* parser::delete_cmd(){
-  return delete_keyword() && from() && rel_name() && where() && condition();
+  AST *rel, *cond;
+  if(delete_keyword() && from() && (rel = rel_name())
+     && where() && (cond = condition())){
+    return new DeleteAST(rel, cond);
+  }
+  return NULL;
 }
 
-AST* parser::delete_keyword(){
+bool parser::delete_keyword(){
   if(t_get(t_index).type() == _delete){
     t_index++;
     return true;
@@ -643,54 +687,63 @@ AST* parser::delete_keyword(){
 }
 
 AST* parser::typed_attr_list(){
-  if(attr_name() && type()){
+  AST *attr, *t;
+  if((attr = attr_name()) && (t = type())){
     size_t first_index = t_index;
-    while(comma() && attr_name() && type()){
+    AST *list = new TypedAttrListAST(attr, t, NULL);
+    AST *next;
+    while(comma() && (attr = attr_name()) && (t = type())){
+      list = new TypedAttrListAST(attr, t, list);
       first_index = t_index;
     }
     t_index = first_index;
-    return true;
+    return list;
   }
-  return false;
+  return NULL;
 }
 
 AST* parser::type(){
   size_t first_index = t_index;
-  if(varchar() && lparen() && lit_integer() && rparen()){
-    return true;
+  Token var = varchar();
+  bool lp = lparen();
+  Token sz = lit_integer();
+  bool rp = rparen();
+  if(var.type() != _null && lp && sz.type() != _null && rp){
+    return new TypeAST(var, atoi(sz.field().c_str()));
   }
   t_index = first_index;
-  if(integer()){
-    return true;
+  Token i = integer();
+  if(i.type() != _null){
+    return new TypeAST(i, -1);
   }
   t_index = first_index;
-  return false;
+  return NULL;
 }
 
-AST* parser::varchar(){
+Token parser::varchar(){
   if(t_get(t_index).type() == _varchar){
     t_index++;
-    return true;
+    return t_get(t_index);
   }
-  return false;
+  return Token(0, "", _null);
 }
 
-AST* parser::lit_integer(){
+Token parser::lit_integer(){
   if(t_get(t_index).type() == _lit_integer){
     t_index++;
-    return true;
+    return t_get(t_index);
   }
-  return false;
+  return Token(0, "", _null);
 }
 
-AST* parser::integer(){
+Token parser::integer(){
   if(t_get(t_index).type() == _integer){
     t_index++;
-    return true;
+    return t_get(t_index);
   }
-  return false;
+  return Token(0, "", _null);
 }
-*/
+
 
 bool parser::equals(){
   if(t_get(t_index).type() == _equals){

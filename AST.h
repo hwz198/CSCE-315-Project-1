@@ -21,6 +21,7 @@ class Token{
   size_t length() const {return m_field.length();}
   TokenType type() const {return m_type;}
   size_t index() const {return m_index;}
+  string field() const {return m_field;}
 Token(size_t new_index, string new_field, TokenType new_type)
 : m_index(new_index), m_field(new_field), m_type(new_type) {}
 };
@@ -29,8 +30,8 @@ Token(size_t new_index, string new_field, TokenType new_type)
 
 struct AST {
   enum Tag {UNDEF = 0, IDENTIFIER, ASSIGN, BINARYOP, SELECT, PROJECT, RENAME, ATTR_NAME,
-            LITERAL, ATTR_LIST, OPEN, CLOSE, WRITE, EXIT, SHOW,
-            CREATE, UPDATE, INSERT, DELETE, TYPED_ATTR_LIST,
+            LITERAL, LIT_LIST, ATTR_LIST, OPEN, CLOSE, WRITE, EXIT, SHOW,
+            CREATE, UPDATE, UPDATE_LIST, INSERT, DELETE, TYPED_ATTR_LIST,
             TYPE}
     tag;
 
@@ -88,6 +89,12 @@ struct LiteralAST : AST{
  LiteralAST(Token l) : AST(LITERAL), literal(l) {}
 };
 
+struct LiteralListAST : AST{
+  AST *literal, *next;
+
+ LiteralListAST(AST* l, AST* n) : AST(LIT_LIST), literal(l), next(n) {}
+};
+
 struct AttrListAST : AST{
   AST* attr_name;
   AST* next;
@@ -96,21 +103,21 @@ struct AttrListAST : AST{
 };
 
 struct OpenAST : AST{
-  Token relation;
+  AST* relation;
 
- OpenAST(Token r) : AST(OPEN), relation(r) {}
+ OpenAST(AST* r) : AST(OPEN), relation(r) {}
 };
 
 struct CloseAST : AST{
-  Token relation;
+  AST* relation;
 
- CloseAST(Token r) : AST(CLOSE), relation(r) {}
+ CloseAST(AST* r) : AST(CLOSE), relation(r) {}
 };
 
 struct WriteAST : AST{
-  Token relation;
+  AST* relation;
 
- WriteAST(Token r) : AST(WRITE), relation(r) {}
+ WriteAST(AST* r) : AST(WRITE), relation(r) {}
 };
 
 struct ExitAST : AST{
@@ -118,46 +125,48 @@ struct ExitAST : AST{
 };
 
 struct ShowAST : AST{
-  Token relation;
+  AST* relation;
 
- ShowAST(Token r) : AST(SHOW), relation(r) {}
+ ShowAST(AST* r) : AST(SHOW), relation(r) {}
 };
 
 struct CreateAST : AST{
-  Token relation_name;
-  AST *typed_attr_list, *key_list;
+  AST *relation_name, *typed_attr_list, *key_list;
 
- CreateAST(Token r, AST* a, AST* k)
+ CreateAST(AST* r, AST* a, AST* k)
    : AST(CREATE), relation_name(r), typed_attr_list(a), key_list(k) {}
 };
 
 struct UpdateAST : AST{
-  Token relation_name;
-  AST *update_list, *condition; //TODO: what is update_list
+  AST *relation_name, *update_list, *condition;
 
- UpdateAST(Token r, AST* u, AST* c)
+ UpdateAST(AST* r, AST* u, AST* c)
    : AST(UPDATE), relation_name(r), update_list(u), condition(c) {};
 };
 
-struct InsertAST : AST{
-  Token relation_name;
-  AST *from;
+struct UpdateListAST : AST{
+  AST *attribute, *literal, *next;
 
- InsertAST(Token r, AST* f) : AST(INSERT), relation_name(r), from(f) {}
+  UpdateListAST(AST* a, AST* l, AST* n)
+    : AST(UPDATE_LIST), attribute(a), literal(l), next(n) {};
+};
+
+struct InsertAST : AST{
+  AST *relation_name, *from;
+
+ InsertAST(AST* r, AST* f) : AST(INSERT), relation_name(r), from(f) {}
 };
 
 struct DeleteAST : AST{
-  Token relation_name;
-  AST *condition;
+  AST *relation_name, *condition;
 
- DeleteAST(Token r, AST* c) : AST(DELETE), relation_name(r), condition(c) {}
+ DeleteAST(AST* r, AST* c) : AST(DELETE), relation_name(r), condition(c) {}
 };
 
 struct TypedAttrListAST : AST{
-  Token attribute;
-  AST *type, *next;
+  AST *attribute, *type, *next;
 
-  TypedAttrListAST(Token a, AST* t, AST* n)
+  TypedAttrListAST(AST* a, AST* t, AST* n)
     : AST(TYPED_ATTR_LIST), attribute(a), type(t), next(n) {}
 };
 
