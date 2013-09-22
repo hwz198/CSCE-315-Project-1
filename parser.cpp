@@ -5,16 +5,6 @@
 #include <cstdlib>
 using namespace std;
 
-const string TokenStrings[] = {"null = 0", "identifier", "lparen", "rparen",
-                               "comma", "assign", "space", "plus", "minus",
-                               "asterisk", "semicolon", "g", "l", "e", "ge",
-                               "le", "ne", "select", "project", "rename","open",
-                               "close", "write", "exit", "show", "create",
-                               "update", "insert", "delete", "varchar",
-                               "integer", "table", "primary", "key", "set",
-                               "where", "into", "values", "from", "relation",
-                               "lit_integer", "literal", "or", "and", "equals"};
-
 AST* parser::parse(string input){
   t_index = 0;
   if(lex(input)){
@@ -382,8 +372,9 @@ bool parser::comma(){
 
 Token parser::assign(){
   if(t_get(t_index).type() == _assign){
+    Token t = t_get(t_index);
     t_index++;
-    return t_get(t_index);
+    return t;
   }
   return Token(0, "", _null);
 }
@@ -713,7 +704,7 @@ AST* parser::type(){
   }
   t_index = first_index;
   Token i = integer();
-  if(i.type() != _null){
+  if(i.type() == _integer){
     return new TypeAST(i, -1);
   }
   t_index = first_index;
@@ -722,24 +713,27 @@ AST* parser::type(){
 
 Token parser::varchar(){
   if(t_get(t_index).type() == _varchar){
+    Token t = t_get(t_index);
     t_index++;
-    return t_get(t_index);
+    return t;
   }
   return Token(0, "", _null);
 }
 
 Token parser::lit_integer(){
   if(t_get(t_index).type() == _lit_integer){
+    Token t = t_get(t_index);
     t_index++;
-    return t_get(t_index);
+    return t;
   }
   return Token(0, "", _null);
 }
 
 Token parser::integer(){
   if(t_get(t_index).type() == _integer){
+    Token t = t_get(t_index);
     t_index++;
-    return t_get(t_index);
+    return t;
   }
   return Token(0, "", _null);
 }
