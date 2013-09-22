@@ -3,30 +3,8 @@
 
 #include<string>
 #include<vector>
+#include "AST.h"
 using namespace std;
-
-enum TokenType {_null = 0, _identifier, _lparen, _rparen, _comma, _assign,
-                _space, _plus, _minus, _asterisk, _semicolon, _g, _l, _e, _ge,
-                _le, _ne, _select, _project, _rename,_open, _close, _write,
-                _exit_key, _show, _create, _update, _insert, _delete, _varchar,
-                _integer, _table, _primary, _key, _set, _where, _into, _values,
-                _from, _relation, _lit_integer, _literal, _or, _and, _equals};
-
-const extern string TokenStrings[]; //used to "decode" enums
-
-class Token{
-  size_t m_index;
-  string m_field;
-  TokenType m_type;
- public:
-  size_t size() const {return m_field.size();}
-  size_t length() const {return m_field.length();}
-  TokenType type() const {return m_type;}
-  size_t index() const {return m_index;}
-Token(size_t new_index, string new_field, TokenType new_type)
-: m_index(new_index), m_field(new_field), m_type(new_type) {}
-};
-
 
 class parser{
  public:
@@ -38,72 +16,72 @@ class parser{
   char get(size_t index);
   Token t_get(size_t index);
 
-  bool statement();
+  AST* statement();
 
-  bool query();
-  bool rel_name();
-  bool identifier();
-  bool expr();
-  bool atomic_expr();
-  bool selection();
-  bool condition();
-  bool conjunction();
-  bool comparison();
-  bool op();
-  bool operand();
-  bool attr_name();
-  bool projection();
-  bool attr_list();
-  bool renaming();
-  bool union_rel();
-  bool difference();
-  bool product();
-
-  bool command();
-  bool open_cmd();
-  bool open();
-  bool close_cmd();
-  bool close();
-  bool write_cmd();
-  bool write();
-  bool exit_cmd();
-  bool exit();
-  bool show_cmd();
-  bool show();
-  bool create_cmd();
-  bool create();
-  bool table();
-  bool primary();
-  bool key();
-  bool update_cmd();
-  bool update();
-  bool set();
-  bool where();
-  bool insert_cmd();
-  bool insert();
-  bool into();
-  bool values();
-  bool from();
-  bool relation();
-  bool delete_cmd();
-  bool delete_keyword();
-  bool typed_attr_list();
-  bool type();
-  bool varchar();
-  bool lit_integer();
-  bool integer();
-
+  AST* query();
+  AST* rel_name();
+  AST* identifier();
+  AST* expr();
+  AST* atomic_expr();
+  AST* selection();
+  AST* condition();
+  AST* conjunction();
+  AST* comparison();
+  TokenType op();
+  AST* operand();
+  AST* attr_name();
+  AST* projection();
+  AST* attr_list();
+  AST* renaming();
+  AST* union_rel();
+  AST* difference();
+  AST* product();
+  /*
+  AST* command();
+  AST* open_cmd();
+  AST* open();
+  AST* close_cmd();
+  AST* close();
+  AST* write_cmd();
+  AST* write();
+  AST* exit_cmd();
+  AST* exit();
+  AST* show_cmd();
+  AST* show();
+  AST* create_cmd();
+  AST* create();
+  AST* table();
+  AST* primary();
+  AST* key();
+  AST* update_cmd();
+  AST* update();
+  AST* set();
+  AST* where();
+  AST* insert_cmd();
+  AST* insert();
+  AST* into();
+  AST* values();
+  AST* from();
+  AST* relation();
+  AST* delete_cmd();
+  AST* delete_keyword();
+  AST* typed_attr_list();
+  AST* type();
+  AST* varchar();
+  AST* lit_integer();
+  AST* integer();
+  */
   bool lparen();
   bool rparen();
-  bool quote();
+  AST* quote();
   bool comma();
-  bool assign();
-  bool space();
+  Token assign();
+  AST* space();
   bool plus();
   bool minus();
   bool asterisk();
   bool semicolon();
-  bool literal();
+  AST* literal();
   bool select();
   bool project();
   bool rename();
@@ -113,7 +91,7 @@ class parser{
 
   // public:
   bool lex(string input);
-  bool parse(string input);
+  AST* parse(string input);
 };
 
 #endif /* PARSER_H */
