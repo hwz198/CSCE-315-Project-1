@@ -6,7 +6,7 @@
 #include "AST.h"
 using namespace std;
 
-class parser{
+class Parser{
  public:
   vector<Token> tokens;
   string str;

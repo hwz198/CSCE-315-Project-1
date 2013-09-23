@@ -1,10 +1,10 @@
-#include "parser.h"
+#include "Parser.h"
 #include<iostream>
 using namespace std;
 
 void testCreateTable(){
 
-  parser P;  
+  Parser P;  
   string str = "CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);";
   bool result = P.parse(str);
   if(!result){
@@ -56,7 +56,7 @@ void testCreateTable(){
 
 void showTableTest(){
 
- 	parser P;  
+ 	Parser P;  
   	string str = "SHOW animals animals;";
   	bool result = P.parse(str);
 	if(result){
@@ -96,7 +96,7 @@ void showTableTest(){
 
 void insertTest(){
 
-	parser P;  
+	Parser P;  
   	string str = "INSERT INT animals VALUES FROM (\"Joe\", \"cat\", 4);";
   	bool result = P.parse(str);
 	if(result!=0){
@@ -150,7 +150,7 @@ void insertTest(){
 
 void exitTest(){
 
-	parser P;  
+	Parser P;  
   	string str = "EXITT;";
   	bool result = P.parse(str);
 	if(result!=0){
@@ -182,7 +182,7 @@ void exitTest(){
 
 void queryTest(){
 
-	parser P;
+	Parser P;
 	string str = "common_names <- project (name) (select (aname == name & akind != kind) (a * animals));"; //single & gives infinite loop
 	bool result = P.parse(str);
 	if(result!=0){

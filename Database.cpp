@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Database.h"
-#include "parser.h"
+#include "Parser.h"
 using namespace std;
 
 Database::Database(){ //Empty Constructor
