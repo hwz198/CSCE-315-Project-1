@@ -16,8 +16,8 @@ fileIOOp::fileIOOp(const Relation &R){ //constructor
 	fileTarget.open(fileName.c_str());
 	tups = R.getRows();
 	keys = R.getKeys();
-	for(int i; i++; i<attr.size()){ //This works because everything is a string. A little inefficient (checks length for int and double) but simple.
-		for(int j; j++; j<tups.size()){
+	for(int i = 0; i<attr.size(); ++i){ //This works because everything is a string. A little inefficient (checks length for int and double) but simple.
+          for(int j = 0; j<tups.size(); ++j){
 			if(varcharLength[i] < tups[j].getDataStrings()[i].length()){
 				varcharLength[i] = tups[j].getDataStrings()[i].length();
 			}
@@ -32,7 +32,7 @@ fileIOOp::~fileIOOp(){
 void fileIOOp::writeToFile(){
 	//Create the table
 	fileTarget <<"CREATE TABLE " << relationName << " (";
-	for(int i; i++; i<attr.size()){
+	for(int i = 0; i<attr.size(); ++i){
 		fileTarget << attr[i].getValue() << " ";
 		if(attr[i].getDataType() == str){
 			fileTarget << "VARCHAR(" << varcharLength[i] << ")";
@@ -48,7 +48,7 @@ void fileIOOp::writeToFile(){
 	}
 	if(!keys.empty()){
 		fileTarget << "PRIMARY KEY (";
-		for(int i; i++; i<keys.size()){
+		for(int i = 0; i<keys.size(); ++i){
 			fileTarget << attr[keys[i]].getValue();
 			if(i != keys.size()-1){fileTarget << " ,";}
 			else{ fileTarget << ")";}
@@ -57,7 +57,7 @@ void fileIOOp::writeToFile(){
 	fileTarget << ";" << endl;
 	
 	//Put the Tuples in it
-	for(int i; i++; i<tups.size()){
+	for(int i = 0; i<tups.size(); ++i){
 		fileTarget << "INSERT INTO " << relationName << " VALUES FROM (";
 		vector<string> tupData = tups[i].getDataStrings();
                   for(int j; j < tupData.size(); ++j){

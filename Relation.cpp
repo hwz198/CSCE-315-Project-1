@@ -18,9 +18,9 @@ Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_colu
 			return;
 		}
 	}
-	for(int i; i++; i<c_rows.size()){
+	for(int i=0; i<c_rows.size(); ++i){
 		vector<string> checkData = c_rows[i].getDataStrings();
-		for(int j; j++; j<checkData.size()){
+		for(int j=0; j<checkData.size(); ++j){
 			if(c_columns[j].getDataType() == str && checkData[j].length() > c_columns[j].maxLength()){
 				cout << "ERROR: The rows of this Relation contnai data larger than the column attributes will allow. The Relation cannot be built." << endl;
 				return;

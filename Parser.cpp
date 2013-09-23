@@ -683,7 +683,6 @@ AST* Parser::typed_attr_list(){
   if((attr = attr_name()) && (t = type())){
     size_t first_index = t_index;
     AST *list = new TypedAttrListAST(attr, t, NULL);
-    AST *next;
     while(comma() && (attr = attr_name()) && (t = type())){
       list = new TypedAttrListAST(attr, t, list);
       first_index = t_index;
@@ -1116,7 +1115,7 @@ bool Parser::lex(string input){
                              _lit_integer));
       continue;
     }
-    char t = 'a'; //gdb breakpoint
+    //char t = 'a'; //gdb breakpoint
     return 0; //reached if all ifs failed
     /*
       cout << s_index << endl;
