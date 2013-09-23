@@ -2,15 +2,18 @@
 
 using namespace std;
 
-fileIOOP(const Relation &R){ //constructor
+fileIOOp::fileIOOp(const Relation &R){ //constructor
 	attr = R.getColumns();
 	if(attr.empty()){
 		cout << "Cannot store a Relation with no attributes." << endl;
 	}
-	fileTarget = ofstream();
+        /* not sure if this is necessary, apparently this is read as a copy
+           constructor instead of initialization, and it looks like the STL
+           says no go to that. not sure what you want to do. --RD */
+	//fileTarget = ofstream();
 	relationName = R.getName();
 	fileName = relationName + ".db";
-	fileTarget.open(fileName);
+	fileTarget.open(fileName.c_str());
 	tups = R.getRows();
 	keys = R.getKeys();
 	for(int i; i++; i<attr.size()){ //This works because everything is a string. A little inefficient (checks length for int and double) but simple.
@@ -22,22 +25,22 @@ fileIOOP(const Relation &R){ //constructor
 	}
 }
 
-~fileIOOp(){
+fileIOOp::~fileIOOp(){
 	fileTarget.close();
 }
 
-void writeToFile(){
+void fileIOOp::writeToFile(){
 	//Create the table
 	fileTarget <<"CREATE TABLE " << relationName << " (";
 	for(int i; i++; i<attr.size()){
-		fileTarget << atrr[i].getValue() << " ";
-		if(attr[i].getDataType() == dataTypes::str){
+		fileTarget << attr[i].getValue() << " ";
+		if(attr[i].getDataType() == str){
 			fileTarget << "VARCHAR(" << varcharLength[i] << ")";
 		}
-		else if(attr[i].getDataType() == dataTypes::in){
+		else if(attr[i].getDataType() == in){
 			fileTarget << "INTEGER";
 		}
-		else if(attr[i].getDataType() == dataTypes::d){
+		else if(attr[i].getDataType() == d){
 			fileTarget << "DOUBLE";
 		}
 		if(i != attr.size()-1){ fileTarget << ", ";}
@@ -56,9 +59,9 @@ void writeToFile(){
 	//Put the Tuples in it
 	for(int i; i++; i<tups.size()){
 		fileTarget << "INSERT INTO " << relationName << " VALUES FROM (";
-		vector<string> tupData = tups[i].getDataStrings()
-		for(int j; j++; j < tupData.size()){
-			if(attr[j].getDataType == dataTypes::str){
+		vector<string> tupData = tups[i].getDataStrings();
+                  for(int j; j < tupData.size(); ++j){
+                    if(attr[j].getDataType() == str){
 				fileTarget << "\"" << tupData[j] << "\"";
 			}
 			else{

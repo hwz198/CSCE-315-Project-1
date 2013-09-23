@@ -1,19 +1,22 @@
-CC=clang++
+CC=g++
 CFLAGS=-O0 -gdwarf-2
 
 all: test.out parse_test.out
 
-parse_test.out: parse_test.cpp parser.o
-	$(CC) $(CFLAGS) parse_test.cpp parser.o -o parse_test.out
-
-parser.o: parser.cpp parser.h AST.h
-	$(CC) -c $(CFLAGS) parser.cpp -o parser.o
+parse_test.out: parse_test.cpp Parser.o
+	$(CC) $(CFLAGS) parse_test.cpp Parser.o -o parse_test.out
 
 test.out: test.cpp Database.o
-	$(CC) $(CFLAGS) test.cpp Database.o Relation.o Attribute.o Tuple.o -o test.out
+	$(CC) $(CFLAGS) test.cpp Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o -o test.out
 
-Database.o: Database.h Database.cpp Relation.o
+Database.o: Database.h Database.cpp Relation.o FileIO.o Parser.o
 	$(CC) -c $(CFLAGS) Database.cpp
+
+Parser.o: Parser.cpp Parser.h AST.h
+	$(CC) -c $(CFLAGS) Parser.cpp -o Parser.o
+
+FileIO.o: FileIO.h FileIO.cpp Relation.o Attribute.o Tuple.o
+	$(CC) -c $(CFLAGS) FileIO.cpp
 
 Relation.o: Relation.h Relation.cpp Attribute.o Tuple.o
 	$(CC) -c $(CFLAGS) Relation.cpp

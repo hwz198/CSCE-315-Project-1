@@ -1,7 +1,6 @@
-#include <stdio>
+#include <cstdio>
 #include <iostream>
 #include <fstream>
-#include "Database.h"
 #include "Relation.h"
 #include "Attribute.h"
 #include "Tuple.h"
@@ -19,4 +18,4 @@ class fileIOOp{
 	fileIOOp(const Relation &R); //constructor
 	~fileIOOp(); //destructor
 	void writeToFile();
-}
+};

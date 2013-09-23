@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "Database.h"
 #include "Parser.h"
+#include "FileIO.h"
 using namespace std;
 
 Database::Database(){ //Empty Constructor
@@ -150,10 +151,10 @@ void Database::Open(string r)
 		return;
 	}
 	
-	ofstream file;
+	ifstream file;
 	Parser p;
 	string l;
-	file.open(r + ".db");
+	file.open((r + ".db").c_str());
 	if(file.is_open()){
 		while(getline(file,l)){
 			p.parse(l);
