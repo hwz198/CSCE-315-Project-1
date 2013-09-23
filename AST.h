@@ -89,7 +89,7 @@ template<AST::Tag T> //generalization for output
 struct DoubleAST : AST{
   AST *left, *right;
 
- DoubleAST(AST* l, AST* r) : AST(T), right(r), left(l) {}
+ DoubleAST(AST* l, AST* r) : AST(T), left(l), right(r) {}
   void print(ostream& os) const {os << "(" << left << "(<" << TagStrings[T] << ">)" << right << ")";}
 };
 
@@ -97,7 +97,7 @@ template<AST::Tag T> //generalization for output
 struct TripleAST : AST{
   AST *left, *center, *right;
 
- TripleAST(AST* l, AST* c, AST* r) : AST(T), right(r), center(c), left(l) {}
+ TripleAST(AST* l, AST* c, AST* r) : AST(T), left(l), center(c), right(r) {}
   void print(ostream& os) const {os << "(" << left << "((<" << TagStrings[T] << ">)" << center << ")" << right << ")";}
 };
 
@@ -112,7 +112,7 @@ struct AssignAST : AST{
 
   void print(ostream& os) const {os << "(" << left << "(" << assign << ")" << right << ")";}
 
- AssignAST(Token as, AST* l, AST* r) : AST(ASSIGN), assign(as), right(r), left(l) {}
+ AssignAST(Token as, AST* l, AST* r) : AST(ASSIGN), assign(as), left(l), right(r) {}
 };
 
 struct BinaryOpAST : AST{
@@ -136,9 +136,11 @@ struct RenameAST : DoubleAST<AST::RENAME>{
  RenameAST(AST* attr_list, AST* relation) : DoubleAST(attr_list, relation) {}
 };
 
+/*
 struct AttrNameAST : TokenAST<AST::ATTR_NAME>{
  AttrNameAST(Token attribute) : TokenAST(attribute) {}
 };
+*/
 
 struct LiteralAST : TokenAST<AST::LITERAL>{
  LiteralAST(Token literal) : TokenAST(literal) {}

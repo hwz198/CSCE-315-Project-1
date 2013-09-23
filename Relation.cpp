@@ -46,7 +46,7 @@ void Relation::addTuple(Tuple T){
     return;
   }
   vector<string> dataCheck = T.getDataStrings();
-  for(int i = 0; i++; i<dataCheck.size()){
+  for(int i = 0; i<dataCheck.size(); ++i){
 	if(dataCheck[i].length() > columns[i].maxLength() && columns[i].getDataType() == str){
 		cout << "Error: The Tuple contains string data longer than the container is allowed to hold, and thus cannot be added to the Relation." << endl;
 		return;
