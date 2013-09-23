@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-O0 -gdwarf-2
+CFLAGS=-O0 -gdwarf-2 -Wall -Wno-sign-compare
 
 all: test.out parse_test.out
 

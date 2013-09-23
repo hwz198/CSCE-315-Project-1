@@ -212,7 +212,7 @@ void Database::deleteTuples(Relation A, string attrib_val, logic_operator op, At
 	}
 	else{
 		vector<Tuple> to_delete;
-		int j=0;
+		//int j=0; is this correct?
 		for(int i=0;i<rows_to_delete.size();i++)
 		{
 			Tuple t = dbase[rel].getTuple(rows_to_delete[i]);

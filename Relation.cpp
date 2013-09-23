@@ -18,9 +18,9 @@ Relation::Relation(string c_name, vector<Tuple> c_rows, vector<Attribute> c_colu
 			return;
 		}
 	}
-	for(int i; i++; i<c_rows.size()){
+	for(int i=0; i<c_rows.size(); ++i){
 		vector<string> checkData = c_rows[i].getDataStrings();
-		for(int j; j++; j<checkData.size()){
+		for(int j=0; j<checkData.size(); ++j){
 			if(c_columns[j].getDataType() == str && checkData[j].length() > c_columns[j].maxLength()){
 				cout << "ERROR: The rows of this Relation contnai data larger than the column attributes will allow. The Relation cannot be built." << endl;
 				return;
@@ -46,7 +46,7 @@ void Relation::addTuple(Tuple T){
     return;
   }
   vector<string> dataCheck = T.getDataStrings();
-  for(int i = 0; i++; i<dataCheck.size()){
+  for(int i = 0; i<dataCheck.size(); ++i){
 	if(dataCheck[i].length() > columns[i].maxLength() && columns[i].getDataType() == str){
 		cout << "Error: The Tuple contains string data longer than the container is allowed to hold, and thus cannot be added to the Relation." << endl;
 		return;
