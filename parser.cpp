@@ -601,9 +601,10 @@ AST* parser::insert_cmd(){
   if(insert() && into() && (rel = rel_name()) && values()
      && from() && lparen() && (cond = literal())){
     AST* list = new LiteralListAST(cond, NULL);
+    AST* next;
     size_t second_index = t_index;
-    while(comma() && (cond = literal())){
-      list = new LiteralListAST(cond, list);
+    while(comma() && (next = literal())){
+      list = new LiteralListAST(list, next);
       second_index = t_index;
     }
     t_index = second_index;
