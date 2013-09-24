@@ -1,4 +1,4 @@
-CXX=clang++
+CXX=g++
 CFLAGS=-O0 -gdwarf-2 -Wall -Wno-sign-compare
 
 all: test.out AST_assembly_test.out AST_traversal_test.out parser_test.out

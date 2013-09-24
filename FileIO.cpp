@@ -60,7 +60,7 @@ void fileIOOp::writeToFile(){
 	for(int i = 0; i<tups.size(); ++i){
 		fileTarget << "INSERT INTO " << relationName << " VALUES FROM (";
 		vector<string> tupData = tups[i].getDataStrings();
-                  for(int j; j < tupData.size(); ++j){
+                  for(int j = 0; j < tupData.size(); ++j){
                     if(attr[j].getDataType() == str){
 				fileTarget << "\"" << tupData[j] << "\"";
 			}
