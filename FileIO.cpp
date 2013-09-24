@@ -17,6 +17,7 @@ fileIOOp::fileIOOp(const Relation &R){ //constructor
 	tups = R.getRows();
 	keys = R.getKeys();
 	for(int i = 0; i<attr.size(); ++i){ //This works because everything is a string. A little inefficient (checks length for int and double) but simple.
+		  varcharLength.push_back(0);
           for(int j = 0; j<tups.size(); ++j){
 			if(varcharLength[i] < tups[j].getDataStrings()[i].length()){
 				varcharLength[i] = tups[j].getDataStrings()[i].length();
@@ -60,8 +61,8 @@ void fileIOOp::writeToFile(){
 	for(int i = 0; i<tups.size(); ++i){
 		fileTarget << "INSERT INTO " << relationName << " VALUES FROM (";
 		vector<string> tupData = tups[i].getDataStrings();
-                  for(int j = 0; j < tupData.size(); ++j){
-                    if(attr[j].getDataType() == str){
+        for(int j = 0; j < tupData.size(); ++j){
+            if(attr[j].getDataType() == str){
 				fileTarget << "\"" << tupData[j] << "\"";
 			}
 			else{
