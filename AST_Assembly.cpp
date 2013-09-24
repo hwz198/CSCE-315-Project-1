@@ -5,7 +5,7 @@
 #include <cstdlib>
 using namespace std;
 
-AST* AST_Assembly::parse(string input){
+AST* AST_Assembly::assemble(string input){
   t_index = 0;
   if(lex(input)){
     size_t first_index = t_index;

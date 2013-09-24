@@ -74,7 +74,7 @@ int main(){
   string str; //= "high_hitters <- select (homeruns >= 40) baseball_players;";
   while(getline(cin, str)){
     bool parsed = 0;
-    AST* tree = P.parse(str);
+    AST* tree = P.assemble(str);
     if(tree != NULL){
       parsed = A.traverse(tree);
       tree->print(std::cout);

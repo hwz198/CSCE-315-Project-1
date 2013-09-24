@@ -160,7 +160,7 @@ void Database::Open(string r)
 	file.open((r + ".db").c_str());
 	if(file.is_open()){
 		while(getline(file,l)){
-			p.parse(l);
+			p.assemble(l);
 		}
 		file.close();
 	}

@@ -92,7 +92,7 @@ class AST_Assembly{
 
   // public:
   bool lex(string input);
-  AST* parse(string input);
+  AST* assemble(string input);
 };
 
 #endif /* PARSER_H */
