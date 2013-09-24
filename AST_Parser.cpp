@@ -95,7 +95,45 @@ bool AST_Parser::parse(AST* ast){
       break;
     }
     case (AST::UPDATE):{
-      
+      UpdateAST* uast = static_cast<UpdateAST*>(ast);
+      string rel_name = identifier(uast->left);
+      Relation* r = db->getRelationRef(rel_name);
+      if(!r){
+        r = views->getRelationRef(rel_name);
+        if(!r){
+          throw runtime_error("Relation " + rel_name + " not found.");
+        }
+      }
+      vector<Attribute> attribs = r->getColumns();
+      vector<Tuple>* rows = r->getRowsRef();
+      UpdateListAST* list = static_cast<UpdateListAST*>(uast->center);
+      while(list){
+        for(size_t i = 0; i < rows->size(); ++i){
+          //vector<size_t> indices;
+          size_t j;
+          string attr_name = identifier(list->left);
+          Token lit_tok = literal(list->center);
+          for(j = 0; j < attribs.size(); ++j){
+            if(attr_name == attribs[j].getValue()
+               && ((lit_tok.type() == _literal && attribs[j].getDataType() == str)
+                   || (lit_tok.type() == _lit_integer && attribs[j].getDataType() == in))){
+              break;
+            }
+          }
+          if(j == attribs.size()){
+            throw runtime_error("Attribute " + identifier(list->left)
+                                + " doesn't exist in " + rel_name);
+          }
+          cout << "{" << i << ", " << j << "}";
+          if(binaryop(uast->right, (*rows)[i], attribs)){
+            cout << " is changed";
+            (*rows)[i].changeDataMember(j, lit_tok.field());
+          }
+          cout << endl;
+        }
+        list = static_cast<UpdateListAST*>(list->right);
+      }
+      break;
     }
     case (AST::SHOW):{
       Relation r = expr(static_cast<ShowAST*>(ast)->center);
@@ -185,6 +223,7 @@ Relation AST_Parser::expr(AST* ast){
   default:
     throw runtime_error("Expression invalid.");
   }
+  throw runtime_error("Expression invalid.");
 }
 
 bool AST_Parser::binaryop(AST* ast, Tuple const& t, vector<Attribute> const& a){

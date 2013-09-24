@@ -115,6 +115,10 @@ vector<Tuple> Relation::getRows() const{
 	return rows;
 }
 
+vector<Tuple>* Relation::getRowsRef(){
+  return &rows;
+}
+
 vector<Attribute> Relation::getColumns() const{
 	return columns;
 }

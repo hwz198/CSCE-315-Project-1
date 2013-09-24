@@ -28,8 +28,6 @@ class AST_Parser{
  public:
   bool parse(AST* p_ast);
  AST_Parser(Database* d, Database* v) : db(d), views(v) {}
-
-  
 };
 
 #endif

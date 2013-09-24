@@ -24,6 +24,7 @@ class Relation{
 		Tuple getTuple(Tuple T) const;
 		Tuple getTuple(size_t index) const;
 		vector<Tuple> getRows() const;
+		vector<Tuple>* getRowsRef();
 		vector<Attribute> getColumns() const;
 		vector<size_t> getKeys() const;
 		bool isKey(size_t id);
