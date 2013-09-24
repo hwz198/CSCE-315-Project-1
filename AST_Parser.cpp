@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <cassert>
 #include <cstdlib>
+#include <algorithm>
 using namespace std;
 
 int atoi(string const& s){
@@ -47,7 +48,7 @@ bool AST_Parser::parse(AST* ast){
         }
         key = static_cast<AttrListAST*>(key->right);
       }
-      views->addRelation(Relation(rel_name, vector<Tuple>(), columns, keys));
+      db->addRelation(Relation(rel_name, vector<Tuple>(), columns, keys));
       break;
     }
     case (AST::INSERT):{
@@ -106,9 +107,11 @@ bool AST_Parser::parse(AST* ast){
       }
       vector<Attribute> attribs = r->getColumns();
       vector<Tuple>* rows = r->getRowsRef();
-      UpdateListAST* list = static_cast<UpdateListAST*>(uast->center);
-      while(list){
-        for(size_t i = 0; i < rows->size(); ++i){
+      for(size_t i = 0; i < rows->size(); ++i){
+        UpdateListAST* list = static_cast<UpdateListAST*>(uast->center);
+        vector<size_t> indices;
+        vector<Token> tokens;
+        while(list){
           //vector<size_t> indices;
           size_t j;
           string attr_name = identifier(list->left);
@@ -124,20 +127,66 @@ bool AST_Parser::parse(AST* ast){
             throw runtime_error("Attribute " + identifier(list->left)
                                 + " doesn't exist in " + rel_name);
           }
-          cout << "{" << i << ", " << j << "}";
-          if(binaryop(uast->right, (*rows)[i], attribs)){
-            cout << " is changed";
-            (*rows)[i].changeDataMember(j, lit_tok.field());
-          }
-          cout << endl;
+          indices.push_back(j);
+          tokens.push_back(lit_tok);
+          list = static_cast<UpdateListAST*>(list->right);
         }
-        list = static_cast<UpdateListAST*>(list->right);
+        cout << "{" << i << "}\n";
+        if(binaryop(uast->right, (*rows)[i], attribs)){
+          for(size_t k = 0; k <indices.size(); ++k){
+            cout << "{" << i << ", " << k << "}\n";
+            (*rows)[i].changeDataMember(indices[k], tokens[k].field());
+          }
+        }
+      }
+      break;
+    }
+    case (AST::DELETE):{
+      DeleteAST* dast = static_cast<DeleteAST*>(ast);
+      string rel_name = identifier(dast->left);
+      Relation* r = db->getRelationRef(rel_name);
+      if(!r){
+        r = views->getRelationRef(rel_name);
+        if(!r){
+          throw runtime_error("Relation " + rel_name + " not found.");
+        }
+      }
+      vector<Tuple> const *rows = r->getRowsRef();
+      vector<Attribute> attribs = r->getColumns();
+      vector<size_t> indices;
+      for(size_t i = 0; i < rows->size(); ++i){
+        if(binaryop(dast->right, (*rows)[i], attribs)){
+          indices.push_back(i);
+        }
+      }
+      sort(indices.begin(), indices.end(), greater<size_t>());
+      for(size_t i = 0; i < indices.size(); ++i){
+        r->deleteTuple(indices[i]);
       }
       break;
     }
     case (AST::SHOW):{
       Relation r = expr(static_cast<ShowAST*>(ast)->center);
       db->Show(r);
+      break;
+    }
+    case (AST::OPEN):{
+      string rel_name = identifier(static_cast<OpenAST*>(ast)->center);
+      db->Open(rel_name);
+      break;
+    }
+    case (AST::CLOSE):{
+      string rel_name = identifier(static_cast<CloseAST*>(ast)->center);
+      db->Close(rel_name);
+      break;
+    }
+    case (AST::WRITE):{
+      string rel_name = identifier(static_cast<WriteAST*>(ast)->center);
+      db->Write(rel_name);
+      break;
+    }
+    case (AST::EXIT):{
+      db->Exit();
       break;
     }
     default: //not query or command
