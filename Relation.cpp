@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include "Relation.h"
 #include "Attribute.h"
 using namespace std;

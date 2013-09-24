@@ -94,6 +94,9 @@ bool AST_Parser::parse(AST* ast){
       }
       break;
     }
+    case (AST::UPDATE):{
+      
+    }
     case (AST::SHOW):{
       Relation r = expr(static_cast<ShowAST*>(ast)->center);
       db->Show(r);
