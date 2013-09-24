@@ -1,4 +1,4 @@
-#include "AST_Parser.h"
+#include "AST_Traversal.h"
 #include <iostream>
 #include <stdexcept>
 #include <cassert>
@@ -10,7 +10,7 @@ int atoi(string const& s){
   return atoi(s.c_str());
 }
 
-bool AST_Parser::parse(AST* ast){
+bool AST_Traversal::traverse(AST* ast){
   try{
     switch(ast->tag){
     case (AST::ASSIGN):{//query
@@ -199,14 +199,14 @@ bool AST_Parser::parse(AST* ast){
   return true;
 }
 
-string AST_Parser::identifier(AST* ast){
+string AST_Traversal::identifier(AST* ast){
   if(ast->tag == AST::IDENTIFIER){
     return static_cast<IdentifierAST*>(ast)->center.field();
   }
   throw runtime_error("Not identifier.");
 }
 
-Relation AST_Parser::expr(AST* ast){
+Relation AST_Traversal::expr(AST* ast){
   switch(ast->tag){
   case (AST::IDENTIFIER):{
     string rel_name = identifier(ast);
@@ -275,7 +275,7 @@ Relation AST_Parser::expr(AST* ast){
   throw runtime_error("Expression invalid.");
 }
 
-bool AST_Parser::binaryop(AST* ast, Tuple const& t, vector<Attribute> const& a){
+bool AST_Traversal::binaryop(AST* ast, Tuple const& t, vector<Attribute> const& a){
   assert(ast->tag == AST::BINARYOP);
   AST* l = static_cast<BinaryOpAST*>(ast)->left;
   AST* r = static_cast<BinaryOpAST*>(ast)->right;
@@ -298,7 +298,7 @@ bool AST_Parser::binaryop(AST* ast, Tuple const& t, vector<Attribute> const& a){
   return false;
 }
 
-bool AST_Parser::perform_op(Value left, Value right, TokenType op){
+bool AST_Traversal::perform_op(Value left, Value right, TokenType op){
   if(left.kind != right.kind){
     throw runtime_error("Invalid operands.");
   }
@@ -338,14 +338,14 @@ bool AST_Parser::perform_op(Value left, Value right, TokenType op){
   }
 }
 
-Token AST_Parser::literal(AST* ast){
+Token AST_Traversal::literal(AST* ast){
   if(ast->tag == AST::LITERAL){
     return static_cast<LiteralAST*>(ast)->center;
   }
   throw runtime_error("Not literal.");
 }
 
-Value AST_Parser::ident_or_literal(AST* ast, Tuple const& t, vector<Attribute> const& a){
+Value AST_Traversal::ident_or_literal(AST* ast, Tuple const& t, vector<Attribute> const& a){
   Value val;
   switch(ast->tag){
   case (AST::IDENTIFIER):{
@@ -383,7 +383,7 @@ Value AST_Parser::ident_or_literal(AST* ast, Tuple const& t, vector<Attribute> c
   }
 }
 
-Attribute AST_Parser::make_attr(AST* ast, string name){
+Attribute AST_Traversal::make_attr(AST* ast, string name){
   assert(ast->tag == AST::TYPE);
   TokenType toktype = static_cast<TypeAST*>(ast)->center.type();
   dataTypes attrtype;

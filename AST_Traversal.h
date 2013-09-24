@@ -12,7 +12,7 @@ struct Value{
   int i;
 };
 
-class AST_Parser{
+class AST_Traversal{
   Database* db;
   Database* views;
 
@@ -26,8 +26,8 @@ class AST_Parser{
   Attribute make_attr(AST*, string);
 
  public:
-  bool parse(AST* p_ast);
- AST_Parser(Database* d, Database* v) : db(d), views(v) {}
+  bool traverse(AST* p_ast);
+ AST_Traversal(Database* d, Database* v) : db(d), views(v) {}
 };
 
 #endif

@@ -1,4 +1,4 @@
-#include "AST_Parser.h"
+#include "AST_Traversal.h"
 #include "Parser.h"
 #include<iostream>
 using namespace std;
@@ -69,14 +69,14 @@ int main(){
   vector<Attribute> attrs;
   vector<size_t> keys2;
   db.addRelation(Relation("hello", tups, attrs, keys2));
-  AST_Parser A(&db, &views);
+  AST_Traversal A(&db, &views);
   Parser P;
   string str; //= "high_hitters <- select (homeruns >= 40) baseball_players;";
   while(getline(cin, str)){
     bool parsed = 0;
     AST* tree = P.parse(str);
     if(tree != NULL){
-      parsed = A.parse(tree);
+      parsed = A.traverse(tree);
       tree->print(std::cout);
     }
     cout << endl;

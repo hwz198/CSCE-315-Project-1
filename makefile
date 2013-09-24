@@ -1,13 +1,13 @@
 CXX=clang++
 CFLAGS=-O0 -gdwarf-2 -Wall -Wno-sign-compare
 
-all: test.out parse_test.out AST_parser_test.out
+all: test.out parse_test.out AST_traversal_test.out
 
-AST_parser_test.out: AST_parser_test.cpp AST_Parser.o Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o
-	$(CXX) $(CFLAGS) AST_parser_test.cpp AST_Parser.o Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o -o AST_parser_test.out
+AST_traversal_test.out: AST_traversal_test.cpp AST_Traversal.o Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o
+	$(CXX) $(CFLAGS) AST_traversal_test.cpp AST_Traversal.o Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o -o AST_traversal_test.out
 
-AST_Parser.o: AST.h AST_Parser.h AST_Parser.cpp Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o
-	$(CXX) -c $(CFLAGS) AST_Parser.cpp -o AST_Parser.o
+AST_Traversal.o: AST.h AST_Traversal.h AST_Traversal.cpp Database.o Parser.o FileIO.o Relation.o Attribute.o Tuple.o
+	$(CXX) -c $(CFLAGS) AST_Traversal.cpp -o AST_Traversal.o
 
 parse_test.out: parse_test.cpp Parser.o
 	$(CXX) $(CFLAGS) parse_test.cpp Parser.o -o parse_test.out
