@@ -1,10 +1,10 @@
-#include "Parser.h"
+#include "AST_Assembly.h"
 #include<iostream>
 using namespace std;
 
 void testCreateTable(){
 
-  Parser P;  
+  AST_Assembly P;  
   string str = "CREATE TABLE animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);";
   bool result = P.parse(str);
   if(!result){
@@ -56,7 +56,7 @@ void testCreateTable(){
 
 void showTableTest(){
 
- 	Parser P;  
+ 	AST_Assembly P;  
   	string str = "SHOW animals animals;";
   	bool result = P.parse(str);
 	if(result){
@@ -96,7 +96,7 @@ void showTableTest(){
 
 void insertTest(){
 
-	Parser P;  
+	AST_Assembly P;  
   	string str = "INSERT INT animals VALUES FROM (\"Joe\", \"cat\", 4);";
   	bool result = P.parse(str);
 	if(result!=0){
@@ -150,7 +150,7 @@ void insertTest(){
 
 void exitTest(){
 
-	Parser P;  
+	AST_Assembly P;  
   	string str = "EXITT;";
   	bool result = P.parse(str);
 	if(result!=0){
@@ -182,7 +182,7 @@ void exitTest(){
 
 void queryTest(){
 
-	Parser P;
+	AST_Assembly P;
 	string str = "common_names <- project (name) (select (aname == name & akind != kind) (a * animals));"; //single & gives infinite loop
 	bool result = P.parse(str);
 	if(result!=0){

@@ -2,11 +2,11 @@
 //It might get a bit complicated but say if DeleteThread is called then we need to reduce the no of threads in the statistics relation and
 // also reduce the no of threads associated with that particular userID in the users relation. And we also need to remove the entry from the created relation. 
 
-#include "Parser.h"
+#include "AST_Assembly.h"
 
 class DBApp{
 
-	Parser p;
+	AST_Assembly p;
 
 public:
 

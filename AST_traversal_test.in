@@ -1,0 +1,59 @@
+old_dogs <- select (Species == "Dog" && Age > 5) Animals;
+SHOW old_dogs;
+
+young_cats <- select (Species == "Cat") Animals;
+SHOW young_cats;
+
+names <- project (Species, Name) Animals;
+SHOW names;
+
+only_names <- project (Name) Animals;
+SHOW only_names;
+
+only_species <- project (Species) Animals;
+SHOW only_species;
+
+new_names <- rename (name, species) names;
+SHOW new_names;
+
+sutff <- old_dogs + (select (Species == "Cat" && Age < 11) Animals);
+SHOW sutff;
+
+not_old_dogs <- Animals - old_dogs;
+SHOW not_old_dogs;
+
+uhoh <- old_dogs * young_cats;
+SHOW uhoh;
+
+CREATE TABLE new_animals (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);
+INSERT INTO new_animals VALUES FROM ("Joe", "cat", 4);
+INSERT INTO new_animals VALUES FROM ("Spot", "dog", 10);
+INSERT INTO new_animals VALUES FROM ("Snoopy", "dog", 3);
+INSERT INTO new_animals VALUES FROM ("Tweety", "bird", 1);
+INSERT INTO new_animals VALUES FROM ("Joe", "bird", 2);
+SHOW new_animals;
+
+CREATE TABLE sumpin (name VARCHAR(20), kind VARCHAR(8), years INTEGER) PRIMARY KEY (name, kind);
+INSERT INTO sumpin VALUES FROM RELATION select (kind == "bird") new_animals;
+SHOW sumpin;
+
+CREATE TABLE dots (x1 INTEGER, y1 INTEGER, z1 INTEGER) PRIMARY KEY (x1, y1, z1);
+INSERT INTO dots VALUES FROM (-1, 0, 20);
+INSERT INTO dots VALUES FROM (3, 2, 5);
+INSERT INTO dots VALUES FROM (0, 0, 0);
+SHOW dots;
+UPDATE dots SET x1 = -5, y1 = 10 WHERE x1 < 0 && z1 > 4 || y1 == 2;
+SHOW dots;
+DELETE FROM dots WHERE z1 == 0;
+SHOW dots;
+
+SHOW new_animals;
+DELETE FROM new_animals WHERE name == "Joe";
+SHOW new_animals;
+
+SHOW Animals;
+DELETE FROM Animals WHERE Species == "Dog" && Age > 5;
+SHOW Animals;
+
+WRITE Animals;
+EXIT;

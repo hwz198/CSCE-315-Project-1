@@ -1,5 +1,5 @@
 #include "AST_Traversal.h"
-#include "Parser.h"
+#include "AST_Assembly.h"
 #include<iostream>
 using namespace std;
 
@@ -70,7 +70,7 @@ int main(){
   vector<size_t> keys2;
   db.addRelation(Relation("hello", tups, attrs, keys2));
   AST_Traversal A(&db, &views);
-  Parser P;
+  AST_Assembly P;
   string str; //= "high_hitters <- select (homeruns >= 40) baseball_players;";
   while(getline(cin, str)){
     bool parsed = 0;

@@ -1,11 +1,11 @@
-#include "Parser.h"
+#include "AST_Assembly.h"
 #include <string>
 #include <iostream>
 #include <cctype>
 #include <cstdlib>
 using namespace std;
 
-AST* Parser::parse(string input){
+AST* AST_Assembly::parse(string input){
   t_index = 0;
   if(lex(input)){
     size_t first_index = t_index;
@@ -26,21 +26,21 @@ AST* Parser::parse(string input){
   return NULL;
 }
 
-char Parser::get(size_t index){
+char AST_Assembly::get(size_t index){
   if(index < str.size()){
     return str[index];
   }
   return (char)0;
 }
 
-Token Parser::t_get(size_t index){
+Token AST_Assembly::t_get(size_t index){
   if(index < tokens.size()){
     return tokens[index];
   }
   return Token(0, "", _null);
 }
 
-AST* Parser::query(){
+AST* AST_Assembly::query(){
   AST* relAST = rel_name();
   Token assign_tok = assign();
   AST* exprAST = expr();
@@ -50,11 +50,11 @@ AST* Parser::query(){
   return NULL;
 }
 
-AST* Parser::rel_name(){
+AST* AST_Assembly::rel_name(){
   return identifier();
 }
 
-AST* Parser::identifier(){
+AST* AST_Assembly::identifier(){
   if(t_get(t_index).type() == _identifier){
     IdentifierAST* idenAST = new IdentifierAST(t_get(t_index));
     t_index++;
@@ -63,7 +63,7 @@ AST* Parser::identifier(){
   return NULL;
 }
 
-AST* Parser::expr(){
+AST* AST_Assembly::expr(){
   size_t first_index = t_index;
   AST* exprAST = selection();
   if(exprAST){
@@ -103,7 +103,7 @@ AST* Parser::expr(){
   return NULL;
 }
 
-AST* Parser::atomic_expr(){
+AST* AST_Assembly::atomic_expr(){
   size_t first_index = t_index;
   AST* atomicAST = rel_name();
   if(atomicAST){
@@ -117,7 +117,7 @@ AST* Parser::atomic_expr(){
   return NULL;
 }
 
-AST* Parser::selection(){
+AST* AST_Assembly::selection(){
   AST* cond;
   AST* atomicAST;
   if(select() && lparen() && (cond = condition())
@@ -127,7 +127,7 @@ AST* Parser::selection(){
   return NULL;
 }
 
-bool Parser::select(){
+bool AST_Assembly::select(){
   if(t_get(t_index).type() == _select){
     t_index++;
     return true;
@@ -135,7 +135,7 @@ bool Parser::select(){
   return false;
 }
 
-bool Parser::lparen(){
+bool AST_Assembly::lparen(){
   if(t_get(t_index).type() == _lparen){
     t_index++;
     return true;
@@ -143,7 +143,7 @@ bool Parser::lparen(){
   return false;
 }
 
-bool Parser::rparen(){
+bool AST_Assembly::rparen(){
   if(t_get(t_index).type() == _rparen){
     t_index++;
     return true;
@@ -151,7 +151,7 @@ bool Parser::rparen(){
   return false;
 }
 
-AST* Parser::condition(){
+AST* AST_Assembly::condition(){
   AST* leftAST = conjunction();
   if(leftAST){
     size_t first_index = t_index;
@@ -168,7 +168,7 @@ AST* Parser::condition(){
   return NULL;
 }
 
-AST* Parser::conjunction(){
+AST* AST_Assembly::conjunction(){
   AST* leftAST = comparison();
   if(leftAST){
     size_t first_index = t_index;
@@ -185,7 +185,7 @@ AST* Parser::conjunction(){
   return NULL;
 }
 
-bool Parser::binary_or(){
+bool AST_Assembly::binary_or(){
   if(t_get(t_index).type() == _or){
     t_index++;
     return true;
@@ -193,7 +193,7 @@ bool Parser::binary_or(){
   return false;
 }
 
-bool Parser::binary_and(){
+bool AST_Assembly::binary_and(){
   if(t_get(t_index).type() == _and){
     t_index++;
     return true;
@@ -201,7 +201,7 @@ bool Parser::binary_and(){
   return false;
 }
 
-AST* Parser::comparison(){
+AST* AST_Assembly::comparison(){
   size_t first_index = t_index;
   AST *left, *right;
   TokenType o;
@@ -216,7 +216,7 @@ AST* Parser::comparison(){
   return NULL;
 }
 
-TokenType Parser::op(){
+TokenType AST_Assembly::op(){
   TokenType o = t_get(t_index).type();
   if(o == _e || o == _ne
      || o == _g || o == _l
@@ -227,7 +227,7 @@ TokenType Parser::op(){
   return _null;
 }
 
-AST* Parser::operand(){
+AST* AST_Assembly::operand(){
   size_t first_index = t_index;
   AST* operAST = attr_name();
   if(operAST){
@@ -242,11 +242,11 @@ AST* Parser::operand(){
   return NULL;
 }
 
-AST* Parser::attr_name(){
+AST* AST_Assembly::attr_name(){
   return identifier();
 }
 
-AST* Parser::literal(){
+AST* AST_Assembly::literal(){
   if(t_get(t_index).type() == _literal
      || t_get(t_index).type() == _lit_integer){
     AST* litAST = new LiteralAST(t_get(t_index));
@@ -256,7 +256,7 @@ AST* Parser::literal(){
   return NULL;
 }
 
-AST* Parser::projection(){
+AST* AST_Assembly::projection(){
   AST *listAST, *atomicAST;
   if(project() && lparen() && (listAST = attr_list())
      && rparen() && (atomicAST = atomic_expr())){
@@ -265,7 +265,7 @@ AST* Parser::projection(){
   return NULL;
 }
 
-bool Parser::project(){
+bool AST_Assembly::project(){
   if(t_get(t_index).type() == _project){
     t_index++;
     return true;
@@ -273,7 +273,7 @@ bool Parser::project(){
   return false;
 }
 
-AST* Parser::attr_list(){
+AST* AST_Assembly::attr_list(){
   size_t first_index = t_index;
   AST* baseAST = attr_name();
   if(baseAST){
@@ -290,7 +290,7 @@ AST* Parser::attr_list(){
   return NULL;
 }
 
-AST* Parser::renaming(){
+AST* AST_Assembly::renaming(){
   AST *listAST, *atomicAST;
   if(rename() && lparen() && (listAST = attr_list())
      && rparen() && (atomicAST = atomic_expr())){
@@ -299,7 +299,7 @@ AST* Parser::renaming(){
   return NULL;
 }
 
-bool Parser::rename(){
+bool AST_Assembly::rename(){
   if(t_get(t_index).type() == _rename){
     t_index++;
     return true;
@@ -307,7 +307,7 @@ bool Parser::rename(){
   return false;
 }
 
-AST* Parser::union_rel(){
+AST* AST_Assembly::union_rel(){
   AST *left, *right;
   if((left = atomic_expr()) && plus() && (right = atomic_expr())){
     return new BinaryOpAST(_plus, left, right);
@@ -315,7 +315,7 @@ AST* Parser::union_rel(){
   return NULL;
 }
 
-bool Parser::plus(){
+bool AST_Assembly::plus(){
   if(t_get(t_index).type() == _plus){
     t_index++;
     return true;
@@ -323,7 +323,7 @@ bool Parser::plus(){
   return false;
 }
 
-AST* Parser::difference(){
+AST* AST_Assembly::difference(){
   AST *left, *right;
   if((left = atomic_expr()) && minus() && (right = atomic_expr())){
     return new BinaryOpAST(_minus, left, right);
@@ -331,7 +331,7 @@ AST* Parser::difference(){
   return NULL;
 }
 
-bool Parser::minus(){
+bool AST_Assembly::minus(){
   if(t_get(t_index).type() == _minus){
     t_index++;
     return true;
@@ -339,7 +339,7 @@ bool Parser::minus(){
   return false;
 }
 
-AST* Parser::product(){
+AST* AST_Assembly::product(){
   AST *left, *right;
   if((left = atomic_expr()) && asterisk() && (right = atomic_expr())){
     return new BinaryOpAST(_asterisk, left, right);
@@ -348,7 +348,7 @@ AST* Parser::product(){
 
 }
 
-bool Parser::asterisk(){
+bool AST_Assembly::asterisk(){
   if(t_get(t_index).type() == _asterisk){
     t_index++;
     return true;
@@ -356,7 +356,7 @@ bool Parser::asterisk(){
   return false;
 }
 
-bool Parser::semicolon(){
+bool AST_Assembly::semicolon(){
   if(t_get(t_index).type() == _semicolon){
     t_index++;
     return true;
@@ -364,7 +364,7 @@ bool Parser::semicolon(){
   return false;
 }
 
-bool Parser::comma(){
+bool AST_Assembly::comma(){
   if(t_get(t_index).type() == _comma){
     t_index++;
     return true;
@@ -372,7 +372,7 @@ bool Parser::comma(){
   return false;
 }
 
-Token Parser::assign(){
+Token AST_Assembly::assign(){
   if(t_get(t_index).type() == _assign){
     Token t = t_get(t_index);
     t_index++;
@@ -381,7 +381,7 @@ Token Parser::assign(){
   return Token(0, "", _null);
 }
 
-AST* Parser::command(){
+AST* AST_Assembly::command(){
   size_t first_index = t_index;
   AST* comAST = open_cmd();
   if(comAST){
@@ -431,7 +431,7 @@ AST* Parser::command(){
   return NULL;
 }
 
-AST* Parser::open_cmd(){
+AST* AST_Assembly::open_cmd(){
   AST *relAST;
   if(open() && (relAST = rel_name())){
     return new OpenAST(relAST);
@@ -439,7 +439,7 @@ AST* Parser::open_cmd(){
   return NULL;
 }
 
-bool Parser::open(){
+bool AST_Assembly::open(){
   if(t_get(t_index).type() == _open){
     t_index++;
     return true;
@@ -447,7 +447,7 @@ bool Parser::open(){
   return false;
 }
 
-AST* Parser::close_cmd(){
+AST* AST_Assembly::close_cmd(){
   AST *relAST;
   if(close() && (relAST = rel_name())){
     return new CloseAST(relAST);
@@ -455,7 +455,7 @@ AST* Parser::close_cmd(){
   return NULL;
 }
 
-bool Parser::close(){
+bool AST_Assembly::close(){
   if(t_get(t_index).type() == _close){
     t_index++;
     return true;
@@ -463,7 +463,7 @@ bool Parser::close(){
   return false;
 }
 
-AST* Parser::write_cmd(){
+AST* AST_Assembly::write_cmd(){
   AST *relAST;
   if(write() && (relAST = rel_name())){
     return new WriteAST(relAST);
@@ -471,7 +471,7 @@ AST* Parser::write_cmd(){
   return NULL;
 }
 
-bool Parser::write(){
+bool AST_Assembly::write(){
   if(t_get(t_index).type() == _write){
     t_index++;
     return true;
@@ -479,14 +479,14 @@ bool Parser::write(){
   return false;
 }
 
-AST* Parser::exit_cmd(){
+AST* AST_Assembly::exit_cmd(){
   if(exit()){
     return new ExitAST;
   }
   return NULL;
 }
 
-bool Parser::exit(){
+bool AST_Assembly::exit(){
   if(t_get(t_index).type() == _exit_key){
     t_index++;
     return true;
@@ -494,7 +494,7 @@ bool Parser::exit(){
   return false;
 }
 
-AST* Parser::show_cmd(){
+AST* AST_Assembly::show_cmd(){
   AST *relAST;
   if(show() && (relAST = atomic_expr())){
     return new ShowAST(relAST);
@@ -502,7 +502,7 @@ AST* Parser::show_cmd(){
   return NULL;
 }
 
-bool Parser::show(){
+bool AST_Assembly::show(){
   if(t_get(t_index).type() == _show){
     t_index++;
     return true;
@@ -510,7 +510,7 @@ bool Parser::show(){
   return false;
 }
 
-AST* Parser::create_cmd(){
+AST* AST_Assembly::create_cmd(){
   AST *relAST, *typedAST, *keyAST;
   if(create() && table() && (relAST = rel_name()) && lparen()
      && (typedAST = typed_attr_list()) && rparen() && primary() && key()
@@ -520,7 +520,7 @@ AST* Parser::create_cmd(){
   return NULL;
 }
 
-bool Parser::create(){
+bool AST_Assembly::create(){
   if(t_get(t_index).type() == _create){
     t_index++;
     return true;
@@ -528,7 +528,7 @@ bool Parser::create(){
   return false;
 }
 
-bool Parser::table(){
+bool AST_Assembly::table(){
   if(t_get(t_index).type() == _table){
     t_index++;
     return true;
@@ -536,7 +536,7 @@ bool Parser::table(){
   return false;
 }
 
-bool Parser::primary(){
+bool AST_Assembly::primary(){
   if(t_get(t_index).type() == _primary){
     t_index++;
     return true;
@@ -544,7 +544,7 @@ bool Parser::primary(){
   return false;
 }
 
-bool Parser::key(){
+bool AST_Assembly::key(){
   if(t_get(t_index).type() == _key){
     t_index++;
     return true;
@@ -552,7 +552,7 @@ bool Parser::key(){
   return false;
 }
 
-AST* Parser::update_cmd(){
+AST* AST_Assembly::update_cmd(){
   AST *rel, *attr, *lit;
   size_t first_index = t_index;
   if(update() && (rel = rel_name()) && set()
@@ -573,7 +573,7 @@ AST* Parser::update_cmd(){
   return NULL;
 }
 
-bool Parser::update(){
+bool AST_Assembly::update(){
   if(t_get(t_index).type() == _update){
     t_index++;
     return true;
@@ -581,7 +581,7 @@ bool Parser::update(){
   return false;
 }
 
-bool Parser::set(){
+bool AST_Assembly::set(){
   if(t_get(t_index).type() == _set){
     t_index++;
     return true;
@@ -589,7 +589,7 @@ bool Parser::set(){
   return false;
 }
 
-bool Parser::where(){
+bool AST_Assembly::where(){
   if(t_get(t_index).type() == _where){
     t_index++;
     return true;
@@ -597,7 +597,7 @@ bool Parser::where(){
   return false;
 }
 
-AST* Parser::insert_cmd(){
+AST* AST_Assembly::insert_cmd(){
   AST *rel, *list;
   size_t first_index = t_index;
   if(insert() && into() && (rel = rel_name()) && values()
@@ -613,7 +613,7 @@ AST* Parser::insert_cmd(){
   return NULL;
 }
 
-AST* Parser::literal_list(){
+AST* AST_Assembly::literal_list(){
   size_t first_index = t_index;
   AST* baseAST = literal();
   if(baseAST){
@@ -630,7 +630,7 @@ AST* Parser::literal_list(){
   return NULL;
 }
 
-bool Parser::insert(){
+bool AST_Assembly::insert(){
   if(t_get(t_index).type() == _insert){
     t_index++;
     return true;
@@ -638,7 +638,7 @@ bool Parser::insert(){
   return false;
 }
 
-bool Parser::into(){
+bool AST_Assembly::into(){
   if(t_get(t_index).type() == _into){
     t_index++;
     return true;
@@ -646,7 +646,7 @@ bool Parser::into(){
   return false;
 }
 
-bool Parser::values(){
+bool AST_Assembly::values(){
   if(t_get(t_index).type() == _values){
     t_index++;
     return true;
@@ -654,7 +654,7 @@ bool Parser::values(){
   return false;
 }
 
-bool Parser::from(){
+bool AST_Assembly::from(){
   if(t_get(t_index).type() == _from){
     t_index++;
     return true;
@@ -662,7 +662,7 @@ bool Parser::from(){
   return false;
 }
 
-bool Parser::relation(){
+bool AST_Assembly::relation(){
   if(t_get(t_index).type() == _relation){
     t_index++;
     return true;
@@ -670,7 +670,7 @@ bool Parser::relation(){
   return false;
 }
 
-AST* Parser::delete_cmd(){
+AST* AST_Assembly::delete_cmd(){
   AST *rel, *cond;
   if(delete_keyword() && from() && (rel = rel_name())
      && where() && (cond = condition())){
@@ -679,7 +679,7 @@ AST* Parser::delete_cmd(){
   return NULL;
 }
 
-bool Parser::delete_keyword(){
+bool AST_Assembly::delete_keyword(){
   if(t_get(t_index).type() == _delete){
     t_index++;
     return true;
@@ -687,7 +687,7 @@ bool Parser::delete_keyword(){
   return false;
 }
 
-AST* Parser::typed_attr_list(){
+AST* AST_Assembly::typed_attr_list(){
   size_t first_index = t_index;
   AST *attr = attr_name();
   AST *t = type();
@@ -706,7 +706,7 @@ AST* Parser::typed_attr_list(){
   return NULL;
 }
 
-AST* Parser::type(){
+AST* AST_Assembly::type(){
   size_t first_index = t_index;
   Token var = varchar();
   bool lp = lparen();
@@ -724,7 +724,7 @@ AST* Parser::type(){
   return NULL;
 }
 
-Token Parser::varchar(){
+Token AST_Assembly::varchar(){
   if(t_get(t_index).type() == _varchar){
     Token t = t_get(t_index);
     t_index++;
@@ -733,7 +733,7 @@ Token Parser::varchar(){
   return Token(0, "", _null);
 }
 
-Token Parser::lit_integer(){
+Token AST_Assembly::lit_integer(){
   if(t_get(t_index).type() == _lit_integer){
     Token t = t_get(t_index);
     t_index++;
@@ -742,7 +742,7 @@ Token Parser::lit_integer(){
   return Token(0, "", _null);
 }
 
-Token Parser::integer(){
+Token AST_Assembly::integer(){
   if(t_get(t_index).type() == _integer){
     Token t = t_get(t_index);
     t_index++;
@@ -752,7 +752,7 @@ Token Parser::integer(){
 }
 
 
-bool Parser::equals(){
+bool AST_Assembly::equals(){
   if(t_get(t_index).type() == _equals){
     t_index++;
     return true;
@@ -762,7 +762,7 @@ bool Parser::equals(){
 
 
 
-bool Parser::lex(string input){
+bool AST_Assembly::lex(string input){
   tokens.clear();
   str = input;
   s_index = 0;

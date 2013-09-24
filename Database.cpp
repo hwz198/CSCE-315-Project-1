@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "Database.h"
-#include "Parser.h"
+#include "AST_Assembly.h"
 #include "FileIO.h"
 using namespace std;
 
@@ -155,7 +155,7 @@ void Database::Open(string r)
 	}
 	
 	ifstream file;
-	Parser p;
+	AST_Assembly p;
 	string l;
 	file.open((r + ".db").c_str());
 	if(file.is_open()){
