@@ -74,7 +74,7 @@ struct TokenAST : AST{
   Token center;
 
  TokenAST(Token c) : AST(T), center(c) {}
-  void print(ostream& os) const {os << "(" << "<" << TagStrings[T] << ">," << center << ")";}
+  void print(ostream& os) const {os << "[." << TagStrings[T] << " " << center << " ]";}
 };
 
 template<AST::Tag T> //generalization for output
@@ -82,7 +82,7 @@ struct SingleAST : AST{
   AST *center;
 
  SingleAST(AST* c) : AST(T), center(c) {}
-  void print(ostream& os) const {os << "(" << "<" << TagStrings[T] << ">" << center << ")";}
+  void print(ostream& os) const {os << "[." << TagStrings[T] << " " << center << " ]";}
 };
 
 template<AST::Tag T> //generalization for output
@@ -90,7 +90,7 @@ struct DoubleAST : AST{
   AST *left, *right;
 
  DoubleAST(AST* l, AST* r) : AST(T), left(l), right(r) {}
-  void print(ostream& os) const {os << "(" << left << "(<" << TagStrings[T] << ">)" << right << ")";}
+  void print(ostream& os) const {os << "[." << TagStrings[T] << " " << left << " " << right << " ]";}
 };
 
 template<AST::Tag T> //generalization for output
@@ -98,7 +98,7 @@ struct TripleAST : AST{
   AST *left, *center, *right;
 
  TripleAST(AST* l, AST* c, AST* r) : AST(T), left(l), center(c), right(r) {}
-  void print(ostream& os) const {os << "(" << left << "((<" << TagStrings[T] << ">)" << center << ")" << right << ")";}
+  void print(ostream& os) const {os << "[." << TagStrings[T] << " " << left << " " << center << " " << right << " ]";}
 };
 
 
@@ -110,7 +110,7 @@ struct AssignAST : AST{
   Token assign;
   AST *left, *right;
 
-  void print(ostream& os) const {os << "(" << left << "(" << assign << ")" << right << ")";}
+  void print(ostream& os) const {os << "[." << TagStrings[ASSIGN] << " " << left << " " << right << " ]";}
 
  AssignAST(Token as, AST* l, AST* r) : AST(ASSIGN), assign(as), left(l), right(r) {}
 };
@@ -119,7 +119,7 @@ struct BinaryOpAST : AST{
   TokenType op;
   AST *left, *right;
 
-  void print(ostream& os) const {os << "(" << left << "(" << TokenStrings[op] << ")" << right << ")";}
+  void print(ostream& os) const {os << "[." << TokenStrings[op] << " " << left << " " << right << " ]";}
 
  BinaryOpAST(TokenType o, AST* l, AST* r) : AST(BINARYOP), op(o), left(l), right(r) {}
 };
@@ -209,6 +209,7 @@ struct TypeAST : TokenAST<AST::TYPE>{
   int size;
 
  TypeAST(Token type, int s) : TokenAST(type), size(s) {}
+  void print(ostream& os) const {os << "[." << TagStrings[AST::TYPE] << " " << center << size << " ]";}
 };
 
 #endif /* AST_H */

@@ -51,7 +51,7 @@ Relation Database::getRelation(string relationName){
       return dbase[i];
     }
   }
-  cerr << "Relation '" << relationName << "' not found.\n";
+  //cerr << "Relation '" << relationName << "' not found.\n";
   return Relation();
 }
 
@@ -60,7 +60,7 @@ Relation *Database::getRelationRef(size_t index){
     return &(dbase[index]);
   } else {
     cerr << "Index " << index << " out of bounds.\n";
-    return new Relation(); //this is probably bad
+    return NULL; //this is probably bad
   }
 }
 
@@ -71,7 +71,7 @@ Relation *Database::getRelationRef(string relationName){
     }
   }
   cerr << "Relation '" << relationName << "' not found.\n";
-  return new Relation(); //also maybe bad. YAY POINTERS!
+  return NULL; //also maybe bad. YAY POINTERS!
 }
 
 int Database::numberOfRelations(){
@@ -80,7 +80,10 @@ int Database::numberOfRelations(){
 
 void Database::Show(const Relation &r) const{
   //Show the relation in dBase
+  vector<size_t> keys = r.getKeys();
   for(int i = 0; i < r.getColumns().size(); ++i){
+    if(find(keys.begin(), keys.end(), i) != keys.end())
+      cout << '*';
     cout << r.getColumns()[i].getValue() << '\t';
   }
   cout << endl << endl;
@@ -640,6 +643,10 @@ Relation Database::projection(Relation A, string new_rel_name,
     cerr << "Passed empty Relation\n";
     return Relation();
   }
+  if(attrib_vals.empty()){
+    cerr << "Passed no attributes to project to\n";
+    return Relation();
+  }
 
   vector<size_t> indices; //indices of Attributes in A that exist in attrib_vals
   vector<Attribute> Acols = A.getColumns();
@@ -654,13 +661,21 @@ Relation Database::projection(Relation A, string new_rel_name,
     }
   }
 
-  if(indices.empty()){
-    cerr << "No matching attribute values found\n";
+  if(indices.size() != attrib_vals.size()){
+    cerr << "Not all matching attribute values found\n";
     return Relation();
   }
 
   for(size_t i = 0; i < indices.size(); ++i){
     AprojCols.push_back(Acols[indices[i]]); //add matching Attributes in A to projected columns
+  }
+  vector<size_t> Akeys = A.getKeys();
+  vector<size_t> AprojKeys;
+  for(size_t i = 0; i < Akeys.size(); ++i){
+    size_t j = find(AprojCols.begin(), AprojCols.end(), Acols[Akeys[i]]) - AprojCols.begin();
+    if(j != AprojCols.size()){
+      AprojKeys.push_back(j);
+    }
   }
 
   //construct Tuples from A that contain only the columns to project
@@ -672,8 +687,14 @@ Relation Database::projection(Relation A, string new_rel_name,
     }
     AprojRows.push_back(tup);
   }
+  if(AprojKeys.empty()){ //make new Relation have unique keys
+    AprojKeys.push_back(0);
+    sort(AprojRows.begin(), AprojRows.end(), tupleComp(AprojKeys));
+    vector<Tuple>::iterator last = unique(AprojRows.begin(), AprojRows.end());
+    AprojRows.erase(last, AprojRows.end());
+  }
 
-  return Relation(new_rel_name, AprojRows, AprojCols, A.getKeys());
+  return Relation(new_rel_name, AprojRows, AprojCols, AprojKeys);
 }
 
 /* param A: Relation to rename attributes from

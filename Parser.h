@@ -82,6 +82,7 @@ class Parser{
   bool asterisk();
   bool semicolon();
   AST* literal();
+  AST* literal_list();
   bool select();
   bool project();
   bool rename();

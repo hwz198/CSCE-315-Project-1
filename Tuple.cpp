@@ -27,6 +27,10 @@ vector<string> Tuple::getDataStrings() const{
 	return dataStrings;
 }
 
+string Tuple::getString(size_t id) const{
+  return dataStrings[id];
+}
+
 tupleComp::tupleComp(){
   vector<size_t> keys;
   keys.push_back(0);

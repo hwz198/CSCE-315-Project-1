@@ -274,16 +274,18 @@ bool Parser::project(){
 }
 
 AST* Parser::attr_list(){
+  size_t first_index = t_index;
   AST* baseAST = attr_name();
   if(baseAST){
-    size_t first_index = t_index;
-    AST* nextAST;
-    while(comma() && (nextAST = attr_name())){
-      first_index = t_index;
-      baseAST = new AttrListAST(baseAST, nextAST);
+    AST* nextAST = NULL;
+    if(comma()){
+      nextAST = attr_list();
+      if(!nextAST){ //stray comma
+        t_index = first_index;
+        return NULL;
+      }
     }
-    t_index = first_index;
-    return new AttrListAST(baseAST, NULL);
+    return new AttrListAST(baseAST, nextAST);
   }
   return NULL;
 }
@@ -323,7 +325,7 @@ bool Parser::plus(){
 
 AST* Parser::difference(){
   AST *left, *right;
-  if((right = atomic_expr()) && minus() && (left = atomic_expr())){
+  if((left = atomic_expr()) && minus() && (right = atomic_expr())){
     return new BinaryOpAST(_minus, left, right);
   }
   return NULL;
@@ -339,7 +341,7 @@ bool Parser::minus(){
 
 AST* Parser::product(){
   AST *left, *right;
-  if((right = atomic_expr()) && asterisk() && (left = atomic_expr())){
+  if((left = atomic_expr()) && asterisk() && (right = atomic_expr())){
     return new BinaryOpAST(_asterisk, left, right);
   }
   return NULL;
@@ -596,28 +598,35 @@ bool Parser::where(){
 }
 
 AST* Parser::insert_cmd(){
-  AST *rel, *cond;
+  AST *rel, *list;
   size_t first_index = t_index;
   if(insert() && into() && (rel = rel_name()) && values()
-     && from() && lparen() && (cond = literal())){
-    AST* list = new LiteralListAST(cond, NULL);
-    AST* next;
-    size_t second_index = t_index;
-    while(comma() && (next = literal())){
-      list = new LiteralListAST(list, next);
-      second_index = t_index;
-    }
-    t_index = second_index;
-    if(rparen()){
-      return new InsertAST(rel, list);
-    }
+     && from() && lparen() && (list = literal_list()) && rparen()){
+    return new InsertAST(rel, list);
   }
   t_index = first_index;
   if(insert() && into() && (rel = rel_name()) && values()
-     && from() && relation() && (cond = expr())){
-    return new InsertAST(rel, cond);
+     && from() && relation() && (list = expr())){
+    return new InsertAST(rel, list);
   }
   t_index = first_index;
+  return NULL;
+}
+
+AST* Parser::literal_list(){
+  size_t first_index = t_index;
+  AST* baseAST = literal();
+  if(baseAST){
+    AST* nextAST = NULL;
+    if(comma()){
+      nextAST = literal_list();
+      if(!nextAST){ //stray comma
+        t_index = first_index;
+        return NULL;
+      }
+    }
+    return new LiteralListAST(baseAST, nextAST);
+  }
   return NULL;
 }
 
@@ -679,16 +688,20 @@ bool Parser::delete_keyword(){
 }
 
 AST* Parser::typed_attr_list(){
-  AST *attr, *t;
-  if((attr = attr_name()) && (t = type())){
-    size_t first_index = t_index;
-    AST *list = new TypedAttrListAST(attr, t, NULL);
-    while(comma() && (attr = attr_name()) && (t = type())){
-      list = new TypedAttrListAST(attr, t, list);
-      first_index = t_index;
+  size_t first_index = t_index;
+  AST *attr = attr_name();
+  AST *t = type();
+  if(attr && t){
+    AST* nextAST = NULL;
+    //AST *list = new TypedAttrListAST(attr, t, NULL);
+    if(comma()){
+      nextAST = typed_attr_list();
+      if(!nextAST){ //stray comma
+        t_index = first_index;
+        return NULL;
+      }
     }
-    t_index = first_index;
-    return list;
+    return new TypedAttrListAST(attr, t, nextAST);
   }
   return NULL;
 }
@@ -842,7 +855,7 @@ bool Parser::lex(string input){
       continue;
     }
     if(get(s_index) == '&' && get(s_index+1) == '&'){
-      tokens.push_back(Token(s_index, str.substr(s_index, 2), _or));
+      tokens.push_back(Token(s_index, str.substr(s_index, 2), _and));
       s_index += 2;
       continue;
     }

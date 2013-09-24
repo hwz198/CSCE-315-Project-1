@@ -14,6 +14,7 @@ class Tuple{
 		Tuple(vector<string> newDataVec); //Initialized Constructor
 		Tuple(); //Empty constructor
 		vector<string> getDataStrings() const; 	//accessor function for dataStrings
+                string getString(size_t id) const;
 		friend bool operator==(const Tuple &a, const Tuple &b);
 		friend bool operator!=(const Tuple &a, const Tuple &b);
 };
