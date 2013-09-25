@@ -6,9 +6,9 @@ INSERT INTO animals VALUES FROM ("Tweety", "bird", 1);
 INSERT INTO animals VALUES FROM ("Joe", "bird", 2);
 SHOW animals;
 WRITE animals;
-
+CLOSE animals;
 OPEN animals;
-EXIT;
+SHOW animals;
 
 CREATE TABLE tools (kind VARCHAR(8), weight INTEGER, cost INTEGER) PRIMARY KEY (kind);
 INSERT INTO tools VALUES FROM ("hammer", 3, 10);

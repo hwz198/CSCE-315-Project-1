@@ -146,25 +146,25 @@ void Database::Insert(string r, Tuple t)
 	dbase[index].addTuple(t);
 }
 
-void Database::Open(string r)
+vector<string> Database::Open(string r)
 {
 	int check = RelationExists(r);	//Check if relation is already in memory
 	if(check != -1){
           cout << "Database " << r << " is already open\n";
-		return;
+          return vector<string>();
 	}
-	
+	vector<string> statements;
 	ifstream file;
-	AST_Assembly p;
 	string l;
 	file.open((r + ".db").c_str());
 	if(file.is_open()){
 		while(getline(file,l)){
-			p.assemble(l);
+                  statements.push_back(l);
 		}
 		file.close();
 	}
 	//Rest of the function requires file IO - to be implemented later
+        return statements;
 }
 
 void Database::Write(string r)

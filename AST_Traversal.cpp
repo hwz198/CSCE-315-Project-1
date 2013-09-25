@@ -1,4 +1,5 @@
 #include "AST_Traversal.h"
+#include "AST_Assembly.h"
 #include <iostream>
 #include <stdexcept>
 #include <cassert>
@@ -172,7 +173,19 @@ bool AST_Traversal::traverse(AST* ast){
     }
     case (AST::OPEN):{
       string rel_name = identifier(static_cast<OpenAST*>(ast)->center);
-      db->Open(rel_name);
+      vector<string> statements = db->Open(rel_name);
+      if(statements.empty()){
+        throw runtime_error("Nothing to open.");
+      }
+      AST_Assembly A;
+      for(size_t i = 0; i < statements.size(); ++i){
+        AST* tree = A.assemble(statements[i]);
+        if(tree){
+          if(!traverse(tree)){
+            throw runtime_error("Error in file.");
+          }
+        }
+      }
       break;
     }
     case (AST::CLOSE):{

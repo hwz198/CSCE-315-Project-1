@@ -48,7 +48,7 @@ class Database{
 		int RelationExists(string r) const; 	//Check if relation exists in dbase. created to avoid duplicate code in show, insert functions
 		void Insert(string r, Tuple t); //relation r and the tuple t that needs to be inserted into the relation
 		
-		void Open(string r); //Open relation r - requires file IO
+		vector<string> Open(string r); //Open relation r - requires file IO
 		void Close(string r);
 		void Write(string r);
 		void Exit();
